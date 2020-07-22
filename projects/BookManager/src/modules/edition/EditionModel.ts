@@ -33,6 +33,6 @@ const editionSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-const Book = mongoose.model<IEdition>('BookScaffolding_Edition', editionSchema);
+const Edition = mongoose.model<IEdition>('BookScaffolding_Edition', editionSchema);
 
-export default Book;
+export default Edition;
