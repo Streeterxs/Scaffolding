@@ -1,0 +1,17 @@
+{
+  "name": "bookscaffolding",
+  "version": "0.0.1",
+  "description": "This is a product created by Afonso Araújo Neto to manage books",
+  "private": "true",
+  "scripts": {
+    "server": "yarn workspace @BookScaffolding/bookmanager start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Afonso Araújo Neto",
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "projects/*"
+    ]
+  }
+}

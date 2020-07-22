@@ -1,0 +1,48 @@
+{
+  "name": "@BookScaffolding/bookmanager",
+  "version": "0.0.1",
+  "description": "This project is created to manage books",
+  "main": "build/server",
+  "private": "true",
+  "scripts": {
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "babel": "babel-node --extensions \".es6,.js,.es,.jsx,.mjs,.ts,.tsx\"",
+    "build": "npm run clear && babel src --extensions \".es6,.js,.es,.jsx,.mjs,.ts\" --ignore *.spec.js --out-dir build --copy-files",
+    "clear": "rimraf ./build",
+    "prestart": "npm run build",
+    "start": "nodemon .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Afonso Araújo Neto",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/plugin-transform-runtime": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/dotenv-safe": "^8.1.0",
+    "@types/kcors": "^2.2.3",
+    "@types/koa": "^2.11.3",
+    "@types/koa-graphql": "^0.8.4",
+    "@types/koa-logger": "^3.1.1",
+    "@types/koa-router": "^7.4.1",
+    "@types/node": "^14.0.24",
+    "nodemon": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "dotenv-safe": "^8.2.0",
+    "graphql": "^15.3.0",
+    "graphql-relay": "^0.6.0",
+    "kcors": "^2.2.2",
+    "koa": "^2.13.0",
+    "koa-graphql": "^0.8.0",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^9.1.0",
+    "mongoose": "^5.9.25",
+    "tslint": "^6.1.2"
+  }
+}
