@@ -11,6 +11,9 @@ dotenvsafe.config({
 });
 
 const ENV = process.env;
-const config = {};
+
+const config = {
+    db_url: `${ENV.MONGODB_URL}`
+};
 
 export default config;
