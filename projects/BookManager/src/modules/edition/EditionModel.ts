@@ -6,6 +6,7 @@ export interface IEdition extends mongoose.Document {
     year: number;
     pages: number;
     language: string;
+    book: string;
     createdAt: number;
     updatedAt: number;
 };
@@ -28,6 +29,10 @@ const editionSchema = new mongoose.Schema({
         required: true
     },
     language: {
+        type: String,
+        required: true
+    },
+    book: {
         type: String,
         required: true
     }

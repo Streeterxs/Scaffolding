@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export interface ICategory extends mongoose.Document {
     name: string;
-    count: number;
+    books: string[];
     createdAt: number;
     updatedAt: number;
 };
@@ -12,10 +12,10 @@ const categorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    count: {
-        type: Number,
+    books: {
+        type: [String],
         required: true,
-        default: 0
+        default: []
     }
 }, {timestamps: true});
 

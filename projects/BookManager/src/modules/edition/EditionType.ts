@@ -1,5 +1,7 @@
 import { GraphQLObjectType, GraphQLString, GraphQLFloat } from "graphql";
 import { IEdition } from "./EditionModel";
+import BookType from "../book/BookType";
+import { loadBook } from "../book/BookLoader";
 
 const EditionType = new GraphQLObjectType({
     name: 'EditionType',
@@ -24,6 +26,10 @@ const EditionType = new GraphQLObjectType({
         language: {
             type: GraphQLString,
             resolve: (edition: IEdition) => edition.language
+        },
+        book: {
+            type: BookType,
+            resolve: (edition: IEdition) => loadBook(edition.book)
         },
         createdAt: {
             type: GraphQLString,

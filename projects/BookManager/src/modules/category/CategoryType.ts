@@ -1,6 +1,9 @@
-import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLFloat } from "graphql";
+import { GraphQLObjectType, GraphQLString, GraphQLList } from "graphql";
 
 import { ICategory } from "./CategoryModel";
+import BookType from "../book/BookType";
+import { IBook } from "../book/BookModel";
+import { loadBook } from "../book/BookLoader";
 
 const CategoryType = new GraphQLObjectType({
     name: 'CategoryType',
@@ -10,9 +13,21 @@ const CategoryType = new GraphQLObjectType({
             type: GraphQLString,
             resolve: (category: ICategory) => category.name
         },
-        count: {
-            type: GraphQLFloat,
-            resolve: (category: ICategory) => category.count
+        books: {
+            type: GraphQLList(BookType),
+            resolve: async (category: ICategory) => {
+
+                const bookList: IBook[] = [];
+
+                for (const bookId in category.books) {
+                    if (category.books.hasOwnProperty(bookId)) {
+
+                        bookList.push(await loadBook(bookId));
+                    }
+                }
+
+                return bookList;
+            }
         },
         createdAt: {
             type: GraphQLString,
