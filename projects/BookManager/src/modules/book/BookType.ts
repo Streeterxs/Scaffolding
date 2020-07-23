@@ -1,8 +1,9 @@
 import { GraphQLObjectType, GraphQLString, GraphQLList } from "graphql";
+import { connectionDefinitions, globalIdField, connectionArgs, connectionFromArray } from "graphql-relay";
 
-import EditionType from "../edition/EditionType";
+import EditionType, { EditionConnection } from "../edition/EditionType";
 import AuthorType from "../author/AuthorType";
-import CategoryType from "../category/CategoryType";
+import CategoryType, { CategoryConnection } from "../category/CategoryType";
 
 import { IBook } from "./BookModel";
 import { ICategory } from "../category/CategoryModel";
@@ -11,49 +12,36 @@ import { IEdition } from "../edition/EditionModel";
 import { loadCategory } from "../category/CategoryLoader";
 import { loadEdition } from "../edition/EditionLoader";
 import { loadAuthor } from "../author/AuthorLoader";
+import { nodeInterface } from "../../interface/nodeDefinitions";
+
+console.log('booktype BookConnection');
 
 const BookType = new GraphQLObjectType({
     name: 'BookType',
     description: 'Covid Position',
-    fields: {
+    interfaces: [nodeInterface],
+    fields: () => ({
+        id: globalIdField('Book'),
         name: {
             type: GraphQLString,
             resolve: (book: IBook) => book.name
         },
         author: {
             type: AuthorType,
-            resolve: async (book: IBook) => (await loadAuthor(book.author))
+            resolve: (book: IBook) => (loadAuthor(book.author))
         },
         categories: {
-            type: GraphQLList(CategoryType),
-            resolve: async (book: IBook) => {
-
-                const categoryList: ICategory[] = [];
-
-                for (const categoryId in book.categories) {
-                    if (book.categories.hasOwnProperty(categoryId)) {
-
-                        categoryList.push(await loadCategory(categoryId));
-                    }
-                }
-
-                return categoryList;
+            type: CategoryConnection.connectionType,
+            args: connectionArgs,
+            resolve: (book: IBook, args) => {
+                connectionFromArray(book.categories.map(loadCategory), args);
             }
         },
         editions: {
-            type: GraphQLList(EditionType),
-            resolve: async (book: IBook) => {
-
-                const editionList: IEdition[] = [];
-
-                for (const editionId in book.editions) {
-                    if (book.editions.hasOwnProperty(editionId)) {
-
-                        editionList.push(await loadEdition(editionId));
-                    }
-                }
-
-                return editionList;
+            type: EditionConnection.connectionType,
+            args: connectionArgs,
+            resolve: (book: IBook, args) => {
+                connectionFromArray(book.editions.map(loadEdition), args);
             }
         },
         createdAt: {
@@ -63,8 +51,15 @@ const BookType = new GraphQLObjectType({
         updatedAt: {
             type: GraphQLString,
             resolve: (book: IBook) => book.updatedAt
-        }
-    }
+        },
+    })
 });
 
-export default BookType;
+const BookConnection =
+    // TODO correct types
+    // Don't use GraphQLNonNull or 'undefinedConnection' is created
+    connectionDefinitions({name: 'Book', nodeType: BookType});
+
+console.log('booktype BookConnection: ', BookConnection);
+
+export {BookType, BookConnection};

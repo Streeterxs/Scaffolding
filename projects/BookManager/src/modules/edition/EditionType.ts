@@ -1,12 +1,19 @@
 import { GraphQLObjectType, GraphQLString, GraphQLFloat } from "graphql";
+import { connectionDefinitions, globalIdField } from "graphql-relay";
+
 import { IEdition } from "./EditionModel";
-import BookType from "../book/BookType";
+import { BookType } from "../book/BookType";
 import { loadBook } from "../book/BookLoader";
+import { nodeInterface } from "../../interface/nodeDefinitions";
+
+console.log('editiontype');
 
 const EditionType = new GraphQLObjectType({
     name: 'EditionType',
     description: 'Edition type',
-    fields: {
+    interfaces: [nodeInterface],
+    fields: () => ({
+        id: globalIdField('Edition'),
         edition: {
             type: GraphQLString,
             resolve: (edition: IEdition) => edition.edition
@@ -39,7 +46,12 @@ const EditionType = new GraphQLObjectType({
             type: GraphQLString,
             resolve: (edition: IEdition) => edition.updatedAt
         }
-    }
+    })
 });
+
+export const EditionConnection =
+    // TODO correct types
+    // Don't use GraphQLNonNull or 'undefinedConnection' is created
+    connectionDefinitions({name: 'Edition', nodeType: EditionType});
 
 export default EditionType;

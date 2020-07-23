@@ -1,32 +1,29 @@
 import { GraphQLObjectType, GraphQLString, GraphQLList } from "graphql";
+import { connectionDefinitions, globalIdField, connectionArgs, connectionFromArray } from "graphql-relay";
 
 import { ICategory } from "./CategoryModel";
-import BookType from "../book/BookType";
+import { BookType, BookConnection } from "../book/BookType";
 import { IBook } from "../book/BookModel";
 import { loadBook } from "../book/BookLoader";
+import { nodeInterface } from "../../interface/nodeDefinitions";
+
+console.log('CategoryType: ');
 
 const CategoryType = new GraphQLObjectType({
     name: 'CategoryType',
     description: 'Category Type',
-    fields: {
+    interfaces: [nodeInterface],
+    fields: () => ({
+        id: globalIdField('Category'),
         name: {
             type: GraphQLString,
             resolve: (category: ICategory) => category.name
         },
         books: {
-            type: GraphQLList(BookType),
-            resolve: async (category: ICategory) => {
-
-                const bookList: IBook[] = [];
-
-                for (const bookId in category.books) {
-                    if (category.books.hasOwnProperty(bookId)) {
-
-                        bookList.push(await loadBook(bookId));
-                    }
-                }
-
-                return bookList;
+            type: BookConnection.connectionType,
+            args: connectionArgs,
+            resolve: (category: ICategory, args) => {
+                return connectionFromArray(category.books.map(loadBook), args);
             }
         },
         createdAt: {
@@ -37,7 +34,12 @@ const CategoryType = new GraphQLObjectType({
             type: GraphQLString,
             resolve: (category: ICategory) => category.updatedAt
         }
-    }
+    })
 });
+
+export const CategoryConnection =
+    // TODO correct types
+    // Don't use GraphQLNonNull or 'undefinedConnection' is created
+    connectionDefinitions({name: 'Category', nodeType: CategoryType});
 
 export default CategoryType;
