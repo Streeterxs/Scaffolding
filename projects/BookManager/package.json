@@ -16,7 +16,7 @@
     "clear:editions": "yarn babel ./src/scripts/clearEditions",
     "clear:all": "yarn clear:authors && yarn clear:books && yarn clear:categories && yarn clear:editions",
     "start": "nodemon .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "jest": "jest"
   },
   "author": "Afonso Araújo Neto",
   "license": "MIT",
@@ -28,19 +28,21 @@
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
     "@types/dotenv-safe": "^8.1.0",
+    "@types/graphql-relay": "^0.6.0",
     "@types/kcors": "^2.2.3",
     "@types/koa": "^2.11.3",
     "@types/koa-graphql": "^0.8.4",
     "@types/koa-logger": "^3.1.1",
     "@types/koa-router": "^7.4.1",
+    "@types/mongoose": "^5.7.32",
     "@types/node": "^14.0.24",
+    "jest": "^26.1.0",
+    "jest-junit": "^11.0.1",
     "nodemon": "^2.0.4",
     "rimraf": "^3.0.2",
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@types/graphql-relay": "^0.6.0",
-    "@types/mongoose": "^5.7.32",
     "dataloader": "^2.0.0",
     "dotenv-safe": "^8.2.0",
     "graphql": "^15.3.0",

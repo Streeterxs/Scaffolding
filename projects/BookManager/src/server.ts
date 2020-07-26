@@ -5,7 +5,11 @@ import app from './app';
 import { connectToDb } from './database';
 
 (async () => {
-  await connectToDb();
+  const connection = await connectToDb();
+
+  console.log('db connect ready states: ', connection.readyState);
+
+  // console.log('db connect return: ', connection);
 
   const server = createServer(app.callback());
 
