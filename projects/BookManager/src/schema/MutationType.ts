@@ -2,6 +2,8 @@ import { GraphQLObjectType } from 'graphql';
 
 import AuthorMutations from '../modules/author/mutations';
 import BookMutations from '../modules/book/mutations';
+import CategoryMutations from '../modules/category/mutations';
+import EditionCreation from '../modules/edition/mutations';
 
 const MutationType = new GraphQLObjectType({
     name: 'MutationType',
@@ -9,7 +11,9 @@ const MutationType = new GraphQLObjectType({
     // TODO correct types
     fields: {
         ...AuthorMutations,
-        ...BookMutations
+        ...BookMutations,
+        ...CategoryMutations,
+        ...EditionCreation
     }
 });
 
