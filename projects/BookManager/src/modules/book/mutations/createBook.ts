@@ -1,8 +1,9 @@
-import { GraphQLString, GraphQLNonNull } from 'graphql';
+import { GraphQLString, GraphQLNonNull, GraphQLList } from 'graphql';
 import { mutationWithClientMutationId, toGlobalId, fromGlobalId } from 'graphql-relay';
+
+import Book from '../BookModel';
 import { BookConnection } from '../BookType';
 import { loadBook } from '../BookLoader';
-import Book from '../BookModel';
 import { loadAuthor } from '../../author/AuthorLoader';
 
 const BooksCreation = mutationWithClientMutationId({
@@ -14,6 +15,9 @@ const BooksCreation = mutationWithClientMutationId({
         },
         author: {
             type: new GraphQLNonNull(GraphQLString)
+        },
+        categories: {
+            type: new GraphQLNonNull(GraphQLList(GraphQLString))
         }
     },
     outputFields: {
@@ -27,18 +31,20 @@ const BooksCreation = mutationWithClientMutationId({
                 };
 
                 return {
-                    cursor: toGlobalId('Books', bookId),
+                    cursor: toGlobalId('Book', bookId),
                     node: loadBook(bookId)
                 }
             }
         }
     },
-    mutateAndGetPayload: async ({name, author}) => {
+    mutateAndGetPayload: async ({name, author, categories}) => {
         try {
 
             const authorIdObj = fromGlobalId(author);
 
-            const BooksCreated = new Book({name, author: authorIdObj.id});
+            const categoriesList = categories.map(category => fromGlobalId(category));
+
+            const BooksCreated = new Book({name, author: authorIdObj.id, categories: categoriesList});
             await BooksCreated.save();
 
             const findedAuthor = await loadAuthor(authorIdObj.id);
