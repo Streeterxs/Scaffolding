@@ -4,7 +4,6 @@ import config from '../config';
 export const connectToDb = (): Promise<mongoose.Connection> => {
 
     return new Promise((resolve, reject) => {
-        console.log('connect to db process cwd: ', process.cwd());
 
         mongoose.Promise = global.Promise;
 
