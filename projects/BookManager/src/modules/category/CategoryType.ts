@@ -2,12 +2,9 @@ import { GraphQLObjectType, GraphQLString, GraphQLList } from "graphql";
 import { connectionDefinitions, globalIdField, connectionArgs, connectionFromArray } from "graphql-relay";
 
 import { ICategory } from "./CategoryModel";
-import { BookType, BookConnection } from "../book/BookType";
-import { IBook } from "../book/BookModel";
+import { BookConnection } from "../book/BookType";
 import { loadBook } from "../book/BookLoader";
 import { nodeInterface } from "../../interface/nodeDefinitions";
-
-console.log('CategoryType: ');
 
 const CategoryType = new GraphQLObjectType({
     name: 'CategoryType',

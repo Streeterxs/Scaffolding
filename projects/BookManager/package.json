@@ -41,9 +41,11 @@
     "mongodb-memory-server": "^6.6.3",
     "nodemon": "^2.0.4",
     "rimraf": "^3.0.2",
+    "supertest": "^4.0.2",
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@types/supertest": "^2.0.10",
     "dataloader": "^2.0.0",
     "dotenv-safe": "^8.2.0",
     "graphql": "^15.3.0",

@@ -1,13 +1,11 @@
 import { GraphQLObjectType, GraphQLString, GraphQLList } from "graphql";
 import { connectionDefinitions, globalIdField, connectionArgs, connectionFromArray } from "graphql-relay";
 
-import EditionType, { EditionConnection } from "../edition/EditionType";
+import { EditionConnection } from "../edition/EditionType";
 import AuthorType from "../author/AuthorType";
-import CategoryType, { CategoryConnection } from "../category/CategoryType";
+import { CategoryConnection } from "../category/CategoryType";
 
 import { IBook } from "./BookModel";
-import { ICategory } from "../category/CategoryModel";
-import { IEdition } from "../edition/EditionModel";
 
 import { loadCategory } from "../category/CategoryLoader";
 import { loadEdition } from "../edition/EditionLoader";

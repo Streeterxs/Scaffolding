@@ -6,8 +6,6 @@ import { BookType } from "../book/BookType";
 import { loadBook } from "../book/BookLoader";
 import { nodeInterface } from "../../interface/nodeDefinitions";
 
-console.log('editiontype');
-
 const EditionType = new GraphQLObjectType({
     name: 'EditionType',
     description: 'Edition type',

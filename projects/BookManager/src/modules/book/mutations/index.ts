@@ -1,5 +1,5 @@
-import CreateBook from './createBook';
+import BookCreation from './createBook';
 
 export default {
-    CreateBook,
+    BookCreation,
 };

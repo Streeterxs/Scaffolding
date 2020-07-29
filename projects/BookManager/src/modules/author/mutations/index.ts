@@ -1,5 +1,5 @@
-import CreateAuthor from './createAuthor';
+import AuthorCreation from './createAuthor';
 
 export default {
-    CreateAuthor,
+    AuthorCreation,
 };

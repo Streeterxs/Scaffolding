@@ -6,8 +6,6 @@ import { BookConnection } from "../book/BookType";
 import { loadBook } from "../book/BookLoader";
 import { nodeInterface } from "../../interface/nodeDefinitions";
 
-console.log('authortype');
-
 const AuthorType = new GraphQLObjectType({
     name: 'AuthorType',
     description: 'Author Type',
