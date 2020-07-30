@@ -29,18 +29,18 @@ const EditionCreation = mutationWithClientMutationId({
         }
     },
     outputFields: {
-        Edition: {
+        edition: {
             type: EditionConnection.edgeType,
-            resolve: (EditionId: string) => {
+            resolve: (EditionIdObj: {id: string}) => {
 
-                if (!EditionId) {
+                if (!EditionIdObj.id) {
 
                     return null;
                 };
 
                 return {
-                    cursor: toGlobalId('Edition', EditionId),
-                    node: loadEdition(EditionId)
+                    cursor: toGlobalId('Edition', EditionIdObj.id),
+                    node: loadEdition(EditionIdObj.id)
                 }
             }
         }
@@ -67,7 +67,7 @@ const EditionCreation = mutationWithClientMutationId({
             });
             await editionCreated.save();
 
-            return editionCreated.id;
+            return {id: editionCreated.id};
         } catch (err) {
 
             console.log(err);
