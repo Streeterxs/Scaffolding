@@ -23,16 +23,16 @@ const BooksCreation = mutationWithClientMutationId({
     outputFields: {
         book: {
             type: BookConnection.edgeType,
-            resolve: (bookId: string) => {
+            resolve: async (bookIdObj: {id: string}) => {
 
-                if (!bookId) {
+                if (!bookIdObj.id) {
 
                     return null;
                 };
 
                 return {
-                    cursor: toGlobalId('Book', bookId),
-                    node: loadBook(bookId)
+                    cursor: toGlobalId('Book', bookIdObj.id),
+                    node: await loadBook(bookIdObj.id)
                 }
             }
         }
@@ -52,7 +52,7 @@ const BooksCreation = mutationWithClientMutationId({
             (await findedAuthor).books.splice(0, 0, `${BooksCreated.id}`);
             await findedAuthor.save();
 
-            return BooksCreated.id;
+            return {id: BooksCreated.id};
         } catch (err) {
 
             console.log(err);
