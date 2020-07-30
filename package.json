@@ -12,7 +12,7 @@
     "server:clear:categories": "yarn workspace @BookScaffolding/bookmanager clear:categories",
     "server:clear:editions": "yarn workspace @BookScaffolding/bookmanager clear:editions",
     "server:clear:all": "yarn workspace @BookScaffolding/bookmanager clear:all",
-    "jest": "jest --no-cache --detectOpenHandles"
+    "test": "jest --no-cache --detectOpenHandles"
   },
   "author": "Afonso Araújo Neto",
   "license": "MIT",
