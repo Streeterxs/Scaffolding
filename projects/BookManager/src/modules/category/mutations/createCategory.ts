@@ -16,16 +16,16 @@ const CategoryCreation = mutationWithClientMutationId({
     outputFields: {
         category: {
             type: CategoryConnection.edgeType,
-            resolve: (categoryId: string) => {
+            resolve: async (categoryIdObj: {id: string}) => {
 
-                if (!categoryId) {
+                if (!categoryIdObj.id) {
 
                     return null;
                 };
 
                 return {
-                    cursor: toGlobalId('Category', categoryId),
-                    node: loadCategory(categoryId)
+                    cursor: toGlobalId('Category', categoryIdObj.id),
+                    node: await loadCategory(categoryIdObj.id)
                 }
             }
         }
@@ -36,7 +36,7 @@ const CategoryCreation = mutationWithClientMutationId({
             const CategoryCreated = new Category({name});
             await CategoryCreated.save();
 
-            return CategoryCreated.id;
+            return {id: CategoryCreated.id};
         } catch (err) {
 
             console.log(err);
