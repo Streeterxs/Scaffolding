@@ -16,16 +16,19 @@ const AuthorCreation = mutationWithClientMutationId({
     outputFields: {
         author: {
             type: AuthorType,
-            resolve: (authorId: string) => loadAuthor(authorId)
+            resolve: async (authorIdObj) => {
+
+                const authorCreated = await loadAuthor(authorIdObj.id);
+                return authorCreated;
+            }
         }
     },
     mutateAndGetPayload: async ({name}) => {
         try {
-
             const AuthorCreated = new Author({name});
             await AuthorCreated.save();
 
-            return AuthorCreated.id;
+            return {id: AuthorCreated.id};
         } catch (err) {
 
             console.log(err);

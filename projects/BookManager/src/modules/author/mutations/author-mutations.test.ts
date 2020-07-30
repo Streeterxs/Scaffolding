@@ -32,13 +32,10 @@ describe('author mutations', () => {
             }
         `;
 
-        console.log('json without stringify: ', createAuthorMutation);
         const graphqlRequest = {
             query: createAuthorMutation,
             variables: {}
         };
-
-        console.log('json to post: ', JSON.stringify(graphqlRequest));
 
         const response = await request(app.callback()).post('/graphql').set({
             Accept: 'application/json',
