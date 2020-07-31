@@ -16,7 +16,7 @@
     "clear:editions": "yarn babel ./src/scripts/clearEditions",
     "clear:all": "yarn clear:authors && yarn clear:books && yarn clear:categories && yarn clear:editions",
     "start": "nodemon .",
-    "jest": "jest"
+    "jest": "jest --no-cache --detectOpenHandles"
   },
   "author": "Afonso Araújo Neto",
   "license": "MIT",

@@ -175,7 +175,7 @@ module.exports = {
     '^.+\\.(js|ts|tsx)?$': require('path').resolve(__dirname, "./babelServerTransformer")
   }, */
   transform: {
-    '^.+\\.(js|ts|tsx)?$': 'babel-jest'
+    '^.+\\.(js|ts|tsx)?$': './babelServerTransformer'
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation

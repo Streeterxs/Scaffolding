@@ -44,5 +44,6 @@ describe('author mutations', () => {
 
         console.log('response body: ', response.body);
         expect(response.status).toBe(200);
+        expect(response.body.data.AuthorCreation).toBeTruthy();
     });
 });

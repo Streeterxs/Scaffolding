@@ -59,6 +59,7 @@ describe('book mutations', () => {
 
         console.log('response body: ', bookResponse.body);
         expect(bookResponse.status).toBe(200);
+        expect(bookResponse.body.data.BookCreation).toBeTruthy();
     });
 });
 
