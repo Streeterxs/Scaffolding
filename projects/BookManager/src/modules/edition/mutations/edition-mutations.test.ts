@@ -5,88 +5,35 @@ import app from '../../../app';
 
 describe('edition mutations', () => {
 
+    let bookId: string;
+
     const {
         connect,
         closeDatabase,
         clearDatabase
     } = databaseTestModule();
 
-    beforeAll(async () => await connect());
+    beforeAll(() => connect());
 
-    afterEach(async () => await clearDatabase());
+    beforeEach(async () => {
 
-    afterAll(async () => await closeDatabase());
+        const authorGraphqlReturn = await createAuthor();
+
+        const bookGraphqlReturn = await createBook(authorGraphqlReturn.AuthorCreation.author.id);
+
+        bookId = bookGraphqlReturn.BookCreation.book.cursor;
+    });
+
+    afterEach(() => clearDatabase());
+
+    afterAll(() => closeDatabase());
 
     it('should create new edition', async () => {
 
-        const createAuthorMutation = `
-            mutation {
-                AuthorCreation(input: {name: "New Author", clientMutationId: "1"}) {
-                    author {
-                        id
-                        name
-                        createdAt
-                        updatedAt
-                    }
-                }
-            }
-        `;
+        const editionResponse = await createEdition(bookId);
 
-        const authorResponse = await graphqlRequestFn(createAuthorMutation, {});
-        expect(authorResponse.status).toBe(200);
-
-        const createBookMutation = `
-            mutation {
-                BookCreation(input: {name: "New book", author: "${authorResponse.body.data.AuthorCreation.author.id}", categories: [] clientMutationId: "1"}) {
-                    book {
-                        cursor
-                        node {
-                            id
-                            name
-                            author {
-                                name
-                            }
-                            createdAt
-                            updatedAt                        
-                        }
-                    }
-                }
-            }
-        `;
-
-        const bookResponse = await graphqlRequestFn(createBookMutation, {});
-        expect(bookResponse.status).toBe(200);
-
-        const createEditionMutation = `
-            mutation {
-                EditionCreation(input: {
-                    edition: 1,
-                    publishing: "New Publisher",
-                    year: 1952,
-                    pages: 1000,
-                    language: "English",
-                    book: "${bookResponse.body.data.BookCreation.book.cursor}",
-                    clientMutationId: "1"}) {
-                    edition {
-                        cursor
-                        node {
-                            id
-                            edition
-                            publishing
-                            year
-                            pages
-                            language
-                            createdAt
-                            updatedAt
-                        }
-                    }
-                }
-            }
-        `;
-
-        const categoryResponse = await graphqlRequestFn(createEditionMutation, {});
-        expect(categoryResponse.status).toBe(200);
-        expect(categoryResponse.body.data.EditionCreation).toBeTruthy();
+        expect(editionResponse.status).toBe(200);
+        expect(editionResponse.body.data.EditionCreation).toBeTruthy();
     });
 });
 
@@ -95,4 +42,80 @@ const graphqlRequestFn = (query, variables) => {
         Accept: 'application/json',
         'Content-Type': 'application/json'
     }).send(JSON.stringify({query, variables}));
+};
+
+const createAuthor = async () => {
+
+    const createAuthorMutation = `
+        mutation {
+            AuthorCreation(input: {name: "New Author", clientMutationId: "1"}) {
+                author {
+                    id
+                    name
+                    createdAt
+                    updatedAt
+                }
+            }
+        }
+    `;
+
+    const authorResponse = await graphqlRequestFn(createAuthorMutation, {});
+    return authorResponse.body.data;
+};
+
+const createBook = async (authorId: string) => {
+
+    const createBookMutation = `
+        mutation {
+            BookCreation(input: {name: "New book", author: "${authorId}", categories: [] clientMutationId: "1"}) {
+                book {
+                    cursor
+                    node {
+                        id
+                        name
+                        author {
+                            name
+                        }
+                        createdAt
+                        updatedAt                        
+                    }
+                }
+            }
+        }
+    `;
+
+    const bookResponse = await graphqlRequestFn(createBookMutation, {});
+    return bookResponse.body.data;
+};
+
+const createEdition = async (bookId: string) => {
+
+    const createEditionMutation = `
+        mutation {
+            EditionCreation(input: {
+                edition: 1,
+                publishing: "New Publisher",
+                year: 1952,
+                pages: 1000,
+                language: "English",
+                book: "${bookId}",
+                clientMutationId: "1"}) {
+                edition {
+                    cursor
+                    node {
+                        id
+                        edition
+                        publishing
+                        year
+                        pages
+                        language
+                        createdAt
+                        updatedAt
+                    }
+                }
+            }
+        }
+    `;
+
+    return await graphqlRequestFn(createEditionMutation, {});
 };
