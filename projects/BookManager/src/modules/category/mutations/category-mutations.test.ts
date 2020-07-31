@@ -11,11 +11,11 @@ describe('category mutations', () => {
         clearDatabase
     } = databaseTestModule();
 
-    beforeAll(async () => await connect());
+    beforeAll(() => connect());
 
-    afterEach(async () => await clearDatabase());
+    afterEach(() => clearDatabase());
 
-    afterAll(async () => await closeDatabase());
+    afterAll(() => closeDatabase());
 
     it('should create new category', async () => {
 

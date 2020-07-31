@@ -5,40 +5,30 @@ import app from '../../../app';
 
 describe('book mutations', () => {
 
+    let authorId: string;
+
     const {
         connect,
         closeDatabase,
         clearDatabase
     } = databaseTestModule();
 
-    beforeAll(async () => await connect());
+    beforeAll(() => connect());
 
-    afterEach(async () => await clearDatabase());
+    beforeEach(async () => {
 
-    afterAll(async () => await closeDatabase());
+        authorId = (await createAuthor()).AuthorCreation.author.id;
+    })
+
+    afterEach(() => clearDatabase());
+
+    afterAll(() => closeDatabase());
 
     it('should create new book', async () => {
 
-        const createAuthorMutation = `
-            mutation {
-                AuthorCreation(input: {name: "New Author", clientMutationId: "1"}) {
-                    author {
-                        id
-                        name
-                        createdAt
-                        updatedAt
-                    }
-                }
-            }
-        `;
-
-        const authorResponse = await graphqlRequestFn(createAuthorMutation, {});
-
-        expect(authorResponse.status).toBe(200);
-
         const createBookMutation = `
             mutation {
-                BookCreation(input: {name: "New book", author: "${authorResponse.body.data.AuthorCreation.author.id}", categories: [] clientMutationId: "1"}) {
+                BookCreation(input: {name: "New book", author: "${authorId}", categories: [] clientMutationId: "1"}) {
                     book {
                         cursor
                         node {
@@ -68,4 +58,23 @@ const graphqlRequestFn = (query, variables) => {
         Accept: 'application/json',
         'Content-Type': 'application/json'
     }).send(JSON.stringify({query, variables}));
-}
+};
+
+const createAuthor = async () => {
+
+    const createAuthorMutation = `
+        mutation {
+            AuthorCreation(input: {name: "New Author", clientMutationId: "1"}) {
+                author {
+                    id
+                    name
+                    createdAt
+                    updatedAt
+                }
+            }
+        }
+    `;
+
+    const authorResponse = await graphqlRequestFn(createAuthorMutation, {});
+    return authorResponse.body.data;
+};
