@@ -19,34 +19,38 @@ describe('category mutations', () => {
 
     it('should create new category', async () => {
 
-        const createCategoryMutation = `
-            mutation {
-                CategoryCreation(input: {name: "New category", clientMutationId: "1"}) {
-                    category {
-                        cursor
-                        node {
-                            id
-                            name
-                            createdAt
-                            updatedAt
-                        }
-                    }
-                }
-            }
-        `;
-
-        const graphqlRequest = {
-            query: createCategoryMutation,
-            variables: {}
-        };
-
-        const response = await request(app.callback()).post('/graphql').set({
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        }).send(JSON.stringify(graphqlRequest));
+        const response = await categoryCreation();
 
         console.log('response body: ', response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.CategoryCreation).toBeTruthy();
     });
 });
+
+const graphqlRequestFn = (query, variables) => {
+    return request(app.callback()).post('/graphql').set({
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+    }).send(JSON.stringify({query, variables}));
+};
+
+const categoryCreation = async () => {
+
+    const createCategoryMutation = `
+        mutation {
+            CategoryCreation(input: {name: "New category", clientMutationId: "1"}) {
+                category {
+                    cursor
+                    node {
+                        id
+                        name
+                        createdAt
+                        updatedAt
+                    }
+                }
+            }
+        }
+    `;
+    
+    return await graphqlRequestFn(createCategoryMutation, {});    
+}
