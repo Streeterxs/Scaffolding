@@ -1,0 +1,212 @@
+schema {
+  query: QueryType
+  mutation: MutationType
+}
+
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+input AddCategoryInput {
+  book: String!
+  category: String!
+  clientMutationId: String
+}
+
+type AddCategoryPayload {
+  book: BookType
+  clientMutationId: String
+}
+
+input AuthorCreationInput {
+  name: String
+  clientMutationId: String
+}
+
+type AuthorCreationPayload {
+  author: AuthorType
+  clientMutationId: String
+}
+
+"""Author Type"""
+type AuthorType implements Node {
+  """The ID of an object"""
+  id: ID!
+  name: String
+  books(after: String, first: Int, before: String, last: Int): BookConnection
+  createdAt: String
+  updatedAt: String
+}
+
+"""A connection to a list of items."""
+type BookConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BookEdge]
+}
+
+"""An edge in a connection."""
+type BookEdge {
+  """The item at the end of the edge"""
+  node: BookType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input BooksCreationInput {
+  name: String!
+  author: String!
+  categories: [String]!
+  clientMutationId: String
+}
+
+type BooksCreationPayload {
+  book: BookEdge
+  clientMutationId: String
+}
+
+"""Covid Position"""
+type BookType implements Node {
+  """The ID of an object"""
+  id: ID!
+  name: String
+  author: AuthorType
+  categories(after: String, first: Int, before: String, last: Int): CategoryConnection
+  editions(after: String, first: Int, before: String, last: Int): EditionConnection
+  createdAt: String
+  updatedAt: String
+}
+
+"""A connection to a list of items."""
+type CategoryConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CategoryEdge]
+}
+
+input CategoryCreationInput {
+  name: String!
+  clientMutationId: String
+}
+
+type CategoryCreationPayload {
+  category: CategoryEdge
+  clientMutationId: String
+}
+
+"""An edge in a connection."""
+type CategoryEdge {
+  """The item at the end of the edge"""
+  node: CategoryType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Category Type"""
+type CategoryType implements Node {
+  """The ID of an object"""
+  id: ID!
+  name: String
+  books(after: String, first: Int, before: String, last: Int): BookConnection
+  createdAt: String
+  updatedAt: String
+}
+
+"""A connection to a list of items."""
+type EditionConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [EditionEdge]
+}
+
+input EditionCreationInput {
+  edition: Float!
+  publishing: String!
+  year: Float!
+  pages: Float!
+  language: String!
+  book: String!
+  clientMutationId: String
+}
+
+type EditionCreationPayload {
+  edition: EditionEdge
+  clientMutationId: String
+}
+
+"""An edge in a connection."""
+type EditionEdge {
+  """The item at the end of the edge"""
+  node: EditionType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Edition type"""
+type EditionType implements Node {
+  """The ID of an object"""
+  id: ID!
+  edition: String
+  publishing: Float
+  year: Float
+  pages: String
+  language: String
+  book: BookType
+  createdAt: String
+  updatedAt: String
+}
+
+"""Mutation types"""
+type MutationType {
+  """Author Creation"""
+  AuthorCreation(input: AuthorCreationInput!): AuthorCreationPayload
+
+  """Books Creation"""
+  BookCreation(input: BooksCreationInput!): BooksCreationPayload
+
+  """Add a Category to a Book"""
+  AddCategory(input: AddCategoryInput!): AddCategoryPayload
+
+  """Category Creation"""
+  CategoryCreation(input: CategoryCreationInput!): CategoryCreationPayload
+
+  """Edition Creation"""
+  EditionCreation(input: EditionCreationInput!): EditionCreationPayload
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""Graphql type for queries"""
+type QueryType {
+  helloWorld: String
+}
