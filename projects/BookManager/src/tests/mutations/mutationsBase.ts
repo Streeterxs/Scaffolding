@@ -23,8 +23,33 @@ export const createBookMutation = (authorId) => `
                         name
                     }
                     createdAt
-                    updatedAt                        
+                    updatedAt
                 }
+            }
+        }
+    }
+`;
+
+export const addCategoryToBookMutation = (bookId, categoryId) => `
+    mutation {
+        AddCategory(input: {book: "${bookId}", category: "${categoryId}"}) {
+            book {
+                id
+                name
+                author {
+                    name
+                }
+                categories {
+                    edges {
+                        cursor
+                        node {
+                            id
+                            name
+                        }
+                    }
+                }
+                createdAt
+                updatedAt
             }
         }
     }

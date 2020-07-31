@@ -4,6 +4,7 @@ import app from '../../app';
 import {
     createAuthorMutation,
     createBookMutation,
+    addCategoryToBookMutation,
     createEditionMutation,
     createCategoryMutation
 } from './';
@@ -21,7 +22,7 @@ export const mutationsRequestBaseModule = () => {
 
         return await graphqlRequestFn(createAuthorMutation(), {});
     };
-    
+
     const createCategory = async () => {
 
         return await graphqlRequestFn(createCategoryMutation(), {})
@@ -32,6 +33,11 @@ export const mutationsRequestBaseModule = () => {
         return await graphqlRequestFn(createBookMutation(authorId), {});
     };
 
+    const addCategoryToBook = async (bookId: string, categoryId: string) => {
+
+        return await graphqlRequestFn(addCategoryToBookMutation(bookId, categoryId), {});
+    }
+
     const createEdition = async (bookId: string) => {
 
         return await graphqlRequestFn(createEditionMutation(bookId), {});
@@ -40,6 +46,7 @@ export const mutationsRequestBaseModule = () => {
     return {
         createAuthor,
         createBook,
+        addCategoryToBook,
         createEdition,
         createCategory
     };
