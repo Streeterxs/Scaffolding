@@ -26,26 +26,7 @@ describe('book mutations', () => {
 
     it('should create new book', async () => {
 
-        const createBookMutation = `
-            mutation {
-                BookCreation(input: {name: "New book", author: "${authorId}", categories: [] clientMutationId: "1"}) {
-                    book {
-                        cursor
-                        node {
-                            id
-                            name
-                            author {
-                                name
-                            }
-                            createdAt
-                            updatedAt                        
-                        }
-                    }
-                }
-            }
-        `;
-
-        const bookResponse = await graphqlRequestFn(createBookMutation, {});
+        const bookResponse = await createBook(authorId);
 
         console.log('response body: ', bookResponse.body);
         expect(bookResponse.status).toBe(200);
@@ -77,4 +58,28 @@ const createAuthor = async () => {
 
     const authorResponse = await graphqlRequestFn(createAuthorMutation, {});
     return authorResponse.body.data;
+};
+
+const createBook = async (authorId: string) => {
+
+    const createBookMutation = `
+        mutation {
+            BookCreation(input: {name: "New book", author: "${authorId}", categories: [] clientMutationId: "1"}) {
+                book {
+                    cursor
+                    node {
+                        id
+                        name
+                        author {
+                            name
+                        }
+                        createdAt
+                        updatedAt                        
+                    }
+                }
+            }
+        }
+    `;
+
+    return await graphqlRequestFn(createBookMutation, {});
 };
