@@ -56,3 +56,19 @@ export const createEditionMutation = (bookId) => `
         }
     }
 `;
+
+export const createCategoryMutation = () => `
+    mutation {
+        CategoryCreation(input: {name: "New category", clientMutationId: "1"}) {
+            category {
+                cursor
+                node {
+                    id
+                    name
+                    createdAt
+                    updatedAt
+                }
+            }
+        }
+    }
+`;

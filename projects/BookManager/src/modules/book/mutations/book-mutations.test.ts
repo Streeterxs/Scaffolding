@@ -1,7 +1,6 @@
-import request from 'supertest';
 import { databaseTestModule } from '../../../tests/database';
 
-import app from '../../../app';
+import { mutationsRequestBaseModule } from '../../../tests/mutations';
 
 describe('book mutations', () => {
 
@@ -12,12 +11,14 @@ describe('book mutations', () => {
         closeDatabase,
         clearDatabase
     } = databaseTestModule();
+    
+    const { createAuthor, createBook } = mutationsRequestBaseModule();
 
     beforeAll(() => connect());
 
     beforeEach(async () => {
 
-        authorId = (await createAuthor()).AuthorCreation.author.id;
+        authorId = (await createAuthor()).body.data.AuthorCreation.author.id;
     })
 
     afterEach(() => clearDatabase());
@@ -26,6 +27,7 @@ describe('book mutations', () => {
 
     it('should create new book', async () => {
 
+        console.log('author created id: ', authorId);
         const bookResponse = await createBook(authorId);
 
         console.log('response body: ', bookResponse.body);
@@ -33,53 +35,3 @@ describe('book mutations', () => {
         expect(bookResponse.body.data.BookCreation).toBeTruthy();
     });
 });
-
-const graphqlRequestFn = (query, variables) => {
-    return request(app.callback()).post('/graphql').set({
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-    }).send(JSON.stringify({query, variables}));
-};
-
-const createAuthor = async () => {
-
-    const createAuthorMutation = `
-        mutation {
-            AuthorCreation(input: {name: "New Author", clientMutationId: "1"}) {
-                author {
-                    id
-                    name
-                    createdAt
-                    updatedAt
-                }
-            }
-        }
-    `;
-
-    const authorResponse = await graphqlRequestFn(createAuthorMutation, {});
-    return authorResponse.body.data;
-};
-
-const createBook = async (authorId: string) => {
-
-    const createBookMutation = `
-        mutation {
-            BookCreation(input: {name: "New book", author: "${authorId}", categories: [] clientMutationId: "1"}) {
-                book {
-                    cursor
-                    node {
-                        id
-                        name
-                        author {
-                            name
-                        }
-                        createdAt
-                        updatedAt                        
-                    }
-                }
-            }
-        }
-    `;
-
-    return await graphqlRequestFn(createBookMutation, {});
-};

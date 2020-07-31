@@ -1,7 +1,6 @@
-import request from 'supertest';
 import { databaseTestModule } from '../../../tests/database';
 
-import app from '../../../app';
+import { mutationsRequestBaseModule } from '../../../tests/mutations';
 
 describe('author mutations', () => {
 
@@ -11,6 +10,8 @@ describe('author mutations', () => {
         clearDatabase
     } = databaseTestModule();
 
+    const { createAuthor } = mutationsRequestBaseModule();
+
     beforeAll(() => connect());
 
     afterEach(() => clearDatabase());
@@ -19,28 +20,7 @@ describe('author mutations', () => {
 
     it('should create new author', async () => {
 
-        const createAuthorMutation = `
-            mutation {
-                AuthorCreation(input: {name: "New Author", clientMutationId: "1"}) {
-                    author {
-                        id
-                        name
-                        createdAt
-                        updatedAt
-                    }
-                }
-            }
-        `;
-
-        const graphqlRequest = {
-            query: createAuthorMutation,
-            variables: {}
-        };
-
-        const response = await request(app.callback()).post('/graphql').set({
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        }).send(JSON.stringify(graphqlRequest));
+        const response = await createAuthor();
 
         console.log('response body: ', response.body);
         expect(response.status).toBe(200);
