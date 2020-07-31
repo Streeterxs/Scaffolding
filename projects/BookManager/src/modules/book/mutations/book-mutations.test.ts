@@ -11,8 +11,8 @@ describe('book mutations', () => {
         closeDatabase,
         clearDatabase
     } = databaseTestModule();
-    
-    const { createAuthor, createBook } = mutationsRequestBaseModule();
+
+    const { createAuthor, createBook, createCategory, addCategoryToBook } = mutationsRequestBaseModule();
 
     beforeAll(() => connect());
 
@@ -27,11 +27,29 @@ describe('book mutations', () => {
 
     it('should create new book', async () => {
 
-        console.log('author created id: ', authorId);
         const bookResponse = await createBook(authorId);
-
-        console.log('response body: ', bookResponse.body);
+    
         expect(bookResponse.status).toBe(200);
         expect(bookResponse.body.data.BookCreation).toBeTruthy();
+    });
+
+    it('should add category to a book', async () => {
+
+        const categoryResponse = await createCategory();
+        expect(categoryResponse.body.data.CategoryCreation).toBeTruthy();
+
+        
+        const bookResponse = await createBook(authorId);
+        expect(bookResponse.body.data.BookCreation).toBeTruthy();
+
+        const {cursor: bookId} = bookResponse.body.data.BookCreation.book;
+        const {cursor: categoryId} = categoryResponse.body.data.CategoryCreation.category;
+
+        const addCategoryResponse = await addCategoryToBook(bookId, categoryId);
+
+        expect(addCategoryResponse.status).toBe(200);
+        expect(addCategoryResponse.body.data.AddCategory).toBeTruthy();
+        expect(addCategoryResponse.body.data.AddCategory.book.categories.edges[0].node.id).toBe(categoryId);
+
     });
 });

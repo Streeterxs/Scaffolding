@@ -12,8 +12,6 @@ import { loadEdition } from "../edition/EditionLoader";
 import { loadAuthor } from "../author/AuthorLoader";
 import { nodeInterface } from "../../interface/nodeDefinitions";
 
-console.log('booktype BookConnection');
-
 const BookType = new GraphQLObjectType({
     name: 'BookType',
     description: 'Covid Position',
@@ -32,14 +30,14 @@ const BookType = new GraphQLObjectType({
             type: CategoryConnection.connectionType,
             args: connectionArgs,
             resolve: (book: IBook, args) => {
-                connectionFromArray(book.categories.map(loadCategory), args);
+                return connectionFromArray(book.categories.map(loadCategory), args);
             }
         },
         editions: {
             type: EditionConnection.connectionType,
             args: connectionArgs,
             resolve: (book: IBook, args) => {
-                connectionFromArray(book.editions.map(loadEdition), args);
+                return connectionFromArray(book.editions.map(loadEdition), args);
             }
         },
         createdAt: {
