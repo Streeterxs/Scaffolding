@@ -23,7 +23,7 @@ describe('category mutations', () => {
 
     it('should create new category', async () => {
 
-        const response = await createCategory();
+        const response = await createCategory('New Category');
 
         log('response body: ', response.body);
         expect(response.status).toBe(200);

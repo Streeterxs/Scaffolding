@@ -23,7 +23,7 @@ describe('author mutations', () => {
 
     it('should create new author', async () => {
 
-        const response = await createAuthor();
+        const response = await createAuthor('New Author');
 
         log('response body: ', response.body);
         expect(response.status).toBe(200);

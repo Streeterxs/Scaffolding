@@ -1,6 +1,6 @@
-export const createAuthorMutation = () => `
+export const createAuthorMutation = (name: string) => `
     mutation {
-        AuthorCreation(input: {name: "New Author", clientMutationId: "1"}) {
+        AuthorCreation(input: {name: "${name}", clientMutationId: "1"}) {
             author {
                 id
                 name
@@ -11,9 +11,9 @@ export const createAuthorMutation = () => `
     }
 `;
 
-export const createBookMutation = (authorId) => `
+export const createBookMutation = ({name, author, categories=[]}) => `
     mutation {
-        BookCreation(input: {name: "New book", author: "${authorId}", categories: [] clientMutationId: "1"}) {
+        BookCreation(input: {name: "${name}", author: "${author}", categories: ${categories} clientMutationId: "1"}) {
             book {
                 cursor
                 node {
@@ -55,15 +55,32 @@ export const addCategoryToBookMutation = (bookId, categoryId) => `
     }
 `;
 
-export const createEditionMutation = (bookId) => `
+export type createEditionMutationInput = {
+    edition: number,
+    book: string,
+    publishing: string,
+    year: number,
+    pages: number,
+    language: string
+} 
+export const createEditionMutation = (
+        {
+            edition=1,
+            book='New Book',
+            publishing='New Publisher',
+            year=1952,
+            pages=1000,
+            language='English'
+        }: createEditionMutationInput
+    ) => `
     mutation {
         EditionCreation(input: {
-            edition: 1,
-            publishing: "New Publisher",
-            year: 1952,
-            pages: 1000,
-            language: "English",
-            book: "${bookId}",
+            edition: ${edition},
+            publishing: "${publishing}",
+            year: ${year},
+            pages: ${pages},
+            language: "${language}",
+            book: "${book}",
             clientMutationId: "1"}) {
             edition {
                 cursor
@@ -82,9 +99,9 @@ export const createEditionMutation = (bookId) => `
     }
 `;
 
-export const createCategoryMutation = () => `
+export const createCategoryMutation = (name: string) => `
     mutation {
-        CategoryCreation(input: {name: "New category", clientMutationId: "1"}) {
+        CategoryCreation(input: {name: "${name}", clientMutationId: "1"}) {
             category {
                 cursor
                 node {

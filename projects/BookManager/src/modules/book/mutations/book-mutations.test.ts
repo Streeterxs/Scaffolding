@@ -21,7 +21,7 @@ describe('book mutations', () => {
 
     beforeEach(async () => {
 
-        authorId = (await createAuthor()).body.data.AuthorCreation.author.id;
+        authorId = (await createAuthor('New Author To Book')).body.data.AuthorCreation.author.id;
         log('authorId: ', authorId);
     })
 
@@ -39,7 +39,7 @@ describe('book mutations', () => {
 
     it('should add category to a book', async () => {
 
-        const categoryResponse = await createCategory();
+        const categoryResponse = await createCategory('New Category');
         expect(categoryResponse.body.data.CategoryCreation).toBeTruthy();
 
 

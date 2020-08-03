@@ -21,7 +21,7 @@ describe('edition mutations', () => {
 
     beforeEach(async () => {
 
-        const authorGraphqlReturn = await (await createAuthor()).body;
+        const authorGraphqlReturn = await (await createAuthor('New Author')).body;
 
         const bookGraphqlReturn = await createBook(authorGraphqlReturn.data.AuthorCreation.author.id);
 
@@ -34,7 +34,14 @@ describe('edition mutations', () => {
 
     it('should create new edition', async () => {
 
-        const editionResponse = await createEdition(bookId);
+        const editionResponse = await createEdition({
+            edition: 1,
+            book: bookId,
+            publishing: 'New Publishing',
+            year: 1952,
+            pages: 1000,
+            language: 'English'
+        });
 
         expect(editionResponse.status).toBe(200);
         expect(editionResponse.body.data.EditionCreation).toBeTruthy();
