@@ -2,7 +2,7 @@ import { GraphQLString, GraphQLNonNull } from 'graphql';
 import { mutationWithClientMutationId, fromGlobalId } from 'graphql-relay';
 
 import { BookType } from '../../book/BookType';
-import { loadBook } from '../../Book/BookLoader';
+import { loadBook } from '../../book/BookLoader';
 
 import { testsLogger } from '../../../tests/testsLogger';
 import { appLogger } from '../../../appLogger';
