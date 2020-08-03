@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
+import { testsLogger } from '../testsLogger';
+
+const log = testsLogger.extend('mutationsRequests');
+
 export const databaseTestModule = () => {
 
     const mongod = new MongoMemoryServer();

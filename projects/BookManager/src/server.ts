@@ -3,17 +3,20 @@ import { createServer } from 'http';
 
 import app from './app';
 import { connectToDb } from './database';
+import { appLogger } from './appLogger';
+
+const log = appLogger.extend('server');
 
 (async () => {
   const connection = await connectToDb();
 
-  console.log('db connect ready states: ', connection.readyState);
+  log('db connect ready states: ', connection.readyState);
 
-  // console.log('db connect return: ', connection);
+  // log('db connect return: ', connection);
 
   const server = createServer(app.callback());
 
   server.listen('3333', () => {
-      console.log('Server is on');
+      log('Server is on');
   });
 })();

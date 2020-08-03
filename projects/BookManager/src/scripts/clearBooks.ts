@@ -1,12 +1,15 @@
+import debug from 'debug';
 import { connectToDb } from "../database";
 import Book from "../modules/book/BookModel";
+
+const log = debug('projects:bookmanager:scripts:clearBooks');
 
 (async () => {
 
     await connectToDb();
 
     await Book.deleteMany({}, () => {
-        console.log('All books deleted');
+        log('All books deleted');
     });
 
     process.exit();

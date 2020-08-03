@@ -12,6 +12,10 @@ import { loadEdition } from "../edition/EditionLoader";
 import { loadAuthor } from "../author/AuthorLoader";
 import { nodeInterface } from "../../interface/nodeDefinitions";
 
+import { appLogger } from "../../appLogger";
+
+const log = appLogger.extend('modules:book:bookType');
+
 const BookType = new GraphQLObjectType({
     name: 'BookType',
     description: 'Covid Position',
@@ -56,6 +60,6 @@ const BookConnection =
     // Don't use GraphQLNonNull or 'undefinedConnection' is created
     connectionDefinitions({name: 'Book', nodeType: BookType});
 
-console.log('booktype BookConnection: ', BookConnection);
+log('booktype BookConnection: ', BookConnection);
 
 export {BookType, BookConnection};

@@ -5,6 +5,18 @@ import Category from '../CategoryModel';
 import { loadCategory } from '../CategoryLoader';
 import { CategoryConnection } from '../CategoryType';
 
+import { testsLogger } from '../../../tests/testsLogger';
+import { appLogger } from '../../../appLogger';
+
+let log;
+if(process.env.JEST_WORKER_ID) {
+
+    log = testsLogger.extend('modules:category:mutations:createCategory');
+} else {
+
+    log = appLogger.extend('modules:category:mutations:createCategory');
+}
+
 const CategoryCreation = mutationWithClientMutationId({
     name: 'CategoryCreation',
     description: 'Category Creation',
@@ -39,7 +51,7 @@ const CategoryCreation = mutationWithClientMutationId({
             return {id: CategoryCreated.id};
         } catch (err) {
 
-            console.log(err);
+            log('error: ', err);
         }
     }
 });

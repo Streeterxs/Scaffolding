@@ -1,6 +1,9 @@
 import { databaseTestModule } from '../../../tests/database';
 
 import { mutationsRequestBaseModule } from '../../../tests/mutations';
+import { testsLogger } from '../../../tests/testsLogger';
+
+const log = testsLogger.extend('authorMutations');
 
 describe('author mutations', () => {
 
@@ -22,7 +25,7 @@ describe('author mutations', () => {
 
         const response = await createAuthor();
 
-        console.log('response body: ', response.body);
+        log('response body: ', response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.AuthorCreation).toBeTruthy();
     });

@@ -5,6 +5,18 @@ import { BookType } from '../BookType';
 import { loadBook } from '../BookLoader';
 import { loadCategory } from '../../category/CategoryLoader';
 
+import { testsLogger } from '../../../tests/testsLogger';
+import { appLogger } from '../../../appLogger';
+
+let log;
+if(process.env.JEST_WORKER_ID) {
+
+    log = testsLogger.extend('modules:book:mutations:addCategory');
+} else {
+
+    log = appLogger.extend('modules:book:mutations:addCategory');
+}
+
 const AddCategory = mutationWithClientMutationId({
     name: 'AddCategory',
     description: 'Add a Category to a Book',
@@ -36,8 +48,8 @@ const AddCategory = mutationWithClientMutationId({
             const {id: bookId} = fromGlobalId(book);
             const {id: categoryId} = fromGlobalId(category);
 
-            console.log('saved bookId: ', bookId);
-            console.log('saved categoryId: ', categoryId);
+            log('saved bookId: ', bookId);
+            log('saved categoryId: ', categoryId);
 
             const foundedBook = await loadBook(bookId);
             (await foundedBook).categories.splice(0, 0, categoryId);
@@ -50,7 +62,7 @@ const AddCategory = mutationWithClientMutationId({
             return {id: bookId};
         } catch (err) {
 
-            console.log('error add category: ', err);
+            log('error add category: ', err);
         }
     }
 });

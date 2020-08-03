@@ -5,6 +5,18 @@ import Edition from '../EditionModel';
 import { loadEdition } from '../EditionLoader';
 import { EditionConnection } from '../EditionType';
 
+import { appLogger } from '../../../appLogger';
+import { testsLogger } from '../../../tests/testsLogger';
+
+let log;
+if(process.env.JEST_WORKER_ID) {
+
+    log = testsLogger.extend('modules:edition:mutations:createEdition');
+} else {
+
+    log = appLogger.extend('modules:edition:mutations:createEdition');
+}
+
 const EditionCreation = mutationWithClientMutationId({
     name: 'EditionCreation',
     description: 'Edition Creation',
@@ -70,7 +82,7 @@ const EditionCreation = mutationWithClientMutationId({
             return {id: editionCreated.id};
         } catch (err) {
 
-            console.log(err);
+            log('error: ', err);
         }
     }
 });

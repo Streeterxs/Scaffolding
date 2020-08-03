@@ -1,4 +1,5 @@
-console.log('server babel config');
+const log = require('debug')('projects:bookmanager:babel');
+log('server babel config');
 
 module.exports = {
     presets: [

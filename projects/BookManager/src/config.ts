@@ -1,8 +1,12 @@
 import path from 'path';
 import dotenvsafe from 'dotenv-safe';
 
+import { appLogger } from './appLogger';
+
+const log = appLogger.extend('config');
+
 const cwd = process.cwd();
-console.log('cwd: ', cwd);
+log('cwd: ', cwd);
 const root = path.join.bind(cwd);
 
 dotenvsafe.config({
@@ -16,6 +20,6 @@ const config = {
     db_url: `${ENV.MONGODB_URL}`
 };
 
-console.log('config: ', config);
+log('config: ', config);
 
 export default config;

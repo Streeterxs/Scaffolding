@@ -1,6 +1,9 @@
 import { databaseTestModule } from '../../../tests/database';
 
 import { mutationsRequestBaseModule } from '../../../tests/mutations';
+import { testsLogger } from '../../../tests/testsLogger';
+
+const log = testsLogger.extend('authorMutations');
 
 describe('category mutations', () => {
 
@@ -22,7 +25,7 @@ describe('category mutations', () => {
 
         const response = await createCategory();
 
-        console.log('response body: ', response.body);
+        log('response body: ', response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.CategoryCreation).toBeTruthy();
     });

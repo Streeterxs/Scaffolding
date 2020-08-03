@@ -3,9 +3,12 @@ import Router from 'koa-router';
 import logger from 'koa-logger';
 import cors from 'kcors';
 import graphqlHttp from 'koa-graphql';
-
 import { GraphQLError } from 'graphql';
+
 import Schema from './schema';
+import { appLogger } from './appLogger';
+
+const log = appLogger.extend('entry');
 
 const router = new Router();
 const app = new Koa();

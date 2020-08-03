@@ -47,6 +47,7 @@
   "dependencies": {
     "@types/supertest": "^2.0.10",
     "dataloader": "^2.0.0",
+    "debug": "^4.1.1",
     "dotenv-safe": "^8.2.0",
     "graphql": "^15.3.0",
     "graphql-relay": "^0.6.0",

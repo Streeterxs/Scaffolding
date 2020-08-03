@@ -6,6 +6,18 @@ import { BookConnection } from '../BookType';
 import { loadBook } from '../BookLoader';
 import { loadAuthor } from '../../author/AuthorLoader';
 
+import { testsLogger } from '../../../tests/testsLogger';
+import { appLogger } from '../../../appLogger';
+
+let log;
+if(process.env.JEST_WORKER_ID) {
+
+    log = testsLogger.extend('modules:book:mutations:createBook');
+} else {
+
+    log = appLogger.extend('modules:book:mutations:createBook');
+}
+
 const BooksCreation = mutationWithClientMutationId({
     name: 'BooksCreation',
     description: 'Books Creation',
@@ -55,7 +67,7 @@ const BooksCreation = mutationWithClientMutationId({
             return {id: BooksCreated.id};
         } catch (err) {
 
-            console.log(err);
+            log('error: ', err);
         }
     }
 });

@@ -1,6 +1,9 @@
 import { databaseTestModule } from '../../../tests/database';
 
 import { mutationsRequestBaseModule } from '../../../tests/mutations';
+import { testsLogger } from '../../../tests/testsLogger';
+
+const log = testsLogger.extend('authorMutations');
 
 describe('edition mutations', () => {
 

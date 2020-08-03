@@ -1,12 +1,16 @@
+import debug from "debug";
+
 import { connectToDb } from "../database";
 import Edition from "../modules/edition/EditionModel";
+
+const log = debug('projects:bookmanager:scripts:clearEditions');
 
 (async () => {
 
     await connectToDb();
 
     await Edition.deleteMany({}, () => {
-        console.log('All editions was deleted');
+        log('All editions was deleted');
     });
 
     process.exit();

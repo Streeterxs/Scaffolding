@@ -1,6 +1,9 @@
 import { databaseTestModule } from '../../../tests/database';
 
 import { mutationsRequestBaseModule } from '../../../tests/mutations';
+import { testsLogger } from '../../../tests/testsLogger';
+
+const log = testsLogger.extend('authorMutations');
 
 describe('book mutations', () => {
 
@@ -19,6 +22,7 @@ describe('book mutations', () => {
     beforeEach(async () => {
 
         authorId = (await createAuthor()).body.data.AuthorCreation.author.id;
+        log('authorId: ', authorId);
     })
 
     afterEach(() => clearDatabase());
@@ -28,7 +32,7 @@ describe('book mutations', () => {
     it('should create new book', async () => {
 
         const bookResponse = await createBook(authorId);
-    
+
         expect(bookResponse.status).toBe(200);
         expect(bookResponse.body.data.BookCreation).toBeTruthy();
     });
@@ -38,7 +42,7 @@ describe('book mutations', () => {
         const categoryResponse = await createCategory();
         expect(categoryResponse.body.data.CategoryCreation).toBeTruthy();
 
-        
+
         const bookResponse = await createBook(authorId);
         expect(bookResponse.body.data.BookCreation).toBeTruthy();
 
