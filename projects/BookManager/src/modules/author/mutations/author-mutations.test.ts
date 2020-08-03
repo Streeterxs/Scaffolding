@@ -13,7 +13,7 @@ describe('author mutations', () => {
         clearDatabase
     } = databaseTestModule();
 
-    const { createAuthor, createBook, addBookToAuthor } = mutationsRequestBaseModule();
+    const { createAuthor, createBook, addBookToAuthor, changeAuthorName } = mutationsRequestBaseModule();
 
     beforeAll(() => connect());
 
@@ -28,6 +28,26 @@ describe('author mutations', () => {
         log('response body: ', response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.AuthorCreation).toBeTruthy();
+    });
+
+    it('should change author name', async () => {
+
+        const createAuthorResponse = await createAuthor('New Author');
+        log('createAuthorResponse body: ', createAuthorResponse.body);
+        expect(createAuthorResponse.status).toBe(200);
+        expect(createAuthorResponse.body.data.AuthorCreation).toBeTruthy();
+
+        const {id: authorId, name, updatedAt} = createAuthorResponse.body.data.AuthorCreation.author;
+        const newName = 'New Name';
+
+        const changeAuthorNameResponse = await changeAuthorName(newName, authorId);
+        log('changeAuthorNameResponse body: ', changeAuthorNameResponse.body);
+        log('changeAuthorNameResponse body.data: ', changeAuthorNameResponse.body.data);
+        expect(changeAuthorNameResponse.status).toBe(200);
+        expect(changeAuthorNameResponse.body.data.ChangeAuthorName).toBeTruthy();
+        expect(changeAuthorNameResponse.body.data.ChangeAuthorName.author.name).toBe(newName);
+        expect(changeAuthorNameResponse.body.data.ChangeAuthorName.author.name).not.toBe(name);
+        expect(changeAuthorNameResponse.body.data.ChangeAuthorName.author.updatedAt).not.toBe(updatedAt);
     });
 
     it('should add book to a author', async () => {

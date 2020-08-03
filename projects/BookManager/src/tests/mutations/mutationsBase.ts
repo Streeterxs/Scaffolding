@@ -14,6 +14,19 @@ export const createAuthorMutation = (name: string) => `
     }
 `;
 
+export const changeAuthorNameMutation = (name: string, author: string) => `
+    mutation {
+        ChangeAuthorName(input: {name: "${name}", author: "${author}", clientMutationId: "2"}) {
+            author {
+                id
+                name
+                createdAt
+                updatedAt
+            }
+        }
+    }
+`;
+
 export const addBookToAuthorMutation = (authorId: string, bookId: string) => `
     mutation {
         AddBook(input: {author: "${authorId}", book: "${bookId}"}) {
