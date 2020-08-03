@@ -1,5 +1,6 @@
+const log = require('debug')('root:jestConfig:babelTransformer');
 const babelJest = require('babel-jest');
 
-console.log('root transformer!!!!!!!!!!!!!!!!!!!!!!!');
+log('root transformer!');
 
 module.exports = babelJest.createTransformer(require('./babel.config'));

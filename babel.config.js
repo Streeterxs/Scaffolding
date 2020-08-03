@@ -1,4 +1,5 @@
-console.log('root babel config');
+const log = require('debug')('root:babel');
+log('root babel config');
 
 module.exports = {
     presets: [ 
