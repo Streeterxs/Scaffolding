@@ -1,3 +1,6 @@
+import { testsLogger } from "../testsLogger";
+
+const log = testsLogger.extend('mutationsQuery');
 export const createAuthorMutation = (name: string) => `
     mutation {
         AuthorCreation(input: {name: "${name}", clientMutationId: "1"}) {
@@ -11,9 +14,38 @@ export const createAuthorMutation = (name: string) => `
     }
 `;
 
-export const createBookMutation = ({name, author, categories=[]}) => `
+export const addBookToAuthorMutation = (authorId: string, bookId: string) => `
     mutation {
-        BookCreation(input: {name: "${name}", author: "${author}", categories: ${categories} clientMutationId: "1"}) {
+        AddBook(input: {author: "${authorId}", book: "${bookId}"}) {
+            author {
+                name
+                books {
+                    edges {
+                        cursor
+                        node {
+                            id
+                            name
+                            createdAt
+                            updatedAt
+                        }
+                    }
+                }
+                createdAt
+                updatedAt
+            }
+        }
+    }
+`;
+
+
+export type createBookMutationInput = {
+    name: string,
+    author: string,
+    categories: string[]
+} 
+export const createBookMutation = ({name, author, categories=[]}: createBookMutationInput) => `
+    mutation {
+        BookCreation(input: {name: "${name}", author: "${author}", categories: ${JSON.stringify(categories)}, clientMutationId: "1"}) {
             book {
                 cursor
                 node {

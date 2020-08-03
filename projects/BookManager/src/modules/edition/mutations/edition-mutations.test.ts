@@ -3,7 +3,7 @@ import { databaseTestModule } from '../../../tests/database';
 import { mutationsRequestBaseModule } from '../../../tests/mutations';
 import { testsLogger } from '../../../tests/testsLogger';
 
-const log = testsLogger.extend('authorMutations');
+const log = testsLogger.extend('editionMutations');
 
 describe('edition mutations', () => {
 
@@ -22,9 +22,11 @@ describe('edition mutations', () => {
     beforeEach(async () => {
 
         const authorGraphqlReturn = await (await createAuthor('New Author')).body;
+        log(authorGraphqlReturn);
 
-        const bookGraphqlReturn = await createBook(authorGraphqlReturn.data.AuthorCreation.author.id);
+        const bookGraphqlReturn = await createBook({name:'New Book', author: `${authorGraphqlReturn.data.AuthorCreation.author.id}`, categories: []});
 
+        log(bookGraphqlReturn.body);
         bookId = bookGraphqlReturn.body.data.BookCreation.book.cursor;
     });
 

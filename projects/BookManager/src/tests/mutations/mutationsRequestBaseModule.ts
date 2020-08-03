@@ -7,7 +7,9 @@ import {
     addCategoryToBookMutation,
     createEditionMutation,
     createCategoryMutation,
-    createEditionMutationInput
+    createEditionMutationInput,
+    createBookMutationInput,
+    addBookToAuthorMutation
 } from './';
 import { testsLogger } from '../testsLogger';
 
@@ -30,16 +32,22 @@ export const mutationsRequestBaseModule = () => {
         return await graphqlRequestFn(createAuthorMutation(name), {});
     };
 
+    const addBookToAuthor = async (authorId: string, bookId: string) => {
+
+        log('add book to author');
+        return graphqlRequestFn(addBookToAuthorMutation(authorId, bookId), {});
+    }
+
     const createCategory = async (name: string) => {
 
         log('create category');
         return await graphqlRequestFn(createCategoryMutation(name), {})
     };
 
-    const createBook = async (bookObj: any) => {
+    const createBook = async (bookObj: createBookMutationInput) => {
 
         log('create book bookObj inputed: ', bookObj);
-        return await graphqlRequestFn(createBookMutation(bookObj), {});
+        return await graphqlRequestFn((() => {log('book query return: ', createBookMutation(bookObj)); return createBookMutation(bookObj)})(), {});
     };
 
     const addCategoryToBook = async (bookId: string, categoryId: string) => {
@@ -57,6 +65,7 @@ export const mutationsRequestBaseModule = () => {
 
     return {
         createAuthor,
+        addBookToAuthor,
         createBook,
         addCategoryToBook,
         createEdition,

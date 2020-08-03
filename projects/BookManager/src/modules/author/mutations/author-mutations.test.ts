@@ -13,7 +13,7 @@ describe('author mutations', () => {
         clearDatabase
     } = databaseTestModule();
 
-    const { createAuthor } = mutationsRequestBaseModule();
+    const { createAuthor, createBook, addBookToAuthor } = mutationsRequestBaseModule();
 
     beforeAll(() => connect());
 
@@ -28,5 +28,31 @@ describe('author mutations', () => {
         log('response body: ', response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.AuthorCreation).toBeTruthy();
+    });
+
+    it('should add book to a author', async () => {
+
+        const authorResponse = await createAuthor('New Author');
+        expect(authorResponse.body.data.AuthorCreation).toBeTruthy();
+        const {id: authorId} = authorResponse.body.data.AuthorCreation.author;
+
+        const bookResponse = await createBook({name: 'New Book', author: `${authorId}`, categories: []});
+        expect(bookResponse.body.data.BookCreation).toBeTruthy();
+
+
+        const {cursor: bookId} = bookResponse.body.data.BookCreation.book;
+
+        const addBookResponse = await addBookToAuthor(authorId, bookId);
+
+        log('addBookResponse: ', addBookResponse.body);
+
+        expect(addBookResponse.status).toBe(200);
+        expect(addBookResponse.body.data.AddBook).toBeTruthy();
+
+        log('addBookResponse.body.data.AddBook.author.books: ', addBookResponse.body.data.AddBook.author.books);
+        log('addBookResponse.body.data.AddBook.author.books.edges[0].node: ', addBookResponse.body.data.AddBook.author.books.edges[0].node);
+        
+        expect(addBookResponse.body.data.AddBook.author.books.edges[0].node.id).toBe(bookId);
+
     });
 });

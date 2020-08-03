@@ -3,7 +3,7 @@ import { databaseTestModule } from '../../../tests/database';
 import { mutationsRequestBaseModule } from '../../../tests/mutations';
 import { testsLogger } from '../../../tests/testsLogger';
 
-const log = testsLogger.extend('authorMutations');
+const log = testsLogger.extend('bookMutations');
 
 describe('book mutations', () => {
 
@@ -21,7 +21,7 @@ describe('book mutations', () => {
 
     beforeEach(async () => {
 
-        authorId = (await createAuthor('New Author To Book')).body.data.AuthorCreation.author.id;
+        authorId = `${(await createAuthor('New Author To Book')).body.data.AuthorCreation.author.id}`;
         log('authorId: ', authorId);
     })
 
@@ -31,8 +31,12 @@ describe('book mutations', () => {
 
     it('should create new book', async () => {
 
-        const bookResponse = await createBook(authorId);
+        log('authorid: ', authorId);
+        const objToCreateBook = {name: 'New Book', author: authorId, categories: []};
+        log('objToCreateBook: ', objToCreateBook);
+        const bookResponse = await createBook({name: 'New Book', author: authorId, categories: []});
 
+        log('bookResponse body: ', bookResponse.body);
         expect(bookResponse.status).toBe(200);
         expect(bookResponse.body.data.BookCreation).toBeTruthy();
     });
@@ -43,7 +47,7 @@ describe('book mutations', () => {
         expect(categoryResponse.body.data.CategoryCreation).toBeTruthy();
 
 
-        const bookResponse = await createBook(authorId);
+        const bookResponse = await createBook({name: 'New Book', author: authorId, categories: []});
         expect(bookResponse.body.data.BookCreation).toBeTruthy();
 
         const {cursor: bookId} = bookResponse.body.data.BookCreation.book;
