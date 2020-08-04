@@ -1,6 +1,6 @@
 import { databaseTestModule } from '../../../tests/database';
 
-import { mutationsRequestBaseModule } from '../../../tests/mutations';
+import { mutationsRequestBaseModule, changeBookNameMutation } from '../../../tests/mutations';
 import { testsLogger } from '../../../tests/testsLogger';
 
 const log = testsLogger.extend('bookMutations');
@@ -15,7 +15,7 @@ describe('book mutations', () => {
         clearDatabase
     } = databaseTestModule();
 
-    const { createAuthor, createBook, createCategory, addCategoryToBook } = mutationsRequestBaseModule();
+    const { createAuthor, createBook, createCategory, addCategoryToBook, changeBookName } = mutationsRequestBaseModule();
 
     beforeAll(() => connect());
 
@@ -59,5 +59,23 @@ describe('book mutations', () => {
         expect(addCategoryResponse.body.data.AddCategory).toBeTruthy();
         expect(addCategoryResponse.body.data.AddCategory.book.categories.edges[0].node.id).toBe(categoryId);
 
+    });
+
+    it('should change a book name', async () => {
+
+        const bookResponse = await createBook({name: 'New Book', author: authorId, categories: []});
+        expect(bookResponse.status).toBe(200);
+        expect(bookResponse.body.data.BookCreation).toBeTruthy();
+        log('bookResponse change book name: ', bookResponse.body.data.BookCreation);
+
+        const newName = 'New Book Name';
+        const {id: bookId} = bookResponse.body.data.BookCreation.book.node;
+
+        const changeBookNameResponse = await changeBookName({name: newName, book: bookId});
+        log(changeBookNameResponse.body)
+        expect(changeBookNameResponse.status).toBe(200);
+        expect(changeBookNameResponse.body.data.ChangeBookName).toBeTruthy();
+        expect(changeBookNameResponse.body.data.ChangeBookName.book.name).toBe(newName);
+        expect(changeBookNameResponse.body.data.ChangeBookName.book.updatedAt).not.toBe(bookResponse.body.data.BookCreation.book.updatedAt);
     });
 });

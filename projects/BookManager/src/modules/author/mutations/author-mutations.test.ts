@@ -60,7 +60,9 @@ describe('author mutations', () => {
         expect(bookResponse.body.data.BookCreation).toBeTruthy();
 
 
+        log('bookId: ', bookResponse.body.data.BookCreation.book.node.id);
         const {cursor: bookId} = bookResponse.body.data.BookCreation.book;
+        log('bookId: ', bookId);
 
         const addBookResponse = await addBookToAuthor(authorId, bookId);
 
