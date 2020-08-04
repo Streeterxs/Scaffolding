@@ -14,7 +14,7 @@ import {
 } from './';
 
 import { testsLogger } from '../testsLogger';
-import { changeBookNameMutation, ChangeBookNameInput, ChangeCategoryNameInput, changeCategoryNameMutation, EditEditionInput, editEditionMutation } from './mutationsBase';
+import { changeBookNameMutation, ChangeBookNameInput, ChangeCategoryNameInput, changeCategoryNameMutation, EditEditionInput, editEditionMutation, ChangeBookEditionInput, changeBookEditionMutation } from './mutationsBase';
 
 const log = testsLogger.extend('mutationsRequests');
 
@@ -89,6 +89,12 @@ export const mutationsRequestBaseModule = () => {
         return await graphqlRequestFn(editEditionMutation(editEditionObj), {});
     }
 
+    const changeBookEdition = async (changeBookEditionObj: ChangeBookEditionInput) => {
+
+        log('change book edition changeBookEditionObj inputed: ', changeBookEditionObj);
+        return await graphqlRequestFn(changeBookEditionMutation(changeBookEditionObj), {});
+    }
+
     return {
         createAuthor,
         addBookToAuthor,
@@ -98,6 +104,7 @@ export const mutationsRequestBaseModule = () => {
         changeBookName,
         createEdition,
         editEdition,
+        changeBookEdition,
         createCategory,
         changeCategoryName
     };

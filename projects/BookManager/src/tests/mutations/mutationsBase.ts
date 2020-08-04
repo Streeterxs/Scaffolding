@@ -1,5 +1,6 @@
 import { testsLogger } from "../testsLogger";
 import ChangeCategoryName from "../../modules/category/mutations/changeName";
+import ChangeBookEdition from "../../modules/edition/mutations/changeBookEdition";
 
 const log = testsLogger.extend('mutationsQuery');
 export const createAuthorMutation = (name: string) => `
@@ -197,6 +198,34 @@ export const editEditionMutation = ({
                 year
                 pages
                 language
+            }
+        }
+    }
+`;
+
+export type ChangeBookEditionInput = {
+    book: string;
+    edition: string;
+};
+export const changeBookEditionMutation = ({book, edition}: ChangeBookEditionInput) => `
+    mutation {
+        ChangeBookEdition(input: {book: "${book}", edition: "${edition}", clientMutationId: "11"}){
+            edition {
+                id
+                edition
+                book {
+                    id
+                    name
+                }
+                publishing
+            }
+            book {
+                id
+                name
+            }
+            lastBook {
+                id
+                name
             }
         }
     }
