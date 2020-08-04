@@ -1,4 +1,5 @@
 import { testsLogger } from "../testsLogger";
+import ChangeCategoryName from "../../modules/category/mutations/changeName";
 
 const log = testsLogger.extend('mutationsQuery');
 export const createAuthorMutation = (name: string) => `
@@ -172,6 +173,23 @@ export const createCategoryMutation = (name: string) => `
                     createdAt
                     updatedAt
                 }
+            }
+        }
+    }
+`;
+
+export type ChangeCategoryNameInput = {
+    name: string;
+    category: string;
+};
+
+export const changeCategoryNameMutation = ({name, category}: ChangeCategoryNameInput) => `
+    mutation {
+        ChangeCategoryName(input: {name: "${name}", category: "${category}", clientMutationId: "9"}) {
+            category {
+                id
+                name
+                updatedAt
             }
         }
     }
