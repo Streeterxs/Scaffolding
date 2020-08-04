@@ -162,6 +162,46 @@ export const createEditionMutation = (
     }
 `;
 
+export type EditEditionInput = {
+    editionIdentifier: string;
+    edition?: number;
+    publishing?: string;
+    year?: number;
+    pages?: number;
+    language?: string
+};
+export const editEditionMutation = ({
+    editionIdentifier,
+    edition,
+    publishing,
+    year,
+    pages,
+    language
+}: EditEditionInput) => `
+    mutation {
+        EditEdition (
+            input: {
+                editionIdentifier: "${editionIdentifier}",
+                ${edition ? `edition: ${edition},` : ''}
+                ${publishing ? `publishing: "${publishing}",` : ''}
+                ${year ? `year: ${year},` : ''}
+                ${pages ? `pages: ${pages},` : ''}
+                ${language ? `language: "${language}",` : ''}
+                clientMutationId: "10"
+            }
+        ) {
+            edition {
+                id
+                edition
+                publishing
+                year
+                pages
+                language
+            }
+        }
+    }
+`;
+
 export const createCategoryMutation = (name: string) => `
     mutation {
         CategoryCreation(input: {name: "${name}", clientMutationId: "8"}) {

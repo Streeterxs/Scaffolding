@@ -13,11 +13,11 @@ const EditionType = new GraphQLObjectType({
     fields: () => ({
         id: globalIdField('Edition'),
         edition: {
-            type: GraphQLString,
+            type: GraphQLFloat,
             resolve: (edition: IEdition) => edition.edition
         },
         publishing: {
-            type: GraphQLFloat,
+            type: GraphQLString,
             resolve: (edition: IEdition) => edition.publishing
         },
         year: {
@@ -25,7 +25,7 @@ const EditionType = new GraphQLObjectType({
             resolve: (edition: IEdition) => edition.year
         },
         pages: {
-            type: GraphQLString,
+            type: GraphQLFloat,
             resolve: (edition: IEdition) => edition.pages
         },
         language: {
