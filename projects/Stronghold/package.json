@@ -1,0 +1,11 @@
+{
+  "name": "@BookScaffolding/stronghold",
+  "version": "0.0.1",
+  "description": "A package to manage all security",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Afonso Araújo Neto",
+  "license": "MIT"
+}
