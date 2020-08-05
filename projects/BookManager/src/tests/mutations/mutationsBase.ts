@@ -119,6 +119,47 @@ export const changeBookNameMutation = (changeBookNameObj: ChangeBookNameInput) =
     }
 `;
 
+export type ChangeAuthorBookInput = {
+    book: string;
+    author: string;
+};
+export const changeAuthorBookMutations = ({book, author}: ChangeAuthorBookInput) => `
+    mutation {
+        ChangeAuthorBook (input: {book: "${book}", author: "${author}", clientMutationId: "12"}) {
+            book {
+                id
+                name
+                author {
+                    id
+                    name
+                }
+                updatedAt
+            }
+            author {
+                id
+                name
+                books {
+                    edges {
+                        cursor
+                        node {
+                            id
+                        }
+                    }
+                }
+            }
+            lastAuthor {
+                id
+                name
+                books {
+                    edges {
+                        cursor
+                    }
+                }
+            }
+        }
+    }
+`;
+
 export type createEditionMutationInput = {
     edition: number,
     book: string,

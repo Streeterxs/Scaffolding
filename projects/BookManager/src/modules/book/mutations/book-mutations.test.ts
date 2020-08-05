@@ -15,7 +15,7 @@ describe('book mutations', () => {
         clearDatabase
     } = databaseTestModule();
 
-    const { createAuthor, createBook, createCategory, addCategoryToBook, changeBookName } = mutationsRequestBaseModule();
+    const { createAuthor, createBook, createCategory, addCategoryToBook, changeBookName, changeAuthorBook } = mutationsRequestBaseModule();
 
     beforeAll(() => connect());
 
@@ -77,5 +77,32 @@ describe('book mutations', () => {
         expect(changeBookNameResponse.body.data.ChangeBookName).toBeTruthy();
         expect(changeBookNameResponse.body.data.ChangeBookName.book.name).toBe(newName);
         expect(changeBookNameResponse.body.data.ChangeBookName.book.updatedAt).not.toBe(bookResponse.body.data.BookCreation.book.updatedAt);
+    });
+
+    it('Should change author from a book', async () => {
+
+        log('authorid: ', authorId);
+        const objToCreateBook = {name: 'New Book', author: authorId, categories: []};
+        log('objToCreateBook: ', objToCreateBook);
+        const bookResponse = await createBook({name: 'New Book', author: authorId, categories: []});
+
+        log('bookResponse body: ', bookResponse.body);
+        expect(bookResponse.status).toBe(200);
+        expect(bookResponse.body.data.BookCreation).toBeTruthy();
+
+        const newAuthorResponse = await createAuthor('New Author Name');
+        expect(newAuthorResponse.status).toBe(200);
+        expect(newAuthorResponse.body.data.AuthorCreation).toBeTruthy();
+
+        const {id: newAuthorId} = newAuthorResponse.body.data.AuthorCreation.author;
+        const {cursor: bookId} = bookResponse.body.data.BookCreation.book;
+
+        const changeAuthorBookResponse = await changeAuthorBook({book: bookId, author: newAuthorId});
+        log('changeAuthorBookResponse.body: ', changeAuthorBookResponse.body);
+        expect(changeAuthorBookResponse.status).toBe(200);
+        expect(changeAuthorBookResponse.body.data.ChangeAuthorBook).toBeTruthy();
+        expect(changeAuthorBookResponse.body.data.ChangeAuthorBook.book.author.id).toBe(newAuthorId);
+        expect(changeAuthorBookResponse.body.data.ChangeAuthorBook.lastAuthor.id).toBe(authorId);
+        expect(changeAuthorBookResponse.body.data.ChangeAuthorBook.author.books.edges[0].node.id).toBe(bookId);
     });
 });
