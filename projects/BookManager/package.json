@@ -21,6 +21,8 @@
   "author": "Afonso Araújo Neto",
   "license": "MIT",
   "devDependencies": {
+    "jest": "^26.1.0",
+    "jest-junit": "^11.0.1"
   },
   "dependencies": {
     "dataloader": "^2.0.0",
