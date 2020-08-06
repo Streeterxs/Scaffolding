@@ -9,7 +9,6 @@
     "build": "npm run clear && babel src --extensions \".es6,.js,.es,.jsx,.mjs,.ts\" --ignore *.spec.js --out-dir build --copy-files",
     "clear": "rimraf ./build",
     "prestart": "npm run build",
-    "clear:all": "yarn clear:authors && yarn clear:books && yarn clear:categories && yarn clear:editions",
     "start": "nodemon .",
     "jest": "jest --no-cache --detectOpenHandles"
   },
@@ -17,8 +16,12 @@
   "license": "MIT",
   "dependencies": {
     "debug": "^4.1.1",
+    "http-proxy": "^1.18.1",
     "koa": "^2.13.0",
     "koa-helmet": "^5.2.0",
     "koa-logger": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/http-proxy": "^1.17.4"
   }
 }
