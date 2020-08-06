@@ -61,7 +61,7 @@ const ChangeBookEdition = mutationWithClientMutationId({
             resolve: (lastBookIdObj: {lastBookId: string}) => {
 
                 if (!lastBookIdObj.lastBookId) {
-                    
+
                     return null;
                 }
 
@@ -92,7 +92,7 @@ const ChangeBookEdition = mutationWithClientMutationId({
             const bookFinded = await loadBook(bookId);
             (await bookFinded).editions.splice(0, 0, editionId);
             await bookFinded.save();
-            
+
             return {
                 editionId,
                 lastBookId: lastBook.id,
@@ -100,7 +100,7 @@ const ChangeBookEdition = mutationWithClientMutationId({
             }
         } catch (err) {
 
-            log('error: ', err);            
+            log('error: ', err);
         }
     }
 });

@@ -63,7 +63,7 @@ const EditEdition = mutationWithClientMutationId({
         pages,
         language
     }) => {
-        
+
         try {
 
             const {id: editionId} = fromGlobalId(editionIdentifier);
@@ -80,7 +80,7 @@ const EditEdition = mutationWithClientMutationId({
 
             return {id: editionId};
         } catch (err) {
-            
+
             log('error: ', err);
         }
     }

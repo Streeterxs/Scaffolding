@@ -96,7 +96,7 @@ export const mutationsRequestBaseModule = () => {
         log('create edition editionObj inputed: ', editionObj);
         return await graphqlRequestFn(createEditionMutation(editionObj), {});
     };
-    
+
     const editEdition = async (editEditionObj: EditEditionInput) => {
 
         log('edit edition editionObj inputed: ', editEditionObj);

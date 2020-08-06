@@ -53,7 +53,7 @@ const ChangeCategoryName = mutationWithClientMutationId({
 
             return {id: categoryId};
         } catch(err) {
-            
+
             log('error: ', err);
         }
     }

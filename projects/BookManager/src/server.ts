@@ -17,6 +17,6 @@ const log = appLogger.extend('server');
   const server = createServer(app.callback());
 
   server.listen('3333', () => {
-      log('Server is on');
+      log('Server is on port 3333');
   });
 })();

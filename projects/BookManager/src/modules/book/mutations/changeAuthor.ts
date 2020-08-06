@@ -66,7 +66,7 @@ const ChangeAuthorBook = mutationWithClientMutationId({
             }}
     },
     mutateAndGetPayload: async ({author, book}) => {
-        
+
         try {
 
             const {id: bookId} = fromGlobalId(book);
@@ -74,13 +74,13 @@ const ChangeAuthorBook = mutationWithClientMutationId({
 
             const bookFinded = await loadBook(bookId);
             const lastAuthor = await loadAuthor(bookFinded.author);
-            
+
             const indexOfTheBook = lastAuthor.books.indexOf(bookId);
             if (indexOfTheBook >= 0) {
 
                 (await lastAuthor).books.splice(indexOfTheBook, 1)
                 await lastAuthor.save();
-            } 
+            }
 
             bookFinded.author = authorId;
             await bookFinded.save();
@@ -89,8 +89,8 @@ const ChangeAuthorBook = mutationWithClientMutationId({
             (await authorFinded).books.splice(0, 0, bookId);
 
             return {
-                bookId: bookId,
-                authorId: authorId,
+                bookId,
+                authorId,
                 lastAuthorId: lastAuthor.id
             }
         } catch (err) {

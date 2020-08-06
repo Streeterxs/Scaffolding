@@ -73,7 +73,7 @@ describe('author mutations', () => {
 
         log('addBookResponse.body.data.AddBook.author.books: ', addBookResponse.body.data.AddBook.author.books);
         log('addBookResponse.body.data.AddBook.author.books.edges[0].node: ', addBookResponse.body.data.AddBook.author.books.edges[0].node);
-        
+
         expect(addBookResponse.body.data.AddBook.author.books.edges[0].node.id).toBe(bookId);
 
     });

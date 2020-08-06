@@ -57,7 +57,7 @@ export type createBookMutationInput = {
     name: string,
     author: string,
     categories: string[]
-} 
+}
 export const createBookMutation = ({name, author, categories=[]}: createBookMutationInput) => `
     mutation {
         BookCreation(input: {name: "${name}", author: "${author}", categories: ${JSON.stringify(categories)}, clientMutationId: "4"}) {
@@ -167,7 +167,7 @@ export type createEditionMutationInput = {
     year: number,
     pages: number,
     language: string
-} 
+}
 export const createEditionMutation = (
         {
             edition=1,

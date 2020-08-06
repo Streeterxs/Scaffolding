@@ -80,7 +80,7 @@ describe('edition mutations', () => {
 
         log('editEditionResponse.body: ', editEditionResponse.body);
         expect(editEditionResponse.status).toBe(200);
-        expect(editEditionResponse.body.data.EditEdition).toBeTruthy;
+        expect(editEditionResponse.body.data.EditEdition).toBeTruthy();
         log('editEditionResponse.body: ', editEditionResponse.body.data.EditEdition.edition.edition);
         expect(editEditionResponse.body.data.EditEdition.edition.edition).toBe(editEditionObj.edition);
         expect(editEditionResponse.body.data.EditEdition.edition.publishing).toBe(editEditionObj.publishing);
@@ -112,7 +112,7 @@ describe('edition mutations', () => {
         const editionId = editionResponse.body.data.EditionCreation.edition.cursor;
 
         const changeBookEditionResponse = await changeBookEdition({edition: editionId, book: newBookId});
-        
+
         log('changeBookEditionResponse.body: ', changeBookEditionResponse.body);
 
         expect(changeBookEditionResponse.status).toBe(200);
