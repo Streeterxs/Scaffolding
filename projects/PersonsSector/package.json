@@ -1,0 +1,11 @@
+{
+  "name": "@BookScaffolding/personssector",
+  "version": "0.0.1",
+  "description": "This project manage persons, identifing them, authorizing, forbidding, registering etc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Afonso Araújo Neto",
+  "license": "MIT"
+}

@@ -21,10 +21,12 @@
     "koa": "^2.13.0",
     "koa-helmet": "^5.2.0",
     "koa-logger": "^3.2.1",
-    "koa-router": "^9.1.0"
+    "koa-router": "^9.1.0",
+    "kcors": "^2.2.2"
   },
   "devDependencies": {
     "@types/http-proxy": "^1.17.4",
+    "@types/koa-helmet": "^5.2.0",
     "jest": "^26.1.0",
     "jest-junit": "^11.0.1"
   }
