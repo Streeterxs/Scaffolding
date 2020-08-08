@@ -16,7 +16,7 @@ const app = new Koa();
 app.use(logger());
 app.use(cors());
 
-const graphqlSettings = async (req: any) => {
+export const graphqlSettings = async (req: any) => {
 
     return {
         graphql: true,
@@ -31,7 +31,7 @@ const graphqlSettings = async (req: any) => {
     }
 }
 
-const graphqlHttpServer = graphqlHttp(graphqlSettings);
+export const graphqlHttpServer = graphqlHttp(graphqlSettings);
 
 router.all('/graphql', graphqlHttpServer);
 
