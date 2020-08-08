@@ -15,13 +15,17 @@
   "author": "Afonso Araújo Neto",
   "license": "MIT",
   "dependencies": {
+    "@BookScaffolding/bookmanager": "^0.0.1",
     "debug": "^4.1.1",
     "http-proxy": "^1.18.1",
     "koa": "^2.13.0",
     "koa-helmet": "^5.2.0",
-    "koa-logger": "^3.2.1"
+    "koa-logger": "^3.2.1",
+    "koa-router": "^9.1.0"
   },
   "devDependencies": {
-    "@types/http-proxy": "^1.17.4"
+    "@types/http-proxy": "^1.17.4",
+    "jest": "^26.1.0",
+    "jest-junit": "^11.0.1"
   }
 }
