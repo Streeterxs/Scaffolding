@@ -1,3 +1,3 @@
 import debug from 'debug';
 
-export const testsLogger = debug('projects:bookmanager:tests');
+export const testsLogger = debug('projects:personssector:tests');

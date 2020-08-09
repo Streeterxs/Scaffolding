@@ -1,3 +1,3 @@
 import debug from 'debug';
 
-export const appLogger = debug('projects:stronghold:app');
+export const appLogger = debug('projects:personssector:app');
