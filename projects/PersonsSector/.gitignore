@@ -1,0 +1,8 @@
+build
+build/*
+
+# environments
+.env
+
+# junit test reports
+junit.xml
