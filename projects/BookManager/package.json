@@ -20,11 +20,6 @@
   },
   "author": "Afonso Araújo Neto",
   "license": "MIT",
-  "devDependencies": {
-    "jest": "^26.1.0",
-    "jest-junit": "^11.0.1",
-    "typescript": "^3.9.7"
-  },
   "dependencies": {
     "dataloader": "^2.0.0",
     "debug": "^4.1.1",
