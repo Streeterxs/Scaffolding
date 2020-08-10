@@ -46,6 +46,8 @@
     "nodemon": "^2.0.4",
     "rimraf": "^3.0.2",
     "supertest": "^4.0.2",
+    "jest": "^26.1.0",
+    "jest-junit": "^11.0.1",
     "typescript": "^3.9.7"
   }
 }
