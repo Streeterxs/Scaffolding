@@ -1274,6 +1274,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/co@^4.6.2":
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/@types/co/-/co-4.6.2.tgz#027177ea7a3e34adbd55424e8b949fceb80fda32"
+  integrity sha512-tCPGk0b+zVZgFq6JovNM9MPH78BdLBE4RQMa21GCe2LhSs91kCSegS2Qdpb1NdRmfa7Asay9+rY2u1Z8Iw0s8A==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
