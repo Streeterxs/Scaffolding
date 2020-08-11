@@ -17,6 +17,7 @@
   "dependencies": {
     "@authentication/rate-limit": "^1.0.0",
     "@authentication/secure-hash": "^1.1.0",
+    "@types/co": "^4.6.2",
     "dataloader": "^2.0.0",
     "debug": "^4.1.1",
     "dotenv-safe": "^8.2.0",
