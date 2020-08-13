@@ -52,6 +52,8 @@ const oAuthClientSchema = new Schema({
 export interface IUser extends mongoose.Document {
     email: string;
     password: string;
+    tokens: string[];
+    person: string;
 };
 
 export interface IUserModel extends mongoose.Model<IUser> {
@@ -67,6 +69,15 @@ const userSchema = new Schema({
         type: String,
         unique: false,
         required: true
+    },
+    tokens: {
+        type: [String],
+        required: true,
+        default: []
+    },
+    person: {
+        type: String,
+        required: false
     }
 });
 
@@ -106,7 +117,11 @@ oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client
     userId: user.id
   });
 
-  return await accessToken.save();
+  const newToken = await accessToken.save();
+  (await user.tokens).splice(0, 0, newToken.id);
+  await user.save();
+
+  return newToken;
 };
 
 oAuthClientSchema.statics.getClient = async (clientId, clientSecret) => {
