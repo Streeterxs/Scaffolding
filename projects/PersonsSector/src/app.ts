@@ -1,14 +1,13 @@
-import koa from 'koa';
+import { createServer } from 'http';
 import Router from 'koa-router';
 import logger from 'koa-logger';
 import { GraphQLError } from 'graphql';
 import graphqlHttp from 'koa-graphql';
-import OAuth2, {Request, Response, UnauthorizedRequestError} from 'oauth2-server';
+import OAuth2 from 'oauth2-server';
 
 import { appLogger } from './appLogger';
 import Schema from './schema';
 import { User, OAuthTokens, OAuthClient } from './modules/user/UserModel';
-import { createServer } from 'http';
 import { koaOauhServer } from './koaOauhServer';
 
 const log = appLogger.extend('entry');
@@ -29,6 +28,7 @@ const model:
         getClient: OAuthClient.getClient,
         getUser: User.getUser
     };
+
 const router = new Router();
 const app = koaOauhServer({
     model
@@ -38,7 +38,7 @@ app.use(async (context, next) => {
     const teste = await context.authenticate();
     log('context.state: ', context.state.oauth);
     log('context.headers: ', context.headers);
-    await teste(next);
+    // await teste(next);
     // await next();
 });
 
