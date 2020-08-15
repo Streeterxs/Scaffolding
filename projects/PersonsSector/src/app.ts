@@ -12,9 +12,6 @@ import { koaOauhServer } from './koaOauhServer';
 
 const log = appLogger.extend('entry');
 
-log('this: ', this);
-log('global this: ', globalThis);
-
 const model:
     OAuth2.AuthorizationCodeModel |
     OAuth2.ClientCredentialsModel |
@@ -39,7 +36,7 @@ app.use(async (context, next) => {
     log('context.state: ', context.state.oauth);
     log('context.headers: ', context.headers);
     // await teste(next);
-    // await next();
+    await next();
 });
 
 app.use(logger());
@@ -64,8 +61,8 @@ export const graphqlServer = graphqlHttp(graphqlSettings);
 
 const appServerCreator = createServer(app.callback());
 
-/* router.all('/graphql', graphqlServer);
+router.all('/graphql', graphqlServer);
 
-app.use(router.routes()).use(router.allowedMethods()); */
+app.use(router.routes()).use(router.allowedMethods());
 
 export default app;
