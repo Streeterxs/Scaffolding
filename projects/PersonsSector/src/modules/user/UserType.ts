@@ -5,6 +5,8 @@ import { IUser } from "./UserModel";
 import { loadPerson } from "../person/PersonLoader";
 import { nodeInterface } from "../../interface/nodeDefinitions";
 
+import PersonType from "../person/PersonType";
+
 const userType = new GraphQLObjectType({
     name: 'UserType',
     description: 'Type for user',
@@ -20,7 +22,7 @@ const userType = new GraphQLObjectType({
             resolve: (user: IUser) => user.tokens
         },
         person: {
-            type: GraphQLString,
+            type: PersonType,
             resolve: (user: IUser) => loadPerson(user.person)
         }
     })

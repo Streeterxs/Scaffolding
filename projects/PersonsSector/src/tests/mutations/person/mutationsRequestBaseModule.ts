@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../../../app';
 
 import { testsLogger } from "../../testsLogger";
-import { createPersonInput, createPersonQuery, updatePersonInput, updatePersonQuery } from './mutationsBase';
+import { createPersonInput, createPersonQuery, updatePersonInput, updatePersonQuery, addUserInput, addUserQuery } from './mutationsBase';
 
 
 export const personMutationsRequestModule = () => {
@@ -27,10 +27,16 @@ export const personMutationsRequestModule = () => {
     const updatePerson = (updatePersonInputObj: updatePersonInput) => {
 
         return graphqlRequestFn(updatePersonQuery(updatePersonInputObj), {});
-    }
+    };
+
+    const addUser = (addUserInputObj: addUserInput) => {
+
+        return graphqlRequestFn(addUserQuery(addUserInputObj), {});
+    };
 
     return {
         createPerson,
-        updatePerson
+        updatePerson,
+        addUser
     };
 };

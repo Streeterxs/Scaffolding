@@ -34,3 +34,38 @@ export const updatePersonQuery = ({name, lastname, person}: updatePersonInput) =
         }
     }
 `;
+
+export type addUserInput = {
+    person: string;
+    user: string;
+};
+export const addUserQuery = ({person, user}: addUserInput) => `
+    mutation {
+        AddUser (input: {person: "${person}", user: "${user}", clientMutationId: "4"}) {
+            person {
+                id
+                name
+                lastname
+                users {
+                    edges {
+                        cursor
+                        node {
+                            id
+                            email
+                        }
+                    }
+                }
+            }
+            user {
+                id
+                email
+                tokens
+                person {
+                    id
+                    name
+                    lastname
+                }
+            }
+        }
+    }
+`;

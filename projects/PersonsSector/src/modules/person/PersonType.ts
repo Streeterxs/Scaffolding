@@ -1,8 +1,9 @@
-import { GraphQLObjectType, GraphQLString, GraphQLList } from "graphql";
-import { globalIdField } from "graphql-relay";
+import { GraphQLObjectType, GraphQLString } from "graphql";
+import { globalIdField, connectionFromArray, connectionDefinitions, connectionArgs } from "graphql-relay";
 
 import { IPerson } from "./PersonModel";
 import { loadUser } from "../user/UserLoader";
+import { userConnection } from "../user/UserType";
 
 const personType = new GraphQLObjectType({
     name: 'PersonType',
@@ -18,10 +19,16 @@ const personType = new GraphQLObjectType({
             resolve: (person: IPerson) => person.lastname
         },
         users: {
-            type: new GraphQLList(GraphQLString),
-            resolve: (person: IPerson) => person.users.map(loadUser)
+            type: userConnection.connectionType,
+            args: connectionArgs,
+            resolve: (person: IPerson, args) => connectionFromArray(person.users.map(loadUser), args)
         }
     })
 });
+
+export const personConnection =
+    // TODO correct types
+    // Don't use GraphQLNonNull or 'undefinedConnection' is created
+    connectionDefinitions({name: 'Person', nodeType: personType});
 
 export default personType;
