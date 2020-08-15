@@ -96,7 +96,8 @@ module.exports = {
   // Run tests from one or more projects
   projects: [
     //'<rootDir>',
-    '<rootDir>/projects/BookManager/jest.config.js'
+    '<rootDir>/projects/BookManager/jest.config.js',
+    '<rootDir>/projects/PersonsSector/jest.config.js'
   ],
 
   // Use this configuration option to add custom reporters to Jest
