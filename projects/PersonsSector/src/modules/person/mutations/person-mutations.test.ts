@@ -13,7 +13,8 @@ describe('Person Mutations', () => {
     } = databaseTestModule();
 
     const {
-        createPerson
+        createPerson,
+        updatePerson
     } = personMutationsRequestModule();
 
     beforeAll(() => connect());
@@ -31,5 +32,25 @@ describe('Person Mutations', () => {
         expect(createPersonResponse.body.data.CreatePerson).toBeTruthy();
         expect(createPersonResponse.body.data.CreatePerson.person.name).toBe('Joe');
         expect(createPersonResponse.body.data.CreatePerson.person.lastname).toBe('Dohan');
+    });
+
+    it('should update a person', async () => {
+
+        const createPersonResponse = await createPerson({name: 'Joe', lastname: 'Dohan'});
+        expect(createPersonResponse.status).toBe(200);
+        expect(createPersonResponse.body.data.CreatePerson).toBeTruthy();
+
+        const {id: personId} = createPersonResponse.body.data.CreatePerson.person;
+        const newName = 'John';
+        const newLastname = 'Duvalle';
+
+        const updatePersonResponse = await updatePerson({name: newName, lastname: newLastname, person: personId});
+
+        log('updatePersonResponse.body: ', updatePersonResponse.body);
+        expect(updatePersonResponse.status).toBe(200);
+        expect(updatePersonResponse.body.data.UpdatePerson).toBeTruthy();
+        expect(updatePersonResponse.body.data.UpdatePerson.person.name).toBe(newName);
+        expect(updatePersonResponse.body.data.UpdatePerson.person.lastname).toBe(newLastname);
+        expect(updatePersonResponse.body.data.UpdatePerson.person.id).toBe(personId);
     });
 });

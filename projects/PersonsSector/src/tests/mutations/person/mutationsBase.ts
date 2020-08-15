@@ -17,3 +17,20 @@ export const createPersonQuery = ({name, lastname}: createPersonInput) => `
         }
     }
 `;
+
+export type updatePersonInput = {
+    name: string;
+    lastname: string;
+    person: string;
+};
+export const updatePersonQuery = ({name, lastname, person}: updatePersonInput) => `
+    mutation {
+        UpdatePerson (input: {name: "${name}", lastname: "${lastname}", person: "${person}", clientMutationId: "2"}) {
+            person {
+                id
+                name
+                lastname
+            }
+        }
+    }
+`;
