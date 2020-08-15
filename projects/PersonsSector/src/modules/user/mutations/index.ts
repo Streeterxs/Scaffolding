@@ -1,1 +1,5 @@
-export default {};
+import Register from './register';
+
+export default {
+    Register,
+};

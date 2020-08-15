@@ -1,12 +1,14 @@
 import { GraphQLObjectType, GraphQLString, GraphQLList } from "graphql";
-import { globalIdField } from "graphql-relay";
+import { globalIdField, connectionDefinitions } from "graphql-relay";
 
 import { IUser } from "./UserModel";
 import { loadPerson } from "../person/PersonLoader";
+import { nodeInterface } from "../../interface/nodeDefinitions";
 
 const userType = new GraphQLObjectType({
     name: 'UserType',
     description: 'Type for user',
+    interfaces: [ nodeInterface ],
     fields: () => ({
         id: globalIdField('User'),
         email: {
@@ -23,5 +25,10 @@ const userType = new GraphQLObjectType({
         }
     })
 });
+
+export const userConnection =
+    // TODO correct types
+    // Don't use GraphQLNonNull or 'undefinedConnection' is created
+    connectionDefinitions({name: 'User', nodeType: userType});
 
 export default userType;

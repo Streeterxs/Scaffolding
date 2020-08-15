@@ -2,9 +2,10 @@ import request from 'supertest';
 
 import app from '../../../app';
 import { testsLogger } from "../../testsLogger";
+import { registerInput, registerMutationQuery } from './mutationsBase';
 
 
-export const personMutationsRequest = () => {
+export const userMutationsRequestModule = () => {
 
     const log = testsLogger.extend('mutationsRequests');
 
@@ -17,5 +18,11 @@ export const personMutationsRequest = () => {
         }).send(JSON.stringify({query, variables}));
     };
 
-    return {};
+    const register = (registerMutationInputObj: registerInput) => {
+
+        return graphqlRequestFn(registerMutationQuery(registerMutationInputObj), {});
+    }
+    return {
+        register
+    };
 };

@@ -7,7 +7,8 @@ const MutationType = new GraphQLObjectType({
     name: 'MutationType',
     description: 'Type for mutation',
     fields: () => ({
-        ...PersonMutations
+        ...PersonMutations,
+        ...UserMutations
     })
 });
 
