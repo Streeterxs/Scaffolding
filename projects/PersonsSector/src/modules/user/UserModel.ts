@@ -1,9 +1,21 @@
 import mongoose, { Schema } from "mongoose";
+import bcrypt from 'bcrypt';
 
 import { appLogger } from "../../appLogger";
 import { Callback, Token, Client } from "oauth2-server";
 
-const log = appLogger.extend('userModel');
+import { testsLogger } from "../../tests/testsLogger";
+
+
+let log;
+
+if (process.env.JEST_WORKER_ID) {
+
+    log = testsLogger.extend('userModel');
+} else {
+
+    log = appLogger.extend('userModel');
+}
 
 export interface IOAuthTokens extends mongoose.Document, Token {
     accessToken: string;
@@ -135,6 +147,18 @@ userSchema.statics.getUser = async (email, password) => {
 
   return await User.findOne({ email, password });
 };
+
+userSchema.pre<IUser>('save', async function(next) {
+
+    if (this.isModified('password')) {
+
+        log('this inside pre save: ', this);
+        this.password = await bcrypt.hash(this.password, 8);
+        log('this.password: ', this.password);
+    }
+
+    next();
+});
 
 export const User = mongoose.model<IUser, IUserModel>('PersonsSector_User', userSchema);
 export const OAuthTokens = mongoose.model<IOAuthTokens, IOAuthTokensModel>('PersonsSector_OAuthTokens', oAuthTokensSchema);
