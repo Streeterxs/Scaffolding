@@ -17,7 +17,8 @@ describe('Person Mutations', () => {
     const {
         createPerson,
         updatePerson,
-        addUser
+        addUser,
+        removeUser
     } = personMutationsRequestModule();
 
     const {
@@ -89,5 +90,35 @@ describe('Person Mutations', () => {
         log('addUserResponse.body.data.AddUser.person.users: ', addUserResponse.body.data.AddUser.person.users);
         expect(addUserResponse.body.data.AddUser.person.users.edges[0].node.id).toBe(userId);
         expect(addUserResponse.body.data.AddUser.user.person.id).toBe(personId);
+    });
+
+    it('should remove a user from a person', async () => {
+
+        const createPersonResponse = await createPerson({name: 'Joe', lastname: 'Dohan'});
+        expect(createPersonResponse.status).toBe(200);
+        expect(createPersonResponse.body.data.CreatePerson).toBeTruthy();
+
+        const email = 'joe_dohan@gmail.com';
+        const password = '12345678';
+
+        const registerResponse = await register({email, password});
+        expect(registerResponse.status).toBe(200);
+        expect(registerResponse.body.data.Register).toBeTruthy();
+
+        const {id: personId} = createPersonResponse.body.data.CreatePerson.person;
+        const {id: userId} = registerResponse.body.data.Register.user.node;
+
+        const addUserResponse = await addUser({person: personId, user: userId});
+        expect(addUserResponse.status).toBe(200);
+        expect(addUserResponse.body.data.AddUser).toBeTruthy();
+
+        const removeUserResponse = await removeUser({person: personId, user: userId});
+        log('removeUserResponse.body: ', removeUserResponse.body);
+        expect(removeUserResponse.status).toBe(200);
+        expect(removeUserResponse.body.data.RemoveUser).toBeTruthy();
+        log('removeUserResponse.body.data.RemoveUser.user: ', removeUserResponse.body.data.RemoveUser.user);
+        log('removeUserResponse.body.data.RemoveUser.user.person: ', removeUserResponse.body.data.RemoveUser.user.person);
+        expect(removeUserResponse.body.data.RemoveUser.user.person).toBeNull();
+        expect((removeUserResponse.body.data.RemoveUser.person.users.edges as string[]).length).toBe(0);
     });
 });

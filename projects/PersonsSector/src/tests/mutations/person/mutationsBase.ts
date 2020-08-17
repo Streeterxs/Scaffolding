@@ -69,3 +69,34 @@ export const addUserQuery = ({person, user}: addUserInput) => `
         }
     }
 `;
+
+export type removeUserInput = {
+    person: string;
+    user: string;
+};
+export const removeUserQuery = ({person, user}: removeUserInput) => `
+    mutation {
+        RemoveUser (input: {person: "${person}", user: "${user}", clientMutationId: "5"}) {
+            person {
+                id
+                name
+                lastname
+                users {
+                    edges {
+                        cursor
+                        node {
+                            id
+                        }
+                    }
+                }
+            }
+            user {
+                id
+                email
+                person {
+                    id
+                }
+            }
+        }
+    }
+`;
