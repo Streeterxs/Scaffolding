@@ -57,7 +57,8 @@ export interface IOAuthCLientModel extends mongoose.Model<IOAuthClient> {
 const oAuthClientSchema = new Schema({
     clientId: { type: String },
     clientSecret: { type: String },
-    redirectUris: { type: Array }
+    grants: { type: [String] },
+    redirectUris: { type: Array, required: false }
 });
 
 
