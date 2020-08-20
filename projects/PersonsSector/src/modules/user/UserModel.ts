@@ -143,9 +143,19 @@ oAuthClientSchema.statics.getClient = async (clientId, clientSecret) => {
 
 userSchema.statics.getUser = async (email, password) => {
 
-  console.log('in getUser (username: ' + email + ', password: ' + password + ')');
+    const user = await User.findOne({email});
 
-  return await User.findOne({ email, password });
+    if (!user) {
+        throw new Error('Invalid login credentials');
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatch) {
+        throw new Error('Invalid password');
+    }
+
+    return user;
 };
 
 userSchema.pre<IUser>('save', async function(next) {

@@ -34,6 +34,7 @@
     "tslint": "^6.1.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/oauth2-server": "^3.0.12"
   }
 }
