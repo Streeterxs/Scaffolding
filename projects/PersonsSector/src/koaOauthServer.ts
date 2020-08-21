@@ -5,9 +5,15 @@ import { appLogger } from './appLogger';
 
 const log = appLogger.extend('koaOauthServer');
 
+export interface IKoaOauth2Context extends koa.DefaultContext {
+    authenticate: () => {};
+    authorize: () => {};
+    token: () => (next: any) => Promise<any>;
+};
 export const koaOauhServer = (options: OAuth2.ServerOptions) => {
 
-    const app = new koa();
+    // https://stackoverflow.com/questions/43160598/adding-properties-to-koa2s-context-in-typescript
+    const app = new koa<koa.DefaultState, IKoaOauth2Context>();
 
     const oauth = new OAuth2(options);
 
@@ -24,24 +30,24 @@ export const koaOauhServer = (options: OAuth2.ServerOptions) => {
             const request = new Request(this.request);
             const response = new Response(this.response);
 
-        try {
-            this.state.oauth = {
-                token: this.oauth.authenticate(request, response)
-            };
-        } catch (e) {
+            try {
+                this.state.oauth = {
+                    token: this.oauth.authenticate(request, response)
+                };
+            } catch (e) {
 
-            log('error: ', e);
-            if (e instanceof UnauthorizedRequestError) {
-                this.status = e.code;
-            } else {
-                this.body = { error: e.name, error_description: e.message };
-                this.status = e.code;
+                log('error: ', e);
+                if (e instanceof UnauthorizedRequestError) {
+                    this.status = e.code;
+                } else {
+                    this.body = { error: e.name, error_description: e.message };
+                    this.status = e.code;
+                }
+
+                return this.app.emit('error', e, this);
             }
 
-            return this.app.emit('error', e, this);
-        }
-
-        return next;
+            return next;
         };
     };
 
