@@ -1,23 +1,31 @@
 import { createServer } from 'http';
 import Router from 'koa-router';
 import logger from 'koa-logger';
+import cors from 'kcors';
+import bodyparser from 'koa-bodyparser';
 import { GraphQLError } from 'graphql';
 import graphqlHttp from 'koa-graphql';
-import OAuth2 from 'oauth2-server';
+import {
+        AuthorizationCodeModel,
+        ClientCredentialsModel,
+        RefreshTokenModel,
+        PasswordModel,
+        ExtensionModel
+    } from 'oauth2-server';
 
 import { appLogger } from './appLogger';
 import Schema from './schema';
 import { User, OAuthTokens, OAuthClient } from './modules/user/UserModel';
-import { koaOauhServer } from './koaOauhServer';
+import { koaOauhServer } from './koaOauthServer';
 
 const log = appLogger.extend('entry');
 
 const model:
-    OAuth2.AuthorizationCodeModel |
-    OAuth2.ClientCredentialsModel |
-    OAuth2.RefreshTokenModel |
-    OAuth2.PasswordModel |
-    OAuth2.ExtensionModel = {
+    AuthorizationCodeModel |
+    ClientCredentialsModel |
+    RefreshTokenModel |
+    PasswordModel |
+    ExtensionModel = {
         getAccessToken: OAuthTokens.getAccessToken,
         saveToken: OAuthTokens.saveToken,
         verifyScope: OAuthTokens.verifyScope,
@@ -31,16 +39,9 @@ const app = koaOauhServer({
     model
 });
 
-app.use(async (context, next) => {
-    const teste = await context.authenticate();
-    log('context.state: ', context.state.oauth);
-    log('context.headers: ', context.headers);
-    // await teste(next);
-    await next();
-});
-
 app.use(logger());
-const user = new User();
+app.use(cors());
+app.use(bodyparser());
 
 export const graphqlSettings = async (req: any) => {
 
@@ -62,6 +63,13 @@ export const graphqlServer = graphqlHttp(graphqlSettings);
 const appServerCreator = createServer(app.callback());
 
 router.all('/graphql', graphqlServer);
+
+router.post('/token', async (context, next) => {
+
+    // @ts-ignore
+    const nextOauth = await context.token();
+    await nextOauth();
+});
 
 app.use(router.routes()).use(router.allowedMethods());
 

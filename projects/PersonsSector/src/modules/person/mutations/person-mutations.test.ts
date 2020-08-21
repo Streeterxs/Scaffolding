@@ -26,7 +26,6 @@ describe('Person Mutations', () => {
     } = userMutationsRequestModule();
 
     beforeAll(() => connect());
-    beforeEach(() => {});
     afterEach(() => clearDatabase());
     afterAll(() => closeDatabase());
 
