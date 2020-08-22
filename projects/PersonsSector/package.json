@@ -10,6 +10,7 @@
     "babel": "babel-node --extensions \".es6,.js,.es,.jsx,.mjs,.ts,.tsx\"",
     "build": "npm run clear && babel src --extensions \".es6,.js,.es,.jsx,.mjs,.ts\" --ignore *.test.js --out-dir build --copy-files && tsc --emitDeclarationOnly",
     "populate:clients": "yarn babel ./src/scripts/populateClients",
+    "create:admin": "yarn babel ./src/scripts/createAdmin",
     "clear": "rimraf ./build",
     "prestart": "npm run build",
     "start": "nodemon ./build/server",
