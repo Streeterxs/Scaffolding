@@ -5,6 +5,7 @@ import { appLogger } from "../../appLogger";
 import { Callback, Token, Client } from "oauth2-server";
 
 import { testsLogger } from "../../tests/testsLogger";
+import { permissions } from "./UserPermissions.enum";
 
 
 let log;
@@ -67,6 +68,7 @@ export interface IUser extends mongoose.Document {
     password: string;
     tokens: string[];
     person: string;
+    permission: permissions
 };
 
 export interface IUserModel extends mongoose.Model<IUser> {
@@ -91,6 +93,10 @@ const userSchema = new Schema({
     person: {
         type: String,
         required: false
+    },
+    permission: {
+        type: Number,
+        required: true
     }
 });
 

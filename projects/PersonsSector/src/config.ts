@@ -20,6 +20,11 @@ const config = {
     db_url: `${ENV.MONGODB_URL}`,
 };
 
+export const admin: {email: string, password: string} = {
+    email: `${ENV.ADMIN_EMAIL}`,
+    password: `${ENV.ADMIN_PASSWORD}`
+};
+
 export const clients: {id: string, secret: string}[] = [
     {
         id: `${ENV.STRONGHOLD_CLIENT_ID}`,
@@ -27,6 +32,7 @@ export const clients: {id: string, secret: string}[] = [
     },
 ];
 
+log('admin: ', admin);
 log('config: ', config);
 log('clients: ', clients);
 
