@@ -64,11 +64,12 @@ const appServerCreator = createServer(app.callback());
 
 router.all('/graphql', graphqlServer);
 
-router.post('/token', async (context, next) => {
+router.post('/token', async (context) => {
 
     // @ts-ignore
-    const nextOauth = await context.token();
+    const nextOauth = context.token();
     await nextOauth();
+    log('context.state: ', context.state);
 });
 
 app.use(router.routes()).use(router.allowedMethods());

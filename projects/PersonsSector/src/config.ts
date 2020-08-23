@@ -20,7 +20,8 @@ const config = {
     db_url: `${ENV.MONGODB_URL}`,
 };
 
-export const admin: {email: string, password: string} = {
+export const admin: {username: string, email: string, password: string} = {
+    username: `${ENV.ADMIN_USERNAME}`,
     email: `${ENV.ADMIN_EMAIL}`,
     password: `${ENV.ADMIN_PASSWORD}`
 };

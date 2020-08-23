@@ -64,6 +64,7 @@ const oAuthClientSchema = new Schema({
 
 
 export interface IUser extends mongoose.Document {
+    username: string;
     email: string;
     password: string;
     tokens: string[];
@@ -75,6 +76,11 @@ export interface IUserModel extends mongoose.Model<IUser> {
     getUser(email: string, password: string): Promise<IUser>;
 };
 const userSchema = new Schema({
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
     email: {
         type: String,
         unique: true,
@@ -118,14 +124,17 @@ oAuthTokensSchema.statics.verifyScope = async (token: IOAuthTokens, scope: strin
 
 oAuthTokensSchema.statics.getRefreshToken = async (refreshToken: string) => {
 
-  console.log('in getRefreshToken (refreshToken: ' + refreshToken + ')');
+  log('in getRefreshToken (refreshToken: ' + refreshToken + ')');
 
   return await OAuthTokens.findOne({ refreshToken });
 };
 
 oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client, user: IUser) => {
 
-  console.log('in saveToken (token: ' + token + ')');
+  log('in saveToken (token: ' + token + ')');
+  log('client.id: ', client.id);
+  log('client.id === client._id: ', client.id === client._id);
+  log('user: ', user);
 
   const accessToken = new OAuthTokens({
     accessToken: token.accessToken,
@@ -139,6 +148,10 @@ oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client
   const newToken = await accessToken.save();
   (await user.tokens).splice(0, 0, newToken.id);
   await user.save();
+
+  // Correct missing parameter client
+  newToken.user = user;
+  newToken.client = client;
 
   return newToken;
 };
