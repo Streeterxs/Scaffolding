@@ -12,7 +12,7 @@ const log = appLogger.extend('server');
 
     const server = createServer(app.callback());
 
-    server.listen('3232', () => {
+    server.listen('3233', () => {
         log('server is on');
     });
 })();

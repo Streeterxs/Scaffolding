@@ -18,6 +18,7 @@ const log = appLogger.extend('scripts:createAdmin');
         if (!userFinded) {
 
             const newUser = new User({
+                username: admin.username,
                 email: admin.email,
                 password: admin.password,
                 permission: permissions.admnistrator
