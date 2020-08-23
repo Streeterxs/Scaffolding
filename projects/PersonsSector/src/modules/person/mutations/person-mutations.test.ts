@@ -3,6 +3,7 @@ import { testsLogger } from "../../../tests/testsLogger";
 
 import { personMutationsRequestModule } from "../../../tests/mutations/person";
 import { userMutationsRequestModule } from "../../../tests/mutations/user";
+import { permissions } from "../../user/UserPermissions.enum";
 
 const log = testsLogger.extend('personMutations');
 
@@ -67,10 +68,12 @@ describe('Person Mutations', () => {
         expect(createPersonResponse.status).toBe(200);
         expect(createPersonResponse.body.data.CreatePerson).toBeTruthy();
 
+        const username = 'joedohan2';
         const email = 'joe_dohan@gmail.com';
         const password = '12345678';
+        const permission = permissions.common;
 
-        const registerResponse = await register({email, password});
+        const registerResponse = await register({username, email, password, permission});
         expect(registerResponse.status).toBe(200);
         expect(registerResponse.body.data.Register).toBeTruthy();
 
@@ -97,10 +100,12 @@ describe('Person Mutations', () => {
         expect(createPersonResponse.status).toBe(200);
         expect(createPersonResponse.body.data.CreatePerson).toBeTruthy();
 
+        const username = 'joedohan2';
         const email = 'joe_dohan@gmail.com';
         const password = '12345678';
+        const permission = permissions.common;
 
-        const registerResponse = await register({email, password});
+        const registerResponse = await register({username, email, password, permission});
         expect(registerResponse.status).toBe(200);
         expect(registerResponse.body.data.Register).toBeTruthy();
 
