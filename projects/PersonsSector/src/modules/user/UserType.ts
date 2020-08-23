@@ -6,6 +6,7 @@ import { loadPerson } from "../person/PersonLoader";
 import { nodeInterface } from "../../interface/nodeDefinitions";
 
 import PersonType from "../person/PersonType";
+import { permissions } from "./UserPermissions.enum";
 
 const userType = new GraphQLObjectType({
     name: 'UserType',
@@ -13,6 +14,10 @@ const userType = new GraphQLObjectType({
     interfaces: [ nodeInterface ],
     fields: () => ({
         id: globalIdField('User'),
+        username: {
+            type: GraphQLString,
+            resolve: (user: IUser) => user.username
+        },
         email: {
             type: GraphQLString,
             resolve: (user: IUser) => user.email
@@ -24,6 +29,10 @@ const userType = new GraphQLObjectType({
         person: {
             type: PersonType,
             resolve: (user: IUser) => loadPerson(user.person)
+        },
+        permission: {
+            type: GraphQLString,
+            resolve: (user: IUser) => permissions[user.permission]
         }
     })
 });

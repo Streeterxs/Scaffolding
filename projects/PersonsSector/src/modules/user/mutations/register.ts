@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId, toGlobalId } from "graphql-relay";
-import { GraphQLNonNull, GraphQLString } from "graphql";
+import { GraphQLNonNull, GraphQLString, GraphQLFloat } from "graphql";
 
 import UserType, { userConnection } from "../UserType";
 import { User } from "../UserModel";
@@ -22,8 +22,10 @@ const register = mutationWithClientMutationId({
     name: 'Register',
     description: 'Register mutation',
     inputFields: {
+        username: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) },
-        password: { type: new GraphQLNonNull(GraphQLString) }
+        password: { type: new GraphQLNonNull(GraphQLString) },
+        permission: { type: new GraphQLNonNull(GraphQLFloat) }
     },
     outputFields: {
         user: {
@@ -42,14 +44,16 @@ const register = mutationWithClientMutationId({
             }
         }
     },
-    mutateAndGetPayload: async ({email, password}) => {
+    mutateAndGetPayload: async ({username, email, password, permission}) => {
 
         try {
 
+            log('username: ', username);
             log('email: ', email);
             log('password: ', password);
+            log('permission: ', permission)
 
-            const newUser = new User({email, password});
+            const newUser = new User({username, email, password, permission});
             await newUser.save();
 
             return {id: newUser.id};

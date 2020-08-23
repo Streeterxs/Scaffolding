@@ -1,6 +1,7 @@
 import { databaseTestModule } from "../../../tests/database";
 import { userMutationsRequestModule } from "../../../tests/mutations/user";
 import { testsLogger } from "../../../tests/testsLogger";
+import { permissions } from "../UserPermissions.enum";
 
 const log = testsLogger.extend('userMutations');
 
@@ -22,10 +23,12 @@ describe('User Mutations', () => {
 
     it('should register a new user', async () => {
 
+        const username = 'joedohan2';
         const email = 'joe_dohan@gmail.com';
         const password = '12345678';
+        const permission = permissions.common;
 
-        const registerResponse = await register({email, password});
+        const registerResponse = await register({username, email, password, permission});
 
         log('registerResponse.body: ', registerResponse.body);
 
