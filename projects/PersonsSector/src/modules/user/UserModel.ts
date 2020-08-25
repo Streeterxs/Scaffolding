@@ -20,11 +20,9 @@ if (process.env.JEST_WORKER_ID) {
 
 export interface IOAuthTokens extends mongoose.Document, Token {
     accessToken: string;
-    accessTokenExpiresOn: Date;
-    clientId: string;
+    accessTokenExpiresAt: Date;
     refreshToken: string;
-    refreshTokenExpiresOn: Date;
-    userId: string;
+    refreshTokenExpiresAt: Date;
 };
 
 export interface IOAuthTokensModel extends mongoose.Model<IOAuthTokens> {
@@ -35,11 +33,11 @@ export interface IOAuthTokensModel extends mongoose.Model<IOAuthTokens> {
 };
 const oAuthTokensSchema = new Schema({
     accessToken: { type: String },
-    accessTokenExpiresOn: { type: Date },
-    clientId: { type: String },
+    accessTokenExpiresAt: { type: Date },
+    client: { type: String },
     refreshToken: { type: String },
-    refreshTokenExpiresOn: { type: Date },
-    userId: { type: String }
+    refreshTokenExpiresAt: { type: Date },
+    user: { type: String }
 });
 
 
@@ -106,13 +104,22 @@ const userSchema = new Schema({
     }
 });
 
-oAuthTokensSchema.statics.getAccessToken = async (bearerToken: string, callback?: Callback<Token>): Promise<IOAuthTokens> => {
+// Fixed infinite loading on request
+oAuthTokensSchema.statics.getAccessToken = (bearerToken: string, callback?: Callback<Token>) => {
 
-    return await OAuthTokens.findOne({accessToken: bearerToken});
+    log('bearerToken: ', bearerToken);
+    OAuthTokens.findOne({accessToken: bearerToken}, (error, token) => {
+
+        log('callback Token: ', token);
+        log('callback error: ', error);
+        callback(error, token);
+    });
 };
 
 oAuthTokensSchema.statics.verifyScope = async (token: IOAuthTokens, scope: string | string[], callback?: Callback<Token>): Promise<boolean> => {
 
+
+    log('verifyScope!!');
     if (!token.scope) {
         return false;
     }
@@ -132,17 +139,19 @@ oAuthTokensSchema.statics.getRefreshToken = async (refreshToken: string) => {
 oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client, user: IUser) => {
 
   log('in saveToken (token: ' + token + ')');
+  log('token stringfied: ', JSON.stringify(token));
+  log('token expires on: ', token.accessTokenExpiresAt);
   log('client.id: ', client.id);
   log('client.id === client._id: ', client.id === client._id);
   log('user: ', user);
 
   const accessToken = new OAuthTokens({
     accessToken: token.accessToken,
-    accessTokenExpiresOn: token.accessTokenExpiresOn,
-    clientId: client.id,
+    accessTokenExpiresAt: token.accessTokenExpiresAt,
+    client: client.id,
     refreshToken: token.refreshToken,
-    refreshTokenExpiresOn: token.refreshTokenExpiresOn,
-    userId: user.id
+    refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+    user: user.id
   });
 
   const newToken = await accessToken.save();

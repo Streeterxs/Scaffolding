@@ -21,18 +21,19 @@ export const koaOauhServer = (options: OAuth2.ServerOptions) => {
     app.context.oauth = oauth;
     app.context.authenticate = function() {
 
-        log('this.app', this.app);
 
-        return (next) => {
+        return async (next) => {
 
-            log('this: ', this);
-            log('this.request: ', this.request);
             const request = new Request(this.request);
             const response = new Response(this.response);
 
             try {
+
+                const authenticateReturn = await this.oauth.authenticate(request, response);
+                log('authenticateReturn: ', authenticateReturn);
+
                 this.state.oauth = {
-                    token: this.oauth.authenticate(request, response)
+                    token: authenticateReturn
                 };
             } catch (e) {
 
