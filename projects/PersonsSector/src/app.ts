@@ -1,5 +1,3 @@
-import { createServer } from 'http';
-import Router from 'koa-router';
 import logger from 'koa-logger';
 import cors from 'kcors';
 import bodyparser from 'koa-bodyparser';
@@ -17,6 +15,7 @@ import { appLogger } from './appLogger';
 import Schema from './schema';
 import { User, OAuthTokens, OAuthClient } from './modules/user/UserModel';
 import { koaOauhServer } from './koaOauthServer';
+import router from './routes';
 
 const log = appLogger.extend('entry');
 
@@ -34,7 +33,6 @@ const model:
         getUser: User.getUser
     };
 
-const router = new Router();
 const app = koaOauhServer({
     model
 });
@@ -60,18 +58,8 @@ export const graphqlSettings = async (req: any) => {
 
 export const graphqlServer = graphqlHttp(graphqlSettings);
 
-const appServerCreator = createServer(app.callback());
+export const appRouter = router(graphqlServer);
 
-router.all('/graphql', graphqlServer);
-
-router.post('/token', async (context) => {
-
-    // @ts-ignore
-    const nextOauth = context.token();
-    await nextOauth();
-    log('context.state: ', context.state);
-});
-
-app.use(router.routes()).use(router.allowedMethods());
+app.use(appRouter.routes()).use(appRouter.allowedMethods());
 
 export default app;

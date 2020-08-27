@@ -1226,6 +1226,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/aws-lambda@^8.10.19":
+  version "8.10.61"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.61.tgz#7471e08843dbdcf09b2494ac5b34c4d1a391e6d0"
+  integrity sha512-+FeZ/52VG4rBSJ0cRE/aB6hMKQzjIgpiSQrGq0eR8ZrXWee7Z2zoGeJzTHVcOeZNawLb+5zvwZNIRGC7X+kQ7Q==
+
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.7":
   version "7.1.9"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.9.tgz#77e59d438522a6fb898fa43dc3455c6e72f3963d"
@@ -6029,6 +6034,13 @@ semver@^7.3.2:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.2.tgz#604962b052b81ed0786aae84389ffba70ffd3938"
   integrity sha512-OrOb32TeeambH6UrhtShmF7CRDqhL6/5XpPNp2DuRH6+9QLw/orhp72j87v8Qa1ScDkvrrBNpZcDejAirJmfXQ==
+
+serverless-http@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/serverless-http/-/serverless-http-2.5.0.tgz#3fb3edbf1d1ab5cff966ef9fe14500506f05ef89"
+  integrity sha512-p0c1aTQ7mLZEtQkaP+K/zT4zFUY1YZs+mRlw/Q0yl+HptJL6IOLLylx6WXXFlQoH5+uUibivRzBbNotatvqDkg==
+  optionalDependencies:
+    "@types/aws-lambda" "^8.10.19"
 
 set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"

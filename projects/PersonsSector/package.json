@@ -2,7 +2,7 @@
   "name": "@BookScaffolding/personssector",
   "version": "0.0.1",
   "description": "This project manage persons, identifing them, authorizing, forbidding, registering etc",
-  "main": "index.js",
+  "main": "./build",
   "author": "Afonso Araújo Neto",
   "license": "MIT",
   "scripts": {
@@ -20,7 +20,6 @@
   "dependencies": {
     "@authentication/rate-limit": "^1.0.0",
     "@authentication/secure-hash": "^1.1.0",
-    "@types/co": "^4.6.2",
     "bcrypt": "^5.0.0",
     "dataloader": "^2.0.0",
     "debug": "^4.1.1",
@@ -35,6 +34,7 @@
     "koa-router": "^9.1.0",
     "mongoose": "^5.9.25",
     "oauth2-server": "^3.1.1",
+    "serverless-http": "^2.5.0",
     "tslint": "^6.1.2"
   },
   "devDependencies": {
