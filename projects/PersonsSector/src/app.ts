@@ -1,4 +1,3 @@
-import { createServer } from 'http';
 import logger from 'koa-logger';
 import cors from 'kcors';
 import bodyparser from 'koa-bodyparser';
@@ -11,7 +10,6 @@ import {
         PasswordModel,
         ExtensionModel
     } from 'oauth2-server';
-import serverless from 'serverless-http';
 
 import { appLogger } from './appLogger';
 import Schema from './schema';

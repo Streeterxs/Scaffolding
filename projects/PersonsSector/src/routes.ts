@@ -4,6 +4,7 @@ import Router from "koa-router";
 import { appLogger } from "./appLogger";
 import { loadUser } from "./modules/user/UserLoader";
 import { permissions } from "./modules/user/UserPermissions.enum";
+import { User } from "./modules/user/UserModel";
 
 const log = appLogger.extend('router');
 
@@ -43,6 +44,30 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
         const nextOauth = context.token();
         await nextOauth();
         log('context.state: ', context.state);
+    });
+
+    kRouter.post('/register', async (context, next) => {
+
+        const {
+            username,
+            email,
+            password
+        } = context.request.body;
+
+        try {
+
+            log('username: ', username);
+            log('email: ', email);
+            log('password: ', password);
+
+            const newUser = new User({username, email, password, permission: permissions.common});
+            await newUser.save();
+
+            await next();
+        } catch(err) {
+
+            log('error: ', err);
+        }
     });
 
     return kRouter;
