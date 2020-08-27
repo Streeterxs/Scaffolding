@@ -11,6 +11,7 @@ import {
         PasswordModel,
         ExtensionModel
     } from 'oauth2-server';
+import serverless from 'serverless-http';
 
 import { appLogger } from './appLogger';
 import Schema from './schema';
@@ -59,9 +60,7 @@ export const graphqlSettings = async (req: any) => {
 
 export const graphqlServer = graphqlHttp(graphqlSettings);
 
-const appServerCreator = createServer(app.callback());
-
-const appRouter = router(graphqlServer);
+export const appRouter = router(graphqlServer);
 
 app.use(appRouter.routes()).use(appRouter.allowedMethods());
 
