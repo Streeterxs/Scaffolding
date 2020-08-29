@@ -8,7 +8,8 @@ const log = testsLogger.extend('userMutations');
 describe('User Mutations', () => {
 
     const {
-        register
+        register,
+        userResetUsers
     } = userMutationsRequestModule();
 
     const {
@@ -18,7 +19,10 @@ describe('User Mutations', () => {
     } = databaseTestModule();
 
     beforeAll(() => connect());
-    afterEach(() => clearDatabase());
+    afterEach(async () => {
+        userResetUsers();
+        await clearDatabase();
+    });
     afterAll(() => closeDatabase());
 
     it('should register a new user', async () => {
@@ -28,7 +32,7 @@ describe('User Mutations', () => {
         const password = '12345678';
         const permission = permissions.common;
 
-        const registerResponse = await register({username, email, password, permission});
+        const registerResponse = await register('admin', {username, email, password, permission});
 
         log('registerResponse.body: ', registerResponse.body);
 
