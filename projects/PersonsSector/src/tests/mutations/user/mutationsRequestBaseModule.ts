@@ -1,28 +1,34 @@
 import request from 'supertest';
 
-import app from '../../../app';
 import { testsLogger } from "../../testsLogger";
 import { registerInput, registerMutationQuery } from './mutationsBase';
+import reqModule from '../../services/requestModule';
+import { requestOption } from "../requestOption.type";
 
 
 export const userMutationsRequestModule = () => {
 
+    const requestModule = reqModule();
     const log = testsLogger.extend('mutationsRequests');
 
-    const graphqlRequestFn = (query, variables) => {
+    const graphqlRequestFn = (option: requestOption, query, variables): Promise<request.Response> => {
 
         log('graphqlRequestFn called');
-        return request(app.callback()).post('/graphql').set({
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        }).send(JSON.stringify({query, variables}));
+        return requestModule[`${option}RequestFn`]({query, variables});
     };
 
-    const register = (registerMutationInputObj: registerInput) => {
+    const register = (option: requestOption, registerMutationInputObj: registerInput) => {
 
-        return graphqlRequestFn(registerMutationQuery(registerMutationInputObj), {});
-    }
+        return graphqlRequestFn(option, registerMutationQuery(registerMutationInputObj), {});
+    };
+
+    const userResetUsers = () => {
+
+        requestModule.reset();
+    };
+
     return {
-        register
+        register,
+        userResetUsers
     };
 };

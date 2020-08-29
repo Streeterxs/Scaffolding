@@ -1,7 +1,5 @@
 import request from 'supertest';
 
-import app from '../../../app';
-
 import { testsLogger } from "../../testsLogger";
 import {
     createPersonInput,
@@ -13,45 +11,51 @@ import {
     removeUserInput,
     removeUserQuery
 } from './mutationsBase';
+import { requestOption } from '../requestOption.type';
+import reqModule from '../../services/requestModule';
 
 
 export const personMutationsRequestModule = () => {
 
+    const requestModule = reqModule();
     const log = testsLogger.extend('mutationsRequests');
 
-    const graphqlRequestFn = (query, variables) => {
+    const graphqlRequestFn = (option: requestOption, query, variables): Promise<request.Response> => {
 
         log('graphqlRequestFn called');
-        return request(app.callback()).post('/graphql').set({
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        }).send(JSON.stringify({query, variables}));
+        return requestModule[`${option}RequestFn`]({query, variables});
     };
 
-    const createPerson = (createPersonInputObj: createPersonInput) => {
+    const createPerson = (option: requestOption, createPersonInputObj: createPersonInput) => {
 
-        return graphqlRequestFn(createPersonQuery(createPersonInputObj), {});
+        return graphqlRequestFn(option, createPersonQuery(createPersonInputObj), {});
     };
 
-    const updatePerson = (updatePersonInputObj: updatePersonInput) => {
+    const updatePerson = (option: requestOption, updatePersonInputObj: updatePersonInput) => {
 
-        return graphqlRequestFn(updatePersonQuery(updatePersonInputObj), {});
+        return graphqlRequestFn(option, updatePersonQuery(updatePersonInputObj), {});
     };
 
-    const addUser = (addUserInputObj: addUserInput) => {
+    const addUser = (option: requestOption, addUserInputObj: addUserInput) => {
 
-        return graphqlRequestFn(addUserQuery(addUserInputObj), {});
+        return graphqlRequestFn(option, addUserQuery(addUserInputObj), {});
     };
 
-    const removeUser = (removeUserInputObj: removeUserInput) => {
+    const removeUser = (option: requestOption, removeUserInputObj: removeUserInput) => {
 
-        return graphqlRequestFn(removeUserQuery(removeUserInputObj), {});
+        return graphqlRequestFn(option, removeUserQuery(removeUserInputObj), {});
+    };
+
+    const personResetUsers = () => {
+
+        requestModule.reset();
     };
 
     return {
         createPerson,
         updatePerson,
         addUser,
-        removeUser
+        removeUser,
+        personResetUsers
     };
 };

@@ -19,20 +19,25 @@ describe('Person Mutations', () => {
         createPerson,
         updatePerson,
         addUser,
-        removeUser
+        removeUser,
+        personResetUsers,
     } = personMutationsRequestModule();
 
     const {
-        register
+        register,
+        userResetUsers
     } = userMutationsRequestModule();
 
     beforeAll(() => connect());
-    afterEach(() => clearDatabase());
+    afterEach(async () => {
+        personResetUsers();
+        await clearDatabase();
+    });
     afterAll(() => closeDatabase());
 
     it('should create a new person', async () => {
 
-        const createPersonResponse = await createPerson({name: 'Joe', lastname: 'Dohan'});
+        const createPersonResponse = await createPerson('admin', {name: 'Joe', lastname: 'Dohan'});
 
         log('createPersonResponse.body: ', createPersonResponse.body);
 
@@ -44,7 +49,7 @@ describe('Person Mutations', () => {
 
     it('should update a person', async () => {
 
-        const createPersonResponse = await createPerson({name: 'Joe', lastname: 'Dohan'});
+        const createPersonResponse = await createPerson('admin', {name: 'Joe', lastname: 'Dohan'});
         expect(createPersonResponse.status).toBe(200);
         expect(createPersonResponse.body.data.CreatePerson).toBeTruthy();
 
@@ -52,7 +57,7 @@ describe('Person Mutations', () => {
         const newName = 'John';
         const newLastname = 'Duvalle';
 
-        const updatePersonResponse = await updatePerson({name: newName, lastname: newLastname, person: personId});
+        const updatePersonResponse = await updatePerson('admin', {name: newName, lastname: newLastname, person: personId});
 
         log('updatePersonResponse.body: ', updatePersonResponse.body);
         expect(updatePersonResponse.status).toBe(200);
@@ -64,7 +69,8 @@ describe('Person Mutations', () => {
 
     it('should add a user to a person', async () => {
 
-        const createPersonResponse = await createPerson({name: 'Joe', lastname: 'Dohan'});
+        const createPersonResponse = await createPerson('admin', {name: 'Joe', lastname: 'Dohan'});
+        log('createPersonResponse.error: ', createPersonResponse.error);
         expect(createPersonResponse.status).toBe(200);
         expect(createPersonResponse.body.data.CreatePerson).toBeTruthy();
 
@@ -73,15 +79,17 @@ describe('Person Mutations', () => {
         const password = '12345678';
         const permission = permissions.common;
 
-        const registerResponse = await register({username, email, password, permission});
+        const registerResponse = await register('admin', {username, email, password, permission});
+        log('registerResponse.error: ', registerResponse.error);
         expect(registerResponse.status).toBe(200);
         expect(registerResponse.body.data.Register).toBeTruthy();
 
         const {id: personId} = createPersonResponse.body.data.CreatePerson.person;
         const {id: userId} = registerResponse.body.data.Register.user.node;
 
-        const addUserResponse = await addUser({person: personId, user: userId});
+        const addUserResponse = await addUser('admin', {person: personId, user: userId});
 
+        log('addUserResponse.error: ', addUserResponse.error);
         log('addUserResponse.body: ', addUserResponse.body);
         log('addUserResponse.body.data.AddUser.person: ', addUserResponse.body.data.AddUser.person);
         expect(addUserResponse.status).toBe(200);
@@ -96,7 +104,7 @@ describe('Person Mutations', () => {
 
     it('should remove a user from a person', async () => {
 
-        const createPersonResponse = await createPerson({name: 'Joe', lastname: 'Dohan'});
+        const createPersonResponse = await createPerson('admin', {name: 'Joe', lastname: 'Dohan'});
         expect(createPersonResponse.status).toBe(200);
         expect(createPersonResponse.body.data.CreatePerson).toBeTruthy();
 
@@ -105,18 +113,18 @@ describe('Person Mutations', () => {
         const password = '12345678';
         const permission = permissions.common;
 
-        const registerResponse = await register({username, email, password, permission});
+        const registerResponse = await register('admin', {username, email, password, permission});
         expect(registerResponse.status).toBe(200);
         expect(registerResponse.body.data.Register).toBeTruthy();
 
         const {id: personId} = createPersonResponse.body.data.CreatePerson.person;
         const {id: userId} = registerResponse.body.data.Register.user.node;
 
-        const addUserResponse = await addUser({person: personId, user: userId});
+        const addUserResponse = await addUser('admin', {person: personId, user: userId});
         expect(addUserResponse.status).toBe(200);
         expect(addUserResponse.body.data.AddUser).toBeTruthy();
 
-        const removeUserResponse = await removeUser({person: personId, user: userId});
+        const removeUserResponse = await removeUser('admin', {person: personId, user: userId});
         log('removeUserResponse.body: ', removeUserResponse.body);
         expect(removeUserResponse.status).toBe(200);
         expect(removeUserResponse.body.data.RemoveUser).toBeTruthy();
