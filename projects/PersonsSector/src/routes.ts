@@ -15,29 +15,29 @@ import { koaOauthServer } from "./koaOauthServer";
 
 const log = appLogger.extend('router');
 
+const model:
+AuthorizationCodeModel |
+ClientCredentialsModel |
+RefreshTokenModel |
+PasswordModel |
+ExtensionModel = {
+    getAccessToken: OAuthTokens.getAccessToken,
+    saveToken: OAuthTokens.saveToken,
+    verifyScope: OAuthTokens.verifyScope,
+    getRefreshToken: OAuthTokens.getRefreshToken,
+    getClient: OAuthClient.getClient,
+    getUser: User.getUser
+};
+
+export const {
+    authenticate,
+    authorize,
+    token
+} = koaOauthServer({
+    model
+});
+
 const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, DefaultContext>>) => {
-
-    const model:
-    AuthorizationCodeModel |
-    ClientCredentialsModel |
-    RefreshTokenModel |
-    PasswordModel |
-    ExtensionModel = {
-        getAccessToken: OAuthTokens.getAccessToken,
-        saveToken: OAuthTokens.saveToken,
-        verifyScope: OAuthTokens.verifyScope,
-        getRefreshToken: OAuthTokens.getRefreshToken,
-        getClient: OAuthClient.getClient,
-        getUser: User.getUser
-    };
-
-    const {
-        authenticate,
-        authorize,
-        token
-    } = koaOauthServer({
-        model
-    });
 
     const kRouter = new Router();
 
