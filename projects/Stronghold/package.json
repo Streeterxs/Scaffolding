@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "@BookScaffolding/bookmanager": "^0.0.1",
+    "@BookScaffolding/personssector": "^0.0.1",    
     "debug": "^4.1.1",
     "http-proxy": "^1.18.1",
     "koa": "^2.13.0",
