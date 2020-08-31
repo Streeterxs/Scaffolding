@@ -1,8 +1,7 @@
 import koa from 'koa';
-import OAuth2, {Request, Response, UnauthorizedRequestError, AuthorizationCodeModel, ClientCredentialsModel, RefreshTokenModel, PasswordModel, ExtensionModel} from 'oauth2-server';
+import OAuth2, { Request, Response, UnauthorizedRequestError } from 'oauth2-server';
 
 import { appLogger } from './appLogger';
-import { OAuthTokens, OAuthClient, User } from './modules/user/UserModel';
 
 const log = appLogger.extend('koaOauthServer');
 
