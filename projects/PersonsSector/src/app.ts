@@ -1,41 +1,16 @@
+import Koa from 'koa';
 import logger from 'koa-logger';
 import cors from 'kcors';
 import bodyparser from 'koa-bodyparser';
 import { GraphQLError } from 'graphql';
 import graphqlHttp from 'koa-graphql';
-import {
-        AuthorizationCodeModel,
-        ClientCredentialsModel,
-        RefreshTokenModel,
-        PasswordModel,
-        ExtensionModel
-    } from 'oauth2-server';
 
 import { appLogger } from './appLogger';
 import Schema from './schema';
-import { User, OAuthTokens, OAuthClient } from './modules/user/UserModel';
-import { koaOauhServer } from './koaOauthServer';
 import router from './routes';
 
 const log = appLogger.extend('entry');
-
-const model:
-    AuthorizationCodeModel |
-    ClientCredentialsModel |
-    RefreshTokenModel |
-    PasswordModel |
-    ExtensionModel = {
-        getAccessToken: OAuthTokens.getAccessToken,
-        saveToken: OAuthTokens.saveToken,
-        verifyScope: OAuthTokens.verifyScope,
-        getRefreshToken: OAuthTokens.getRefreshToken,
-        getClient: OAuthClient.getClient,
-        getUser: User.getUser
-    };
-
-const app = koaOauhServer({
-    model
-});
+const app = new Koa();
 
 app.use(logger());
 app.use(cors());

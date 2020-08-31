@@ -1,25 +1,49 @@
 import { ParameterizedContext, DefaultState, DefaultContext, Middleware } from "koa";
 import Router from "koa-router";
+import {
+    AuthorizationCodeModel,
+    ClientCredentialsModel,
+    RefreshTokenModel,
+    PasswordModel,
+    ExtensionModel } from "oauth2-server";
 
 import { appLogger } from "./appLogger";
 import { loadUser } from "./modules/user/UserLoader";
 import { permissions } from "./modules/user/UserPermissions.enum";
-import { User } from "./modules/user/UserModel";
+import { User, OAuthTokens, OAuthClient } from "./modules/user/UserModel";
+import { koaOauthServer } from "./koaOauthServer";
 
 const log = appLogger.extend('router');
 
 const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, DefaultContext>>) => {
 
+    const model:
+    AuthorizationCodeModel |
+    ClientCredentialsModel |
+    RefreshTokenModel |
+    PasswordModel |
+    ExtensionModel = {
+        getAccessToken: OAuthTokens.getAccessToken,
+        saveToken: OAuthTokens.saveToken,
+        verifyScope: OAuthTokens.verifyScope,
+        getRefreshToken: OAuthTokens.getRefreshToken,
+        getClient: OAuthClient.getClient,
+        getUser: User.getUser
+    };
+
+    const {
+        authenticate,
+        authorize,
+        token
+    } = koaOauthServer({
+        model
+    });
+
     const kRouter = new Router();
 
     if (graphqlServer) {
 
-        kRouter.all('/graphql', async (context, next) => {
-
-            log('context.headers: ', context.headers);
-            // @ts-ignore
-            const nextAuth = context.authenticate();
-            await nextAuth();
+        kRouter.all('/graphql', authenticate(), async (context, next) => {
 
             log('authenticate context.state: ', context.state)
             const {user: userId} = context.state.oauth.token;
@@ -38,13 +62,7 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
         }, graphqlServer);
     }
 
-    kRouter.post('/token', async (context) => {
-
-        // @ts-ignore
-        const nextOauth = context.token();
-        await nextOauth();
-        log('context.state: ', context.state);
-    });
+    kRouter.post('/token', token());
 
     kRouter.post('/register', async (context, next) => {
 

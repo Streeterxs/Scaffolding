@@ -1,7 +1,8 @@
 import koa from 'koa';
-import OAuth2, {Request, Response, UnauthorizedRequestError} from 'oauth2-server';
+import OAuth2, {Request, Response, UnauthorizedRequestError, AuthorizationCodeModel, ClientCredentialsModel, RefreshTokenModel, PasswordModel, ExtensionModel} from 'oauth2-server';
 
 import { appLogger } from './appLogger';
+import { OAuthTokens, OAuthClient, User } from './modules/user/UserModel';
 
 const log = appLogger.extend('koaOauthServer');
 
@@ -10,115 +11,117 @@ export interface IKoaOauth2Context extends koa.DefaultContext {
     authorize: () => {};
     token: () => (next: any) => Promise<any>;
 };
-export const koaOauhServer = (options: OAuth2.ServerOptions) => {
-
-    // https://stackoverflow.com/questions/43160598/adding-properties-to-koa2s-context-in-typescript
-    const app = new koa<koa.DefaultState, IKoaOauth2Context>();
+export const koaOauthServer = (options: OAuth2.ServerOptions) => {
 
     const oauth = new OAuth2(options);
 
-    // https://stackoverflow.com/questions/45782303/best-way-to-add-helper-methods-to-context-object-in-koa2
-    app.context.oauth = oauth;
-    app.context.authenticate = function() {
+    const authenticate = () => {
 
+        return async (context: koa.DefaultContext, next: koa.Next) => {
 
-        return async (next) => {
-
-            const request = new Request(this.request);
-            const response = new Response(this.response);
+            log('context: ', context);
+            log('context.request: ', context.request);
+            const request = new Request(context.request);
+            const response = new Response(context.response);
 
             try {
-
-                const authenticateReturn = await this.oauth.authenticate(request, response);
-                log('authenticateReturn: ', authenticateReturn);
-
-                this.state.oauth = {
-                    token: authenticateReturn
+                context.state.oauth = {
+                    token: await oauth.authenticate(request, response)
                 };
             } catch (e) {
 
                 log('error: ', e);
                 if (e instanceof UnauthorizedRequestError) {
-                    this.status = e.code;
+                    context.status = e.code;
                 } else {
-                    this.body = { error: e.name, error_description: e.message };
-                    this.status = e.code;
+                    context.body = { error: e.name, error_description: e.message };
+                    context.status = e.code;
                 }
 
-                return this.app.emit('error', e, this);
+                return context.app.emit('error', e, context);
             }
 
-            return next;
+            await next();
         };
     };
 
-    app.context.authorize = function() {
+    const authorize = () => {
 
-        return async (next) => {
-            const request = new Request(this.request);
-            const response = new Response(this.response);
+        return async (context: koa.DefaultContext, next: koa.Next) => {
+
+            const request = new Request(context.request);
+            const response = new Response(context.response);
 
             try {
-                this.state.oauth = {
-                    code: await this.oauth.authorize(request, response)
+                context.state.oauth = {
+                    code: await oauth.authorize(request, response)
                 };
 
-                this.body = response.body;
-                this.status = response.status;
+                context.body = response.body;
+                context.status = response.status;
 
-                this.set(response.headers);
+                context.set(response.headers);
             } catch (e) {
                 if (response) {
-                    this.set(response.headers);
+                    context.set(response.headers);
                 }
 
                 if (e instanceof UnauthorizedRequestError) {
-                    this.status = e.code;
+                    context.status = e.code;
                 } else {
-                    this.body = { error: e.name, error_description: e.message };
-                    this.status = e.code;
+                    context.body = { error: e.name, error_description: e.message };
+                    context.status = e.code;
                 }
 
-                return this.app.emit('error', e, this);
+                return context.app.emit('error', e, context);
             }
 
-            return next;
+            await next();
         };
     };
 
-    app.context.token = function() {
+    const token = () => {
 
-        return async (next) => {
-            const request = new Request(this.request);
-            const response = new Response(this.response);
+        log('token middleware');
+
+        return async (context: koa.DefaultContext, next: koa.Next) => {
+
+            const request = new Request(context.request);
+            const response = new Response(context.response);
 
             try {
-                this.state.oauth = {
-                    token: await this.oauth.token(request, response)
+
+                context.state.oauth = {
+                    token: await oauth.token(request, response)
                 };
 
-                this.body = response.body;
-                this.status = response.status;
+                context.body = response.body;
+                context.status = response.status;
 
-                this.set(response.headers);
+                context.set(response.headers);
             } catch (e) {
+
                 if (response) {
-                    this.set(response.headers);
+                    context.set(response.headers);
                 }
 
                 if (e instanceof UnauthorizedRequestError) {
-                    this.status = e.code;
+                    context.status = e.code;
                 } else {
-                    this.body = { error: e.name, error_description: e.message };
-                    this.status = e.code;
+                    context.body = { error: e.name, error_description: e.message };
+                    context.status = e.code;
                 }
 
-                return this.app.emit('error', e, this);
+                return context.app.emit('error', e, context);
             }
 
-            return next;
+            await next();
         };
     };
 
-    return app;
+    return {
+        authenticate,
+        authorize,
+        token
+    };
 };
