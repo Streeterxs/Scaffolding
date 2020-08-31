@@ -58,8 +58,6 @@ class UsersModule {
         visitor: false
     };
 
-    constructor() {};
-
     static get instance() {
 
         if (!this._instance) {

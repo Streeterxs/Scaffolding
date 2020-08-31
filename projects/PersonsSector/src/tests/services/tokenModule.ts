@@ -43,8 +43,6 @@ class TokenModule {
         visitorToken: false
     };
 
-    constructor() {};
-
     static get instance() {
 
         if (!this._instance) {

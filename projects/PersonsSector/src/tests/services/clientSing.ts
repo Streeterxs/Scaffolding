@@ -30,8 +30,6 @@ class ClientMod {
 
     private _isFetching = false;
 
-    constructor() {};
-
     static get instance() {
 
         if (!this._instance) {
