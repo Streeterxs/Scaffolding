@@ -16,17 +16,20 @@
   "license": "MIT",
   "dependencies": {
     "@BookScaffolding/bookmanager": "^0.0.1",
-    "@BookScaffolding/personssector": "^0.0.1",    
+    "@BookScaffolding/personssector": "^0.0.1",
     "debug": "^4.1.1",
     "http-proxy": "^1.18.1",
+    "kcors": "^2.2.2",
     "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
     "koa-helmet": "^5.2.0",
     "koa-logger": "^3.2.1",
     "koa-router": "^9.1.0",
-    "kcors": "^2.2.2"
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "@types/http-proxy": "^1.17.4",
-    "@types/koa-helmet": "^5.2.0"
+    "@types/koa-helmet": "^5.2.0",
+    "@types/node-fetch": "^2.5.7"
   }
 }

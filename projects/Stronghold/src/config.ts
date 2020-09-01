@@ -17,7 +17,18 @@ dotenvsafe.config({
 const ENV = process.env;
 
 const config = {
-    db_url: `${ENV.MONGODB_URL}`
+    db_url: `${ENV.MONGODB_URL}`,
+    services: {
+        personssector: {
+            baseurl: `${ENV.PERSONSSECTOR_URL}`,
+            // Use array order to point your routes, example at routes.ts
+            routes:`${ENV.PERSONSSECTOR_ROUTES}`.split('/')
+        }
+    },
+    credentials: {
+        clientId: `${ENV.CLIENT_ID}`,
+        clientSecret: `${ENV.CLIENT_SECRET}`
+    }
 };
 
 log('config: ', config);
