@@ -20,7 +20,7 @@ const requestModule = (): requestModuleReturn => {
         const adminToken = await tokenModule.getAdminToken();
         log('adminRequestFn called');
         log('adminToken token: ', adminToken);
-        return request(app.callback()).post('/graphql').set({
+        return request(app.callback()).post('/psgraphql').set({
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${adminToken.token.access_token}`
@@ -30,7 +30,7 @@ const requestModule = (): requestModuleReturn => {
     const managerRequestFn = async (body) => {
 
         log('managerRequestFn called');
-        return request(app.callback()).post('/graphql').set({
+        return request(app.callback()).post('/psgraphql').set({
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${(await tokenModule.getManagerToken()).token.access_token}`
@@ -40,7 +40,7 @@ const requestModule = (): requestModuleReturn => {
     const commonRequestFn = async (body) => {
 
         log('commonRequestFn called');
-        return request(app.callback()).post('/graphql').set({
+        return request(app.callback()).post('/psgraphql').set({
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${(await tokenModule.getCommonToken()).token.access_token}`
@@ -50,7 +50,7 @@ const requestModule = (): requestModuleReturn => {
     const visitorRequestFn = async (body) => {
 
         log('visitorRequestFn called');
-        return request(app.callback()).post('/graphql').set({
+        return request(app.callback()).post('/psgraphql').set({
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${(await tokenModule.getVisitorToken()).token.access_token}`
