@@ -43,7 +43,7 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
 
     if (graphqlServer) {
 
-        kRouter.all('/graphql', authenticate(), async (context, next) => {
+        kRouter.all('/psgraphql', authenticate(), async (context, next) => {
 
             log('authenticate context.state: ', context.state)
             const {user: userId} = context.state.oauth.token;
@@ -62,7 +62,14 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
         }, graphqlServer);
     }
 
-    kRouter.post('/token', token());
+    kRouter.post('/token', async (context, next) => {
+
+        log('context.headers: ', context.headers);
+        log('context.request.body: ', context.request.body);
+        await next();
+    }, token());
+
+    kRouter.post('/authenticate', authenticate());
 
     kRouter.post('/register', async (context, next) => {
 
