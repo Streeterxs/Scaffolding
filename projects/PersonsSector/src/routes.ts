@@ -10,7 +10,7 @@ import {
 import { appLogger } from "./appLogger";
 import { loadUser } from "./modules/user/UserLoader";
 import { permissions } from "./modules/user/UserPermissions.enum";
-import { User, OAuthTokens, OAuthClient } from "./modules/user/UserModel";
+import { User, OAuthTokens, OAuthClient, OAuthAuthorizationCode } from "./modules/user/UserModel";
 import { koaOauthServer } from "./koaOauthServer";
 
 const log = appLogger.extend('router');
@@ -26,7 +26,8 @@ ExtensionModel = {
     verifyScope: OAuthTokens.verifyScope,
     getRefreshToken: OAuthTokens.getRefreshToken,
     getClient: OAuthClient.getClient,
-    getUser: User.getUser
+    getUser: User.getUser,
+    saveAuthorizationCode: OAuthAuthorizationCode.saveAuthorizationCode
 };
 
 export const {
@@ -47,10 +48,10 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
 
             log('authenticate context.state: ', context.state)
             const {user: userId} = context.state.oauth.token;
-            log('userId: ', userId);
-            const userFinded = await loadUser(userId);
 
-            const canRequest = userFinded.permission === permissions.admnistrator || userFinded.permission === permissions.manager;
+            const user = await loadUser(userId);
+            log('user: ', user);
+            const canRequest = user.permission === permissions.admnistrator || user.permission === permissions.manager;
 
             if (canRequest) {
 
@@ -69,7 +70,34 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
         await next();
     }, token());
 
-    kRouter.post('/authenticate', authenticate());
+    kRouter.post('/authenticate', async (context, next) => {
+
+        log('authenticate request arrived');
+        log('context.req.headers: ', context.req.headers);
+
+        await next();
+    },
+    authenticate(), async (context, next) => {
+
+        const {user: userId} = context.state.oauth.token;
+
+        const user = await loadUser(userId);
+
+        log('context.state.oauth.token.user.username: ', context.state.oauth.token.user.username);
+        log('/authenticate user: ', user);
+        log('/authenticate user.username: ', user?.username);
+        log('/authenticate user.email: ', user?.email);
+        log('/authenticate user.permission: ', user?.permission);
+
+        context.body = {
+            username: user.username,
+            email: user.email,
+            permission: user.permission
+        };
+
+        log('context.body: ', context.body);
+        await next();
+    });
 
     kRouter.post('/register', async (context, next) => {
 

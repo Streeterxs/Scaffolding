@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from 'bcrypt';
 
 import { appLogger } from "../../appLogger";
-import { Callback, Token, Client } from "oauth2-server";
+import { Callback, Token, Client, AuthorizationCode, AuthorizationCodeModel } from "oauth2-server";
 
 import { testsLogger } from "../../tests/testsLogger";
 import { permissions } from "./UserPermissions.enum";
@@ -24,7 +24,6 @@ export interface IOAuthTokens extends mongoose.Document, Token {
     refreshToken: string;
     refreshTokenExpiresAt: Date;
 };
-
 export interface IOAuthTokensModel extends mongoose.Model<IOAuthTokens> {
     getAccessToken: (bearerToken: string, callback?: Callback<IOAuthTokens>) => Promise<IOAuthTokens>;
     getRefreshToken: (refreshToken: string) => Promise<IOAuthTokens>;
@@ -49,7 +48,6 @@ export interface IOAuthClient extends mongoose.Document {
     accessTokenLifetime?: number;
     refreshTokenLifetime?: number;
 };
-
 export interface IOAuthCLientModel extends mongoose.Model<IOAuthClient> {
     getClient(clientId: string, clientSecret: string, callback?: Callback<Client>): Promise<Client>;
 };
@@ -69,7 +67,6 @@ export interface IUser extends mongoose.Document {
     person: string;
     permission: permissions
 };
-
 export interface IUserModel extends mongoose.Model<IUser> {
     getUser(email: string, password: string): Promise<IUser>;
 };
@@ -102,6 +99,24 @@ const userSchema = new Schema({
         type: Number,
         required: true
     }
+});
+
+export interface IAuthorizationCode extends mongoose.Document, AuthorizationCode {
+    authorizationCode: string;
+    expiresAt: Date;
+};
+export interface IAuthorizationCodeModel extends mongoose.Model<IAuthorizationCode> {
+    saveAuthorizationCode: (
+        code: Pick<AuthorizationCode, 'authorizationCode' | 'expiresAt' | 'redirectUri' | 'scope'>,
+        client: Client,
+        user: IUser,
+        callback?: Callback<IAuthorizationCode>) => Promise<IAuthorizationCode>
+};
+const authorizationCodeSchema = new Schema<IAuthorizationCode>({
+    authorizationCode: { type: String },
+    expiresAt: { type: Date },
+    client: { type: String },
+    user: { type: String }
 });
 
 // Fixed infinite loading on request
@@ -165,8 +180,13 @@ oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client
   return newToken;
 };
 
-oAuthClientSchema.statics.getClient = async (clientId, clientSecret) => {
+// Correct this when https://github.com/oauthjs/node-oauth2-server/issues/654 is solved
+oAuthClientSchema.statics.getClient = async (clientId, clientSecret: string | null) => {
 
+    if (!clientSecret) {
+
+        return await OAuthClient.findOne({clientId});
+    }
     return await OAuthClient.findOne({ clientId, clientSecret });
 };
 
@@ -199,6 +219,18 @@ userSchema.pre<IUser>('save', async function(next) {
     next();
 });
 
+authorizationCodeSchema.statics.saveAuthorizationCode = async (code, client, user) => {
+
+    const newAuthorizationCode = await new OAuthAuthorizationCode({
+        authorizationCode: code.authorizationCode,
+        expiresIn: code.expiresIn,
+        client,
+        user
+    });
+
+    return newAuthorizationCode;
+};
 export const User = mongoose.model<IUser, IUserModel>('PersonsSector_User', userSchema);
 export const OAuthTokens = mongoose.model<IOAuthTokens, IOAuthTokensModel>('PersonsSector_OAuthTokens', oAuthTokensSchema);
 export const OAuthClient = mongoose.model<IOAuthClient, IOAuthCLientModel>('PersonsSector_OAuthClient', oAuthClientSchema);
+export const OAuthAuthorizationCode = mongoose.model<IAuthorizationCode, IAuthorizationCodeModel>('PersonsSector_OAuthAuthorizationCode', authorizationCodeSchema);
