@@ -16,7 +16,8 @@ export const basicAuth = () => {
 
         if (canProceed) {
 
-            context.set('authorization', `Basic ${Buffer.from(`${config.credentials.clientId}:${config.credentials.clientSecret}`).toString('base64')}`);
+            context.req.headers = {...context.req.headers, Authorization: `Basic ${Buffer.from(`${config.credentials.clientId}:${config.credentials.clientSecret}`).toString('base64')}`};
+            log('context.headers', context.headers);
             await next();
         } else {
 
