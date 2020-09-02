@@ -12,6 +12,7 @@
     "populate:clients": "yarn babel ./src/scripts/populateClients",
     "create:admin": "yarn babel ./src/scripts/createAdmin",
     "clear:users": "yarn babel ./src/scripts/clearUsers",
+    "clear:clients": "yarn babel ./src/scripts/clearClients",
     "clear": "rimraf ./build",
     "prestart": "npm run build",
     "start": "nodemon ./build/server",
