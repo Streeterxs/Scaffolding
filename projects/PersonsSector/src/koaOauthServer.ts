@@ -1,7 +1,9 @@
 import koa from 'koa';
-import OAuth2, { Request, Response, UnauthorizedRequestError } from 'oauth2-server';
+import OAuth2, { Request, Response, UnauthorizedRequestError, AuthorizeOptions } from 'oauth2-server';
 
 import { appLogger } from './appLogger';
+import { loadUser } from './modules/user/UserLoader';
+import { User } from './modules/user/UserModel';
 
 const log = appLogger.extend('koaOauthServer');
 
@@ -44,16 +46,26 @@ export const koaOauthServer = (options: OAuth2.ServerOptions) => {
         };
     };
 
-    const authorize = () => {
+    const authorize = (authenticateHandler?) => {
 
         return async (context: koa.DefaultContext, next: koa.Next) => {
 
             const request = new Request(context.request);
             const response = new Response(context.response);
 
+            const authorizeParams = (): [Request, Response, AuthorizeOptions?] => {
+
+                const params: [Request, Response, AuthorizeOptions?] = [request, response];
+
+                if (authenticateHandler) {
+                    params.push(authenticateHandler);
+                }
+
+                return params;
+            }
             try {
                 context.state.oauth = {
-                    code: await oauth.authorize(request, response)
+                    code: await oauth.authorize(...authorizeParams())
                 };
 
                 context.body = response.body;
