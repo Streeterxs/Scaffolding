@@ -23,13 +23,14 @@ const log = appLogger.extend('scripts:populateClients');
                 grants: [
                     'password',
                     'refresh_token',
-                    'client_credentials'
+                    'client_credentials',
+                    'authorization_code'
                 ]
             });
 
-            await oAuthClient.save({}, () => {
-                log('created client');
-            });
+            const clientCreated = await oAuthClient.save({});
+
+            log('clientCreated: ', clientCreated);
         } else {
 
             log('client already created');
