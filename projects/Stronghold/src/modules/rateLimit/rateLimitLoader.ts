@@ -1,6 +1,6 @@
 import dataloader from 'dataloader';
 
-import { RateLimitStateModel } from './rateLimitState';
+import { RateLimitStateModel } from './rateLimitStateModel';
 
 const rateLimitLoader = new dataloader((keys: string[]) => RateLimitStateModel.find({_id: {$in: keys}}));
 
