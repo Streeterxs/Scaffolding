@@ -6,6 +6,7 @@ import { permissions } from '@BookScaffolding/personssector';
 
 import { appLogger } from "./appLogger";
 import config from "./config";
+import { exponencialRateLimit } from "./controllers/rateLimits";
 
 const log = appLogger.extend('middlewares');
 
@@ -29,9 +30,9 @@ export const basicAuth = () => {
     };
 };
 
-export const permissionLimiter = (...args: [permissions, permissions?, permissions?, permissions?]) => {
+export const authenticate = () => {
 
-    const authenticate = async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>): Promise<void> => {
+    return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next): Promise<void> => {
 
         log('config.services.personssector.routes[1]: ', config.services.personssector.routes[1]);
 
@@ -43,11 +44,15 @@ export const permissionLimiter = (...args: [permissions, permissions?, permissio
         const responseReturned = await response.json();
         log('responseReturned: ', responseReturned);
         context.state.authenticatedUser = responseReturned;
+
+        await next();
     };
+}
+
+export const permissionLimiter = (...args: [permissions, permissions?, permissions?, permissions?]) => {
 
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next) => {
 
-        await authenticate(context);
         const { permission } = context.state.authenticatedUser;
 
         log('user permission: ', permission);
