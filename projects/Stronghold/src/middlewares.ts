@@ -6,7 +6,7 @@ import { permissions } from '@BookScaffolding/personssector';
 
 import { appLogger } from "./appLogger";
 import config from "./config";
-import { exponencialRateLimit } from "./controllers/rateLimits";
+import { exponencialRateLimit, bucketRateLimit } from "./controllers/rateLimits";
 
 const log = appLogger.extend('middlewares');
 
@@ -28,6 +28,37 @@ export const basicAuth = () => {
             throw new Error("Couldn't login");
         }
     };
+};
+
+export const exponencialRate = () => {
+
+    return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next): Promise<void> => {
+
+        const {canReset, userId} = context.state.exponencialRate;
+
+        if (canReset) {
+
+            exponencialRateLimit.reset(userId);
+            await next();
+        } else {
+
+            exponencialRateLimit.consume(userId);
+            await next();
+        }
+
+    }
+};
+
+export const bucketRate = () => {
+
+    return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next): Promise<void> => {
+
+        const { username } = context.state.authenticatedUser;
+
+        bucketRateLimit.consume(username);
+        await next();
+
+    }
 };
 
 export const authenticate = () => {
@@ -53,6 +84,7 @@ export const permissionLimiter = (...args: [permissions, permissions?, permissio
 
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next) => {
 
+        log('context.state: ', context.state);
         const { permission } = context.state.authenticatedUser;
 
         log('user permission: ', permission);

@@ -2,11 +2,11 @@ import Router from 'koa-router';
 import fetch from 'node-fetch';
 
 import bookManager, {graphqlHttpServer} from '@BookScaffolding/bookmanager';
-import { permissions, authenticate } from '@BookScaffolding/personssector';
+import { permissions } from '@BookScaffolding/personssector';
 
 import { appLogger } from './appLogger';
 import config from './config';
-import { basicAuth, permissionLimiter } from './middlewares';
+import { basicAuth, permissionLimiter, authenticate, bucketRate, exponencialRate } from './middlewares';
 
 const router = new Router();
 const log = appLogger.extend('routes');
@@ -30,6 +30,10 @@ router.post('/token', basicAuth(), async (context, next) => {
         await next();
     });
 
-router.all('/bookmanager', authenticate(), permissionLimiter(permissions.admnistrator, permissions.manager) , graphqlHttpServer);
+router.all('/bookmanager',
+    authenticate(),
+    bucketRate(),
+    permissionLimiter(permissions.admnistrator, permissions.manager),
+    graphqlHttpServer);
 
 export default router;

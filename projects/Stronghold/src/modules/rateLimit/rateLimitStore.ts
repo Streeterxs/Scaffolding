@@ -1,5 +1,5 @@
 import { RateLimitStore, RateLimitState } from '@authentication/rate-limit';
-import { loadRateLimit, removeRateLimit } from './rateLimitLoader';
+import { loadRateLimit } from './rateLimitLoader';
 
 export class RateStore implements RateLimitStore<string> {
 
@@ -27,7 +27,8 @@ export class RateStore implements RateLimitStore<string> {
 
     async remove(id: string): Promise<void | null | {}> {
 
-        await removeRateLimit(id);
+        const rateLimitFinded = await loadRateLimit(id);
+        await rateLimitFinded.remove();
     };
 
 }
