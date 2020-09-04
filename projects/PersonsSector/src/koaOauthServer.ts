@@ -106,7 +106,9 @@ export const koaOauthServer = (options: OAuth2.ServerOptions) => {
                     token: await oauth.token(request, response)
                 };
 
-                context.body = response.body;
+                const {userReturned, accessTokenExpiresAt, refreshTokenExpiresAt} = context.state.oauth.token;
+
+                context.body = {...response.body, username: userReturned.username, email: userReturned.email, accessTokenExpiresAt, refreshTokenExpiresAt};
                 context.status = response.status;
 
                 context.set(response.headers);

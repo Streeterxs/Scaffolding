@@ -68,7 +68,11 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
         log('context.headers: ', context.headers);
         log('context.request.body: ', context.request.body);
         await next();
-    }, token());
+    }, token(), async (context, next) => {
+
+        log('context.state.oauth.token: ', context.state.oauth.token);
+        await next();
+    });
 
     kRouter.post('/authenticate', async (context, next) => {
 

@@ -155,7 +155,8 @@ oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client
 
   log('in saveToken (token: ' + token + ')');
   log('token stringfied: ', JSON.stringify(token));
-  log('token expires on: ', token.accessTokenExpiresAt);
+  log('access token expires on: ', token.accessTokenExpiresAt);
+  log('refresh token expires on: ', token.refreshTokenExpiresAt);
   log('client.id: ', client.id);
   log('client.id === client._id: ', client.id === client._id);
   log('user: ', user);
@@ -174,8 +175,8 @@ oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client
   await user.save();
 
   // Correct missing parameter client
-  newToken.user = user;
-  newToken.client = client;
+  newToken.userReturned = user;
+  newToken.clientReturned = client;
 
   return newToken;
 };
