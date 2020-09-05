@@ -30,6 +30,20 @@ router.post('/token', basicAuth(), async (context, next) => {
         await next();
     });
 
+router.get('/visitor', async (context, next) => {
+
+    const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[2] /* example */}`, {
+        headers: {...context.headers},
+        method: 'GET'
+    });
+
+    const responseJson = await response.json();
+    log('response json: ', responseJson);
+
+    context.body = responseJson;
+    await next();
+})
+
 router.all('/bookmanager',
     authenticate(),
     bucketRate(),
