@@ -127,6 +127,21 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
         }
     });
 
+    kRouter.get('/visitor', async (context, next) => {
+
+        try {
+
+            const freeVisitor = await User.getFreeVisitor();
+            log('free Visitor: ', freeVisitor);
+
+            context.body = freeVisitor;
+            await next();
+        } catch (err) {
+
+            log('/visitor error: ', err);
+        }
+    })
+
     return kRouter;
 };
 
