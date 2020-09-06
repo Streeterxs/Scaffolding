@@ -51,7 +51,7 @@ export interface IOAuthClient extends mongoose.Document {
 export interface IOAuthCLientModel extends mongoose.Model<IOAuthClient> {
     getClient(clientId: string, clientSecret: string, callback?: Callback<Client>): Promise<Client>;
 };
-const oAuthClientSchema = new Schema({
+const oAuthClientSchema = new Schema<IOAuthClient>({
     clientId: { type: String },
     clientSecret: { type: String },
     grants: { type: [String] },
@@ -69,6 +69,7 @@ export interface IUser extends mongoose.Document {
 };
 export interface IUserModel extends mongoose.Model<IUser> {
     getUser(email: string, password: string): Promise<IUser>;
+    getFreeVisitor(): Promise<IUser>;
 };
 const userSchema = new Schema({
     username: {
@@ -155,7 +156,8 @@ oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client
 
   log('in saveToken (token: ' + token + ')');
   log('token stringfied: ', JSON.stringify(token));
-  log('token expires on: ', token.accessTokenExpiresAt);
+  log('access token expires on: ', token.accessTokenExpiresAt);
+  log('refresh token expires on: ', token.refreshTokenExpiresAt);
   log('client.id: ', client.id);
   log('client.id === client._id: ', client.id === client._id);
   log('user: ', user);
@@ -174,8 +176,8 @@ oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client
   await user.save();
 
   // Correct missing parameter client
-  newToken.user = user;
-  newToken.client = client;
+  newToken.userReturned = user;
+  newToken.clientReturned = client;
 
   return newToken;
 };
@@ -188,6 +190,37 @@ oAuthClientSchema.statics.getClient = async (clientId, clientSecret: string | nu
         return await OAuthClient.findOne({clientId});
     }
     return await OAuthClient.findOne({ clientId, clientSecret });
+};
+
+// This method should return a user with permission === visitor
+// This visitor should have the oldest expired Refresh token from the newest saved token
+userSchema.statics.getFreeVisitor = async () => {
+
+    log('getFreeVisitor');
+    const today = new Date();
+    const freeVisitor = await User.aggregate([
+
+        {$match: {permission: permissions.visitor}},
+
+        {$lookup: {
+            from: "OAuthTokens",
+            let: {lastTokens: {$arrayElemAt: ['$tokens', 0]}},
+            pipeline: [
+                {$match:
+                    {_id: '$$lastToken'}
+                },
+                {$limit: 1}
+            ],
+            as: 'last_used_token'
+        }},
+
+        {$match: {$expr: {$lt: ['last_used_token.refreshTokenExpiresAt', today]}}},
+        {$sort: {'last_used_token.refreshTokenExpiresAt': -1}},
+        {$limit: 1}
+    ]);
+
+    return freeVisitor;
+
 };
 
 userSchema.statics.getUser = async (email, password) => {

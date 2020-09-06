@@ -97,6 +97,7 @@ export const koaOauthServer = (options: OAuth2.ServerOptions) => {
 
         return async (context: koa.DefaultContext, next: koa.Next) => {
 
+            log('context.request.body: ', context.request.body);
             const request = new Request(context.request);
             const response = new Response(context.response);
 
@@ -106,7 +107,9 @@ export const koaOauthServer = (options: OAuth2.ServerOptions) => {
                     token: await oauth.token(request, response)
                 };
 
-                context.body = response.body;
+                const {userReturned, accessTokenExpiresAt, refreshTokenExpiresAt} = context.state.oauth.token;
+
+                context.body = {...response.body, username: userReturned.username, accessTokenExpiresAt, refreshTokenExpiresAt};
                 context.status = response.status;
 
                 context.set(response.headers);

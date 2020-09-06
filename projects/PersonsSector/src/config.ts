@@ -18,6 +18,7 @@ const ENV = process.env;
 
 const config = {
     db_url: `${ENV.MONGODB_URL}`,
+    visitorsPassword: `${ENV.VISITORS_PASSWORD}`
 };
 
 export const admin: {username: string, email: string, password: string} = {
