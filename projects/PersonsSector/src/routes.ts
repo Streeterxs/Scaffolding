@@ -98,7 +98,6 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
             email: user.email,
             permission: user.permission
         };
-
         log('context.body: ', context.body);
         await next();
     });
