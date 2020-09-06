@@ -61,6 +61,36 @@ export const bucketRate = () => {
     }
 };
 
+export const visitor = () => {
+
+    return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next) => {
+
+        try {
+
+            const headers = {...context.headers};
+            delete headers['content-type'];
+            log('headers: ', headers);
+            const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[2] /* example */}`, {
+                headers,
+                method: 'GET'
+            });
+
+            const visitorReturned = await response.json();
+
+            log('visitorReturned: ', visitorReturned);
+            context.state.visitor = {
+                username: visitorReturned.username,
+                email: visitorReturned.email
+            }
+            await next();
+        } catch (err) {
+
+            log('visitor error: ', err);
+            throw new Error('Visitor error');
+        }
+    }
+}
+
 export const authenticate = () => {
 
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next): Promise<void> => {
