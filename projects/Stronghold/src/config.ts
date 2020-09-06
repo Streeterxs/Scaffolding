@@ -28,7 +28,8 @@ const config = {
     credentials: {
         clientId: `${ENV.CLIENT_ID}`,
         clientSecret: `${ENV.CLIENT_SECRET}`
-    }
+    },
+    visitorsPassword: `${ENV.VISITORS_PASSWORD}`
 };
 
 log('config: ', config);
