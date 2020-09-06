@@ -196,6 +196,7 @@ oAuthClientSchema.statics.getClient = async (clientId, clientSecret: string | nu
 // This visitor should have the oldest expired Refresh token from the newest saved token
 userSchema.statics.getFreeVisitor = async () => {
 
+    log('getFreeVisitor');
     const today = new Date();
     const freeVisitor = await User.aggregate([
 

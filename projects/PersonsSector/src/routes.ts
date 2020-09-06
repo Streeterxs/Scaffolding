@@ -134,7 +134,7 @@ const router = (graphqlServer?: Middleware<ParameterizedContext<DefaultState, De
             const freeVisitor = await User.getFreeVisitor();
             log('free Visitor: ', freeVisitor);
 
-            context.body = freeVisitor;
+            context.body = freeVisitor[0];
             await next();
         } catch (err) {
 
