@@ -10,6 +10,7 @@ export const loadRateLimit = async (userId: string) => {
 
     try {
 
+        log('typeof userId: ', typeof userId);
         const rateLimitFinded = await rateLimitLoader.load(userId);
         return rateLimitFinded;
     } catch (err) {

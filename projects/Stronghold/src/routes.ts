@@ -13,7 +13,7 @@ import {
     exponencialRate,
     visitor,
     searchCredentialsByIdentifier,
-    searchCredentialsByAccessToken, 
+    searchCredentialsByAccessToken,
     accessTokenChecker} from './middlewares';
 import { Credentials } from './modules/credentials/credentialsModel';
 import { appLogger } from './appLogger';
@@ -30,9 +30,9 @@ router.get('/', (context, next) => {
 router.post(
         '/token',
         accessTokenChecker(),
-        basicAuth(),
         searchCredentialsByAccessToken(),
         bucketRate(),
+        basicAuth(),
         async (context, next) => {
 
             const {grant_type, username, password} = context.request.body;
@@ -61,6 +61,8 @@ router.post(
 
                 context.state.exponencialRate.canReset = false;
             }
+
+            await next();
         },
         exponencialRate()
     );
