@@ -4,10 +4,19 @@ import fetch from 'node-fetch';
 import bookManager, {graphqlHttpServer} from '@BookScaffolding/bookmanager';
 import { permissions } from '@BookScaffolding/personssector';
 
-import { appLogger } from './appLogger';
 import config from './config';
-import { basicAuth, permissionLimiter, authenticate, bucketRate, exponencialRate, visitor } from './middlewares';
-import { Visitor } from './modules/visitors/visitorModel';
+import {
+    basicAuth,
+    permissionLimiter,
+    authenticate,
+    bucketRate,
+    exponencialRate,
+    visitor,
+    searchCredentialsByIdentifier,
+    searchCredentialsByAccessToken, 
+    accessTokenChecker} from './middlewares';
+import { Credentials } from './modules/credentials/credentialsModel';
+import { appLogger } from './appLogger';
 
 const router = new Router();
 const log = appLogger.extend('routes');
@@ -18,18 +27,43 @@ router.get('/', (context, next) => {
     context.body = 'helloooo!';
 });
 
-router.post('/token', basicAuth(), async (context, next) => {
+router.post(
+        '/token',
+        accessTokenChecker(),
+        basicAuth(),
+        searchCredentialsByAccessToken(),
+        bucketRate(),
+        async (context, next) => {
 
-        const {grant_type, username, password} = context.request.body;
-        const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[0] /* example */}`, {
-            headers: {...context.headers},
-            body: `grant_type=${grant_type}&username=${username}&password=${password}`,
-            method: 'POST'
-        });
+            const {grant_type, username, password} = context.request.body;
+            const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[0] /* example */}`, {
+                headers: {...context.headers},
+                body: `grant_type=${grant_type}&username=${username}&password=${password}`,
+                method: 'POST'
+            });
 
-        context.body = await response.json();
-        await next();
-    });
+            context.body = await response.json();
+            await next();
+        },
+        async (context, next) => {
+
+            context.state.exponencialRate = {
+                userId: context.state.identifier,
+                canReset: true
+            };
+
+            log('context.response.body: ', context.response.body);
+            const cantReset = context.response.body.error_description ?
+                context.response.body.error_description === 'Invalid password' || context.response.body.error_description === 'Invalid login credentials' :
+                false
+
+            if (cantReset) {
+
+                context.state.exponencialRate.canReset = false;
+            }
+        },
+        exponencialRate()
+    );
 
 router.all('/visitor',
     async (context, next) => {
@@ -53,6 +87,8 @@ router.all('/visitor',
             }
         }
     },
+    searchCredentialsByIdentifier(),
+    bucketRate(),
     visitor(),
     async (context, next) => {
 
@@ -60,6 +96,7 @@ router.all('/visitor',
 
         const headers = {...context.headers};
         delete headers['content-type'];
+
         const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[0] /* example */}`, {
             headers: {
                 ...headers,
@@ -81,32 +118,38 @@ router.all('/visitor',
     async (context, next) => {
 
         const identifier = context.state.identifier;
-        const {username, email} = context.state.visitor;
         const { access_token, refresh_token, refreshTokenExpiresAt, accessTokenExpiresAt } = context.state.token;
 
-        const newVisitor = new Visitor({
-            identifier,
-            username,
-            email,
-            accessToken: access_token,
-            refreshToken: refresh_token,
-            accessTokenExpiresAt,
-            refreshTokenExpiresAt,
-        });
+        if (!context.state.credentials) {
 
-        try {
+            const newVisitor = new Credentials({
+                identifier,
+                accessToken: access_token,
+                refreshToken: refresh_token,
+                accessTokenExpiresAt,
+                refreshTokenExpiresAt
+            });
 
             await newVisitor.save();
-        } catch (err) {
+            await next();
+        } else {
 
-            throw new Error("new visitor.save error");
+            const findedVisitorCredentials = await Credentials.findOne({identifier});
+            findedVisitorCredentials.accessToken = access_token;
+            findedVisitorCredentials.refreshToken = refresh_token;
+            findedVisitorCredentials.accessTokenExpiresAt = accessTokenExpiresAt;
+            findedVisitorCredentials.refreshTokenExpiresAt = refreshTokenExpiresAt;
+
+            await findedVisitorCredentials.save();
+            await next();
         }
 
-        await next();
     }
 );
 
 router.all('/bookmanager',
+    accessTokenChecker(),
+    searchCredentialsByAccessToken(),
     authenticate(),
     bucketRate(),
     permissionLimiter(permissions.admnistrator, permissions.manager),
