@@ -4,11 +4,11 @@ import fetch from 'node-fetch';
 
 import { permissions } from '@BookScaffolding/personssector';
 
-import { appLogger } from "./appLogger";
-import config from "./config";
-import { exponencialRateLimit, bucketRateLimit } from "./controllers/rateLimits";
+import { appLogger } from "../appLogger";
+import config from "../config";
+import { exponencialRateLimit, bucketRateLimit } from "../controllers/rateLimits";
 
-const log = appLogger.extend('middlewares');
+export const log = appLogger.extend('middlewares');
 
 export const basicAuth = () => {
 
@@ -30,18 +30,44 @@ export const basicAuth = () => {
     };
 };
 
+export const accessTokenChecker = () => {
+
+    return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next) => {
+
+        try {
+
+            const authorization = context.headers.authorization as string;
+
+            if (!authorization || !authorization.includes('Bearer')) {
+
+                throw new Error('No token on authorization');
+            }
+
+        } catch (err) {
+
+            log('err');
+            return;
+        }
+
+        await next();
+    }
+}
+
 export const exponencialRate = () => {
 
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next): Promise<void> => {
 
         const {canReset, userId} = context.state.exponencialRate;
-
+        log('exponencial rate limit userId: ', userId);
+        log('exponencial rate limit canReset: ', canReset);
         if (canReset) {
 
+            log('exponencial rate limit reset');
             exponencialRateLimit.reset(userId);
             await next();
         } else {
 
+            log('exponencial rate limit consume');
             exponencialRateLimit.consume(userId);
             await next();
         }
@@ -53,9 +79,12 @@ export const bucketRate = () => {
 
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next): Promise<void> => {
 
-        const { username } = context.state.authenticatedUser;
+        const identifier = context.state.identifier;
 
-        bucketRateLimit.consume(username);
+        if(identifier) {
+
+            bucketRateLimit.consume(identifier);
+        }
         await next();
 
     }
