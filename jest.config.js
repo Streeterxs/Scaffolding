@@ -97,7 +97,8 @@ module.exports = {
   projects: [
     //'<rootDir>',
     '<rootDir>/projects/BookManager/jest.config.js',
-    '<rootDir>/projects/PersonsSector/jest.config.js'
+    '<rootDir>/projects/PersonsSector/jest.config.js',
+    '<rootDir>/projects/Stronghold/jest.config.js'
   ],
 
   // Use this configuration option to add custom reporters to Jest

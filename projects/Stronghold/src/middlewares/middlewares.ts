@@ -5,12 +5,12 @@ import fetch from 'node-fetch';
 import { permissions } from '@BookScaffolding/personssector';
 
 import { appLogger } from "../appLogger";
-import config from "../config";
-import { exponencialRateLimit, bucketRateLimit } from "../controllers/rateLimits";
+import { exponencialRateLimit, bucketRateLimit } from "../services/rateLimits";
+import { visitorRequest, authenticateRequest } from "../services/personsSectorFetcher";
 
 export const log = appLogger.extend('middlewares');
 
-export const basicAuth = () => {
+export const basicAuth = (clientId: string, clientSecret: string) => {
 
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next) => {
 
@@ -20,7 +20,7 @@ export const basicAuth = () => {
 
         if (canProceed) {
 
-            context.req.headers = {...context.req.headers, authorization: `Basic ${Buffer.from(`${config.credentials.clientId}:${config.credentials.clientSecret}`).toString('base64')}`};
+            context.req.headers = {...context.req.headers, authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`};
             log('context.headers', context.headers);
             await next();
         } else {
@@ -90,7 +90,7 @@ export const bucketRate = () => {
     }
 };
 
-export const visitor = () => {
+export const visitor = (baseurl, route) => {
 
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next) => {
 
@@ -99,10 +99,7 @@ export const visitor = () => {
             const headers = {...context.headers};
             delete headers['content-type'];
             log('headers: ', headers);
-            const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[2] /* example */}`, {
-                headers,
-                method: 'GET'
-            });
+            const response = await visitorRequest({baseurl, route, headers});
 
             const visitorReturned = await response.json();
 
@@ -120,16 +117,11 @@ export const visitor = () => {
     }
 }
 
-export const authenticate = () => {
+export const authenticate = (baseurl, route) => {
 
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next): Promise<void> => {
 
-        log('config.services.personssector.routes[1]: ', config.services.personssector.routes[1]);
-
-        const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[1] /* example */}`, {
-            headers: {...context.headers},
-            method: 'POST'
-        });
+        const response = await authenticateRequest({baseurl, route, headers: {...context.headers}});
 
         const responseReturned = await response.json();
         log('responseReturned: ', responseReturned);
