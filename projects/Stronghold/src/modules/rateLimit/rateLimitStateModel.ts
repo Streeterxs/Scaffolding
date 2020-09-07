@@ -5,7 +5,7 @@ export interface IRateLimitState extends Mongoose.Document, RateLimitState{
     userID: string;
 };
 const rateLimitStateSchema = new Schema<IRateLimitState>({
-    userID: {type: String, required: true},
+    userID: {type: String, required: true, unique: true},
     value: {type: Number, required: true},
     timestamp: {type: Number, required: true}
 });

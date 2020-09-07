@@ -63,12 +63,12 @@ export const exponencialRate = () => {
         if (canReset) {
 
             log('exponencial rate limit reset');
-            exponencialRateLimit.reset(userId);
+            await exponencialRateLimit.reset(userId + 'expo');
             await next();
         } else {
 
             log('exponencial rate limit consume');
-            exponencialRateLimit.consume(userId);
+            await exponencialRateLimit.consume(userId + 'expo');
             await next();
         }
 
@@ -83,7 +83,7 @@ export const bucketRate = () => {
 
         if(identifier) {
 
-            bucketRateLimit.consume(identifier);
+            await bucketRateLimit.consume(identifier + 'bucket');
         }
         await next();
 
