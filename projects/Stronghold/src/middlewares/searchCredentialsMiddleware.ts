@@ -12,6 +12,7 @@ export const searchCredentialsByIdentifier = () => {
 
         try {
 
+            log('context.state: ', context.state);
             const identifier = context.state.identifier;
             const credentialsFinded = await Credentials.findOne({identifier});
 

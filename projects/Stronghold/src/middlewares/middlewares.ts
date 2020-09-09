@@ -6,7 +6,7 @@ import { permissions } from '@BookScaffolding/personssector';
 
 import { appLogger } from "../appLogger";
 import { exponencialRateLimit, bucketRateLimit } from "../services/rateLimits";
-import { visitorRequest, authenticateRequest } from "../services/personsSectorFetcher";
+import { authenticateRequest, visitorRequest } from "../services/personsSectorFetcher";
 
 export const log = appLogger.extend('middlewares');
 
