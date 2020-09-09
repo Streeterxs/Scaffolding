@@ -1,10 +1,11 @@
-import { searchCredentialsByIdentifier, bucketRate, visitor } from "../middlewares";
-import { Credentials } from "../modules/credentials/credentialsModel";
-import { log as routesLogger } from "./routes";
-import config from "../config";
 import Router from "koa-router";
 
-const log = routesLogger.extend('visitor');
+import { searchCredentialsByIdentifier, bucketRate, visitor } from "../middlewares";
+import { Credentials } from "../modules/credentials/credentialsModel";
+import config from "../config";
+import { appLogger } from "../appLogger";
+
+const log = appLogger.extend('routes:visitor');
 
 
 export const visitorRouteMount = (path: string, router: Router<any, {}>) => {

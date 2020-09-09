@@ -12,15 +12,24 @@ export const log = appLogger.extend('middlewares');
 
 export const basicAuth = (clientId: string, clientSecret: string) => {
 
+    log('clientId: ', clientId);
+    log('clientSecret: ', clientSecret);
+    const credentials = {
+        clientId,
+        clientSecret
+    };
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next) => {
 
         const body = context.request.body;
+        log('clientId: ', clientId);
+        log('clientSecret: ', clientSecret);
+        log('credentials: ', credentials);
         log('body: ', body);
         const canProceed = body.grant_type && body.username && body.password;
 
         if (canProceed) {
 
-            context.req.headers = {...context.req.headers, authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`};
+            context.req.headers = {...context.req.headers, authorization: `Basic ${Buffer.from(`${credentials.clientId}:${credentials.clientSecret}`).toString('base64')}`};
             log('context.headers', context.headers);
             await next();
         } else {

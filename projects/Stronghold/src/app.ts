@@ -5,9 +5,10 @@ import cors from 'kcors';
 import bodyparser from 'koa-bodyparser';
 
 import {appLogger} from './appLogger';
-import router from './routes';
+import { router } from './routes';
 
 const log = appLogger.extend('entry');
+log('new log');
 const app = new koa();
 app.use(helmet());
 app.use(logger());

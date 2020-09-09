@@ -3,14 +3,18 @@ import Router from 'koa-router';
 import bookManager from '@BookScaffolding/bookmanager';
 
 import { appLogger } from '../appLogger';
-import {tokenRouteMount} from './token';
+import { tokenRouteMount } from './token';
 import { visitorRouteMount } from './visitor';
 import { bookManagerRouteMount } from './bookmanager';
+import config from '../config';
 
-const router = new Router();
-export const log = appLogger.extend('routes');
+export const router = new Router();
+export const routerLog = appLogger.extend('routes');
 
-log('bookManager: ', bookManager);
+routerLog('tokeeeeen!');
+routerLog('bookManager: ', bookManager);
+routerLog('token clientid: ', config.credentials.clientId);
+routerLog('token clientSecret: ', config.credentials.clientSecret);
 
 router.get('/', (context, next) => {
     context.body = 'helloooo!';
@@ -22,4 +26,3 @@ visitorRouteMount('/visitor', router);
 
 bookManagerRouteMount('/bookmanager', router);
 
-export default router;

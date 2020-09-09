@@ -1,18 +1,27 @@
-import { accessTokenChecker, searchCredentialsByAccessToken, bucketRate, basicAuth, exponencialRate } from "../middlewares";
-import config from "../config";
-import { log as routesLogger } from "./routes";
 import Router from "koa-router";
 
-const log = routesLogger.extend('token');
+import {
+    accessTokenChecker,
+    searchCredentialsByAccessToken,
+    bucketRate,
+    basicAuth,
+    exponencialRate } from "../middlewares";
+import config from "../config";
+import { appLogger } from "../appLogger";
+
+const log = appLogger.extend('routes:token');
 
 export const tokenRouteMount = (path: string, router: Router<any, {}>) => {
+
+    log('tokeeeeen!');
+    log('token clientid: ', config.credentials.clientId);
+    log('token clientSecret: ', config.credentials.clientSecret);
 
     router.get(
         path,
         ...tokenRouteMiddlewares()
     );
 };
-
 
 export const tokenRouteMiddlewares = () => [
 
