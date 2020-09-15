@@ -1,4 +1,5 @@
 import Router from "koa-router";
+import fetch from 'node-fetch';
 
 import {
     accessTokenChecker,
@@ -32,6 +33,7 @@ export const tokenRouteMiddlewares = () => [
 
     async (context, next) => {
 
+        log('token context.request.body: ', context.request.body);
         const {grant_type, username, password} = context.request.body;
         const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[0] /* example */}`, {
             headers: {...context.headers},

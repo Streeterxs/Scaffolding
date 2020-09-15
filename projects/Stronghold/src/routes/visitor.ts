@@ -1,4 +1,5 @@
 import Router from "koa-router";
+import fetch from 'node-fetch';
 
 import { searchCredentialsByIdentifier, bucketRate, visitor } from "../middlewares";
 import { Credentials } from "../modules/credentials/credentialsModel";

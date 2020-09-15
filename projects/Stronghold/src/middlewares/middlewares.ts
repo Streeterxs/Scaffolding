@@ -54,7 +54,7 @@ export const accessTokenChecker = () => {
 
         } catch (err) {
 
-            log('err');
+            log('err: ', err);
             return;
         }
 
@@ -90,6 +90,7 @@ export const bucketRate = () => {
 
         const identifier = context.state.identifier;
 
+        log('bucketRate identifier: ', identifier);
         if(identifier) {
 
             await bucketRateLimit.consume(identifier + 'bucket');
