@@ -28,7 +28,7 @@ describe('Person Mutations', () => {
     beforeEach(() => {
 
         // if you have an existing `beforeEach` just add the following lines to it
-        fetchMock.mockOnce(JSON.stringify({teste: 'teste'}));
+        fetchMock.mockOnce(JSON.stringify({test: 'test'}));
     });
     beforeAll(() => connect());
     afterEach(async () => {
@@ -51,7 +51,7 @@ describe('Person Mutations', () => {
         log('response.body: ', response.body);
         log('response.status: ', response.status);
         log('response.header: ', response.header);
-        expect(response.body.test).toBe('body');
+        expect(response.body.test).toBe('test');
         expect(response.status).toBe(200);
     });
 
@@ -67,7 +67,8 @@ describe('Person Mutations', () => {
         log('response.body: ', response.body);
         log('response.status: ', response.status);
         log('response.header: ', response.header);
-        expect(response.body.test).toBe('body');
-        expect(response.status).toBe(200);
+        expect(response.body.test).toBe(undefined);
+        expect(response.body.error).toBe('Not Authorized');
+        expect(response.status).toBe(401);
     });
 });

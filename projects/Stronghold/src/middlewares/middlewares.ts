@@ -55,6 +55,8 @@ export const accessTokenChecker = () => {
         } catch (err) {
 
             log('err: ', err);
+            context.body = {error: 'Not Authorized'};
+            context.response.status = 401;
             return;
         }
 
