@@ -113,6 +113,8 @@ export const visitor = (baseurl, route) => {
 
             const visitorReturned = await response.json();
 
+
+            log('[routes] visitor fetch1 return : ', visitorReturned);
             log('visitorReturned: ', visitorReturned);
             context.state.visitor = {
                 username: visitorReturned.username,

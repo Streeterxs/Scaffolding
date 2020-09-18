@@ -1,5 +1,5 @@
-import { accessTokenChecker, searchCredentialsByAccessToken, bucketRate, permissionLimiter, authenticate } from "../middlewares";
-import config from "../config";
+import { accessTokenChecker, searchCredentialsByAccessToken, bucketRate, permissionLimiter, authenticate } from "../../middlewares";
+import config from "../../config";
 
 import { graphqlHttpServer } from "@BookScaffolding/bookmanager";
 import { permissions } from '@BookScaffolding/personssector';

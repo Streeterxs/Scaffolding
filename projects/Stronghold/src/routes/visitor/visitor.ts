@@ -1,10 +1,10 @@
 import Router from "koa-router";
 import fetch from 'node-fetch';
 
-import { searchCredentialsByIdentifier, bucketRate, visitor } from "../middlewares";
-import { Credentials } from "../modules/credentials/credentialsModel";
-import config from "../config";
-import { appLogger } from "../appLogger";
+import { searchCredentialsByIdentifier, bucketRate, visitor } from "../../middlewares";
+import { Credentials } from "../../modules/credentials/credentialsModel";
+import config from "../../config";
+import { appLogger } from "../../appLogger";
 
 const log = appLogger.extend('routes:visitor');
 
@@ -61,6 +61,7 @@ export const visitorRouteMiddleware = () => [
         });
 
         const token = await response.json();
+        log('[routes] visitor fetch2 return : ', token);
         context.state.token = token;
         context.body = {
             accessToken: token.access_token,

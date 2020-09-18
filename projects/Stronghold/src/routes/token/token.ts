@@ -6,9 +6,9 @@ import {
     searchCredentialsByAccessToken,
     bucketRate,
     basicAuth,
-    exponencialRate } from "../middlewares";
-import config from "../config";
-import { appLogger } from "../appLogger";
+    exponencialRate } from "../../middlewares";
+import config from "../../config";
+import { appLogger } from "../../appLogger";
 
 const log = appLogger.extend('routes:token');
 

@@ -1,9 +1,9 @@
 import request from 'supertest';
 import fetchMock from 'jest-fetch-mock';
 
-import { databaseTestModule } from "../tests/database";
-import { testsLogger } from "../tests/testsLogger";
-import app from "../app";
+import { databaseTestModule } from "../../tests/database";
+import { testsLogger } from "../../tests/testsLogger";
+import app from "../../app";
 
 const log = testsLogger.extend('routes:bookmanager');
 
