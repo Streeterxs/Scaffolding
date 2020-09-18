@@ -52,6 +52,7 @@ export const accessTokenChecker = () => {
                 throw new Error('No token on authorization');
             }
 
+            await next();
         } catch (err) {
 
             log('err: ', err);
@@ -60,7 +61,6 @@ export const accessTokenChecker = () => {
             return;
         }
 
-        await next();
     }
 }
 
