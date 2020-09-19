@@ -37,7 +37,8 @@ export const visitorRouteMiddleware = () => [
             log('error: ', err);
             context.body = {
                 error_message: 'No identifier in the body'
-            }
+            };
+            context.response.status = 401;
         }
     },
     searchCredentialsByIdentifier(),
