@@ -19,5 +19,6 @@ export const bookManagerRouteMiddlewares = () => [
     authenticate(config.services.personssector.baseurl, config.services.personssector.routes[1]),
     bucketRate(),
     permissionLimiter(permissions.admnistrator, permissions.manager),
+    // TODO correct this Using serverless function not importing a package
     graphqlHttpServer
 ]

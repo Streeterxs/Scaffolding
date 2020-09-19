@@ -4,13 +4,12 @@ import fetchMock from 'jest-fetch-mock';
 import { databaseTestModule } from "../../tests/database";
 import { testsLogger } from "../../tests/testsLogger";
 import app from "../../app";
+import { permissions } from '@BookScaffolding/personssector/build';
 
 const log = testsLogger.extend('routes:bookmanager');
 
-fetchMock.enableMocks();
-describe('Person Mutations', () => {
+describe('BookManager', () => {
 
-    fetchMock.doMock();
     const {
         connect,
         closeDatabase,
@@ -29,20 +28,7 @@ describe('Person Mutations', () => {
 
         log('before each');
         // if you have an existing `beforeEach` just add the following lines to it
-        fetchMock.mockIf(/^https?:\/\/localhost:3233.*$/, async req => {
-
-            log('entered fetchMock mockIf fn');
-            if (req.url.endsWith('/authenticate')) {
-                log('request to personssector/authenticate');
-                return JSON.stringify({test: 'body'})
-            } else {
-
-                return {
-                    status: 404,
-                    body: JSON.stringify({error: 'Not Found'})
-                }
-            }
-        });
+        fetchMock.mockOnce(JSON.stringify({permission: permissions.admnistrator}));
     });
     beforeAll(() => connect());
     afterEach(async () => {
@@ -51,6 +37,7 @@ describe('Person Mutations', () => {
     });
     afterAll(() => closeDatabase());
 
+    // TODO implement serverless fn local placeholder to pass this test
     it('should pass', async () => {
 
         const response = await requestFn(
