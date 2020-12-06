@@ -1,73 +1,24 @@
-import Router from 'koa-router';
+import Router from "koa-router";
 import fetch from 'node-fetch';
 
-import bookManager, {graphqlHttpServer} from '@BookScaffolding/bookmanager';
-import { permissions } from '@BookScaffolding/personssector';
+import { searchCredentialsByIdentifier, bucketRate, visitor } from "../../middlewares";
+import { Credentials } from "../../modules/credentials/credentialsModel";
+import config from "../../config";
+import { appLogger } from "../../appLogger";
 
-import config from './config';
-import {
-    basicAuth,
-    permissionLimiter,
-    authenticate,
-    bucketRate,
-    exponencialRate,
-    visitor,
-    searchCredentialsByIdentifier,
-    searchCredentialsByAccessToken,
-    accessTokenChecker} from './middlewares';
-import { Credentials } from './modules/credentials/credentialsModel';
-import { appLogger } from './appLogger';
+const log = appLogger.extend('routes:visitor');
 
-const router = new Router();
-const log = appLogger.extend('routes');
 
-log('bookManager: ', bookManager);
+export const visitorRouteMount = (path: string, router: Router<any, {}>) => {
 
-router.get('/', (context, next) => {
-    context.body = 'helloooo!';
-});
-
-router.post(
-        '/token',
-        accessTokenChecker(),
-        searchCredentialsByAccessToken(),
-        bucketRate(),
-        basicAuth(),
-        async (context, next) => {
-
-            const {grant_type, username, password} = context.request.body;
-            const response = await fetch(`${config.services.personssector.baseurl}/${config.services.personssector.routes[0] /* example */}`, {
-                headers: {...context.headers},
-                body: `grant_type=${grant_type}&username=${username}&password=${password}`,
-                method: 'POST'
-            });
-
-            context.body = await response.json();
-            await next();
-        },
-        async (context, next) => {
-
-            context.state.exponencialRate = {
-                userId: context.state.identifier,
-                canReset: true
-            };
-
-            log('context.response.body: ', context.response.body);
-            const cantReset = context.response.body.error_description ?
-                context.response.body.error_description === 'Invalid password' || context.response.body.error_description === 'Invalid login credentials' :
-                false
-
-            if (cantReset) {
-
-                context.state.exponencialRate.canReset = false;
-            }
-
-            await next();
-        },
-        exponencialRate()
+    router.all(
+        path,
+        ...visitorRouteMiddleware()
     );
+};
 
-router.all('/visitor',
+export const visitorRouteMiddleware = () => [
+
     async (context, next) => {
 
         try {
@@ -86,12 +37,14 @@ router.all('/visitor',
             log('error: ', err);
             context.body = {
                 error_message: 'No identifier in the body'
-            }
+            };
+            context.response.status = 401;
         }
     },
     searchCredentialsByIdentifier(),
     bucketRate(),
-    visitor(),
+    visitor(config.services.personssector.baseurl, config.services.personssector.routes[2]),
+
     async (context, next) => {
 
         const {email: username} = context.state.visitor;
@@ -109,6 +62,7 @@ router.all('/visitor',
         });
 
         const token = await response.json();
+        log('[routes] visitor fetch2 return : ', token);
         context.state.token = token;
         context.body = {
             accessToken: token.access_token,
@@ -117,6 +71,7 @@ router.all('/visitor',
         };
         await next();
     },
+
     async (context, next) => {
 
         const identifier = context.state.identifier;
@@ -147,14 +102,4 @@ router.all('/visitor',
         }
 
     }
-);
-
-router.all('/bookmanager',
-    accessTokenChecker(),
-    searchCredentialsByAccessToken(),
-    authenticate(),
-    bucketRate(),
-    permissionLimiter(permissions.admnistrator, permissions.manager),
-    graphqlHttpServer);
-
-export default router;
+];

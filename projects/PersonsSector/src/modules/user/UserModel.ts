@@ -185,11 +185,18 @@ oAuthTokensSchema.statics.saveToken = async (token: IOAuthTokens, client: Client
 // Correct this when https://github.com/oauthjs/node-oauth2-server/issues/654 is solved
 oAuthClientSchema.statics.getClient = async (clientId, clientSecret: string | null) => {
 
+    let clientFinded: IOAuthClient;
+    log('clientId: ', clientId);
+    log('clientSecret: ', clientSecret);
     if (!clientSecret) {
 
-        return await OAuthClient.findOne({clientId});
+        clientFinded = await OAuthClient.findOne({clientId});
+        log('clientFinded:', clientFinded);
+        return clientFinded;
     }
-    return await OAuthClient.findOne({ clientId, clientSecret });
+    clientFinded = await OAuthClient.findOne({ clientId, clientSecret });
+    log('clientFinded:', clientFinded);
+    return clientFinded;
 };
 
 // This method should return a user with permission === visitor

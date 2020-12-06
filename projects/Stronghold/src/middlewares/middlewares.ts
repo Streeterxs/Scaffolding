@@ -6,21 +6,30 @@ import { permissions } from '@BookScaffolding/personssector';
 
 import { appLogger } from "../appLogger";
 import { exponencialRateLimit, bucketRateLimit } from "../services/rateLimits";
-import { visitorRequest, authenticateRequest } from "../services/personsSectorFetcher";
+import { authenticateRequest, visitorRequest } from "../services/personsSectorFetcher";
 
 export const log = appLogger.extend('middlewares');
 
 export const basicAuth = (clientId: string, clientSecret: string) => {
 
+    log('clientId: ', clientId);
+    log('clientSecret: ', clientSecret);
+    const credentials = {
+        clientId,
+        clientSecret
+    };
     return async (context: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>, next: Next) => {
 
         const body = context.request.body;
+        log('clientId: ', clientId);
+        log('clientSecret: ', clientSecret);
+        log('credentials: ', credentials);
         log('body: ', body);
         const canProceed = body.grant_type && body.username && body.password;
 
         if (canProceed) {
 
-            context.req.headers = {...context.req.headers, authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`};
+            context.req.headers = {...context.req.headers, authorization: `Basic ${Buffer.from(`${credentials.clientId}:${credentials.clientSecret}`).toString('base64')}`};
             log('context.headers', context.headers);
             await next();
         } else {
@@ -43,13 +52,15 @@ export const accessTokenChecker = () => {
                 throw new Error('No token on authorization');
             }
 
+            await next();
         } catch (err) {
 
-            log('err');
+            log('err: ', err);
+            context.body = {error: 'Not Authorized'};
+            context.response.status = 401;
             return;
         }
 
-        await next();
     }
 }
 
@@ -81,6 +92,7 @@ export const bucketRate = () => {
 
         const identifier = context.state.identifier;
 
+        log('bucketRate identifier: ', identifier);
         if(identifier) {
 
             await bucketRateLimit.consume(identifier + 'bucket');
@@ -103,6 +115,8 @@ export const visitor = (baseurl, route) => {
 
             const visitorReturned = await response.json();
 
+
+            log('[routes] visitor fetch1 return : ', visitorReturned);
             log('visitorReturned: ', visitorReturned);
             context.state.visitor = {
                 username: visitorReturned.username,

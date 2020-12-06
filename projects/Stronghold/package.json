@@ -28,11 +28,13 @@
     "koa-helmet": "^5.2.0",
     "koa-logger": "^3.2.1",
     "koa-router": "^9.1.0",
+    "supertest": "^4.0.2"
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@types/http-proxy": "^1.17.4",
     "@types/koa-helmet": "^5.2.0",
-    "@types/node-fetch": "^2.5.7"
+    "@types/node-fetch": "^2.5.7",
+    "jest-fetch-mock": "^3.0.3"
   }
 }
