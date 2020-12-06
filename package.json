@@ -14,7 +14,10 @@
     "server:clear:editions": "yarn workspace @BookScaffolding/bookmanager clear:editions",
     "server:clear:all": "yarn workspace @BookScaffolding/bookmanager clear:all",
     "stronghold:server": "yarn bookmanager:build && yarn workspace @BookScaffolding/stronghold start",
+    "stronghold:build": "yarn bookmanager:build && yarn workspace @BookScaffolding/stronghold build",
     "personssector:server": "yarn workspace @BookScaffolding/personssector start",
+    "personssector:build": "yarn workspace @BookScaffolding/personssector build",
+    "build:all": "yarn personssector:build && yarn stronghold:build && yarn bookmanager:build",
     "jest": "jest --no-cache --detectOpenHandles"
   },
   "author": "Afonso Araújo Neto",
