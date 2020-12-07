@@ -11,7 +11,8 @@ const root = path.join.bind(cwd);
 
 dotenvsafe.config({
     path: root('.env'),
-    sample: root('.env.example')
+    sample: root('.env.example'),
+    allowEmptyValues: true,
 });
 
 const ENV = process.env;
