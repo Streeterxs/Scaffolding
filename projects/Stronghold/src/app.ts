@@ -5,14 +5,16 @@ import cors from 'kcors';
 import bodyparser from 'koa-bodyparser';
 import fetch from 'node-fetch';
 
-import {appLogger} from './appLogger';
+import { appLogger } from './appLogger';
 import { router } from './routes';
 
 const log = appLogger.extend('entry');
 log('new log');
+
 if (!globalThis.fetch) {
     globalThis.fetch = (fetch as any);
 }
+
 const app = new koa();
 app.use(helmet());
 app.use(logger());
