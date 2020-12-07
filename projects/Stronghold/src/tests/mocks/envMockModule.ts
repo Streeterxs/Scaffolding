@@ -11,11 +11,10 @@ export const mockedEnvModule = () => {
     };
 
     const restore = () => {
-        const { restore } = mockedEnvValues;
 
-        if (restore) {
+        if (mockedEnvValues.restore) {
 
-            restore();
+            mockedEnvValues.restore();
         }
     };
 
