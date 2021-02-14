@@ -1,11 +1,11 @@
-import { databaseTestModule } from '../../../tests/database';
+import { databaseTestModule } from '../../../../tests/database';
 
-import { mutationsRequestBaseModule } from '../../../tests/mutations';
-import { testsLogger } from '../../../tests/testsLogger';
+import { mutationsRequestBaseModule } from '../../../../tests/mutations';
+import { testsLogger } from '../../../../tests/testsLogger';
 
 const log = testsLogger.extend('categoryMutations');
 
-describe('category mutations', () => {
+describe('CategoryChangeNameMutation', () => {
 
     const {
         connect,
@@ -20,15 +20,6 @@ describe('category mutations', () => {
     afterEach(() => clearDatabase());
 
     afterAll(() => closeDatabase());
-
-    it('should create new category', async () => {
-
-        const response = await createCategory('New Category');
-
-        log('response body: ', response.body);
-        expect(response.status).toBe(200);
-        expect(response.body.data.CategoryCreate).toBeTruthy();
-    });
 
     it('should change a category name', async () => {
 

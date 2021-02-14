@@ -1,11 +1,11 @@
-import { databaseTestModule } from '../../../tests/database';
+import { databaseTestModule } from '../../../../tests/database';
 
-import { mutationsRequestBaseModule } from '../../../tests/mutations';
-import { testsLogger } from '../../../tests/testsLogger';
+import { mutationsRequestBaseModule } from '../../../../tests/mutations';
+import { testsLogger } from '../../../../tests/testsLogger';
 
 const log = testsLogger.extend('editionMutations');
 
-describe('edition mutations', () => {
+describe('EditionEditMutation', () => {
 
     let bookId: string;
     let authorId: string;
@@ -16,7 +16,7 @@ describe('edition mutations', () => {
         clearDatabase
     } = databaseTestModule();
 
-    const { createAuthor, createBook, createEdition, editEdition, changeBookEdition } = mutationsRequestBaseModule();
+    const { createAuthor, createBook, createEdition, editEdition } = mutationsRequestBaseModule();
 
     beforeAll(() => connect());
 
@@ -35,21 +35,6 @@ describe('edition mutations', () => {
     afterEach(() => clearDatabase());
 
     afterAll(() => closeDatabase());
-
-    it('should create new edition', async () => {
-
-        const editionResponse = await createEdition({
-            edition: 1,
-            book: bookId,
-            publishing: 'New Publishing',
-            year: 1952,
-            pages: 1000,
-            language: 'English'
-        });
-
-        expect(editionResponse.status).toBe(200);
-        expect(editionResponse.body.data.EditionCreate).toBeTruthy();
-    });
 
     it('should change a edition properties', async () => {
 
@@ -87,38 +72,5 @@ describe('edition mutations', () => {
         expect(editEditionResponse.body.data.EditionEdit.edition.year).toBe(editEditionObj.year);
         expect(editEditionResponse.body.data.EditionEdit.edition.language).toBe(editEditionObj.language);
         expect(editEditionResponse.body.data.EditionEdit.edition.pages).toBe(1000);
-    });
-
-    it('should change a edition from a book to another', async () => {
-
-        const editionResponse = await createEdition({
-            edition: 1,
-            book: bookId,
-            publishing: 'New Publishing',
-            year: 1952,
-            pages: 1000,
-            language: 'English'
-        });
-
-        expect(editionResponse.status).toBe(200);
-        expect(editionResponse.body.data.EditionCreate).toBeTruthy();
-
-        const bookResponse = await createBook({name: 'New New Book', author: authorId, categories: []});
-
-        expect(bookResponse.status).toBe(200);
-        expect(bookResponse.body.data.BookCreate).toBeTruthy();
-
-        const newBookId = bookResponse.body.data.BookCreate.book.cursor;
-        const editionId = editionResponse.body.data.EditionCreate.edition.cursor;
-
-        const changeBookEditionResponse = await changeBookEdition({edition: editionId, book: newBookId});
-
-        log('changeBookEditionResponse.body: ', changeBookEditionResponse.body);
-
-        expect(changeBookEditionResponse.status).toBe(200);
-        expect(changeBookEditionResponse.body.data.EditionChangeBook).toBeTruthy();
-        expect(changeBookEditionResponse.body.data.EditionChangeBook.edition.book.id).toBe(newBookId);
-        expect(changeBookEditionResponse.body.data.EditionChangeBook.lastBook.id).toBe(bookId);
-
     });
 });

@@ -1,11 +1,11 @@
-import { databaseTestModule } from "../../../tests/database";
-import { userMutationsRequestModule } from "../../../tests/mutations/user";
-import { testsLogger } from "../../../tests/testsLogger";
-import { permissions } from "../UserPermissions.enum";
+import { databaseTestModule } from "../../../../tests/database";
+import { userMutationsRequestModule } from "../../../../tests/mutations/user";
+import { testsLogger } from "../../../../tests/testsLogger";
+import { permissions } from "../../UserPermissions.enum";
 
 const log = testsLogger.extend('userMutations');
 
-describe('User Mutations', () => {
+describe('UserRegisterMutation', () => {
 
     const {
         register,
