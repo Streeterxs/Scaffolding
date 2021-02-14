@@ -1,5 +1,5 @@
 import { testsLogger } from "../testsLogger";
-import ChangeCategoryName from "../../modules/category/mutations/changeName";
+import ChangeCategoryName from "../../modules/category/mutations/CategoryChangeNameMutation";
 import ChangeBookEdition from "../../modules/edition/mutations/changeBookEdition";
 
 const log = testsLogger.extend('mutationsQuery');

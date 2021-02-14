@@ -1,5 +1,5 @@
 import CategoryCreation from './createCategory';
-import ChangeCategoryName from './changeName';
+import ChangeCategoryName from './CategoryChangeNameMutation';
 
 export default {
     CategoryCreation,
