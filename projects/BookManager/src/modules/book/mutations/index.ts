@@ -1,6 +1,6 @@
 import BookCreation from './createBook';
 import AddCategory from './addCategory';
-import ChangeBookName from './changeName';
+import ChangeBookName from './BookChangeNameMutation';
 import ChangeAuthorBook from './changeAuthor';
 
 export default {
