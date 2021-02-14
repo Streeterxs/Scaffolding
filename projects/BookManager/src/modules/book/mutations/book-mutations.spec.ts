@@ -21,7 +21,7 @@ describe('book mutations', () => {
 
     beforeEach(async () => {
 
-        authorId = `${(await createAuthor('New Author To Book')).body.data.AuthorCreation.author.id}`;
+        authorId = `${(await createAuthor('New Author To Book')).body.data.AuthorCreate.author.id}`;
         log('authorId: ', authorId);
     })
 
@@ -38,26 +38,26 @@ describe('book mutations', () => {
 
         log('bookResponse body: ', bookResponse.body);
         expect(bookResponse.status).toBe(200);
-        expect(bookResponse.body.data.BookCreation).toBeTruthy();
+        expect(bookResponse.body.data.BookCreate).toBeTruthy();
     });
 
     it('should add category to a book', async () => {
 
         const categoryResponse = await createCategory('New Category');
-        expect(categoryResponse.body.data.CategoryCreation).toBeTruthy();
+        expect(categoryResponse.body.data.CategoryCreate).toBeTruthy();
 
 
         const bookResponse = await createBook({name: 'New Book', author: authorId, categories: []});
-        expect(bookResponse.body.data.BookCreation).toBeTruthy();
+        expect(bookResponse.body.data.BookCreate).toBeTruthy();
 
-        const {cursor: bookId} = bookResponse.body.data.BookCreation.book;
-        const {cursor: categoryId} = categoryResponse.body.data.CategoryCreation.category;
+        const {cursor: bookId} = bookResponse.body.data.BookCreate.book;
+        const {cursor: categoryId} = categoryResponse.body.data.CategoryCreate.category;
 
         const addCategoryResponse = await addCategoryToBook(bookId, categoryId);
 
         expect(addCategoryResponse.status).toBe(200);
-        expect(addCategoryResponse.body.data.AddCategory).toBeTruthy();
-        expect(addCategoryResponse.body.data.AddCategory.book.categories.edges[0].node.id).toBe(categoryId);
+        expect(addCategoryResponse.body.data.BookAddCategory).toBeTruthy();
+        expect(addCategoryResponse.body.data.BookAddCategory.book.categories.edges[0].node.id).toBe(categoryId);
 
     });
 
@@ -65,18 +65,18 @@ describe('book mutations', () => {
 
         const bookResponse = await createBook({name: 'New Book', author: authorId, categories: []});
         expect(bookResponse.status).toBe(200);
-        expect(bookResponse.body.data.BookCreation).toBeTruthy();
-        log('bookResponse change book name: ', bookResponse.body.data.BookCreation);
+        expect(bookResponse.body.data.BookCreate).toBeTruthy();
+        log('bookResponse change book name: ', bookResponse.body.data.BookCreate);
 
         const newName = 'New Book Name';
-        const {id: bookId} = bookResponse.body.data.BookCreation.book.node;
+        const {id: bookId} = bookResponse.body.data.BookCreate.book.node;
 
         const changeBookNameResponse = await changeBookName({name: newName, book: bookId});
         log(changeBookNameResponse.body)
         expect(changeBookNameResponse.status).toBe(200);
-        expect(changeBookNameResponse.body.data.ChangeBookName).toBeTruthy();
-        expect(changeBookNameResponse.body.data.ChangeBookName.book.name).toBe(newName);
-        expect(changeBookNameResponse.body.data.ChangeBookName.book.updatedAt).not.toBe(bookResponse.body.data.BookCreation.book.updatedAt);
+        expect(changeBookNameResponse.body.data.BookChangeName).toBeTruthy();
+        expect(changeBookNameResponse.body.data.BookChangeName.book.name).toBe(newName);
+        expect(changeBookNameResponse.body.data.BookChangeName.book.updatedAt).not.toBe(bookResponse.body.data.BookCreate.book.updatedAt);
     });
 
     it('Should change author from a book', async () => {
@@ -88,21 +88,21 @@ describe('book mutations', () => {
 
         log('bookResponse body: ', bookResponse.body);
         expect(bookResponse.status).toBe(200);
-        expect(bookResponse.body.data.BookCreation).toBeTruthy();
+        expect(bookResponse.body.data.BookCreate).toBeTruthy();
 
         const newAuthorResponse = await createAuthor('New Author Name');
         expect(newAuthorResponse.status).toBe(200);
-        expect(newAuthorResponse.body.data.AuthorCreation).toBeTruthy();
+        expect(newAuthorResponse.body.data.AuthorCreate).toBeTruthy();
 
-        const {id: newAuthorId} = newAuthorResponse.body.data.AuthorCreation.author;
-        const {cursor: bookId} = bookResponse.body.data.BookCreation.book;
+        const {id: newAuthorId} = newAuthorResponse.body.data.AuthorCreate.author;
+        const {cursor: bookId} = bookResponse.body.data.BookCreate.book;
 
         const changeAuthorBookResponse = await changeAuthorBook({book: bookId, author: newAuthorId});
         log('changeAuthorBookResponse.body: ', changeAuthorBookResponse.body);
         expect(changeAuthorBookResponse.status).toBe(200);
-        expect(changeAuthorBookResponse.body.data.ChangeAuthorBook).toBeTruthy();
-        expect(changeAuthorBookResponse.body.data.ChangeAuthorBook.book.author.id).toBe(newAuthorId);
-        expect(changeAuthorBookResponse.body.data.ChangeAuthorBook.lastAuthor.id).toBe(authorId);
-        expect(changeAuthorBookResponse.body.data.ChangeAuthorBook.author.books.edges[0].node.id).toBe(bookId);
+        expect(changeAuthorBookResponse.body.data.BookChangeAuthor).toBeTruthy();
+        expect(changeAuthorBookResponse.body.data.BookChangeAuthor.book.author.id).toBe(newAuthorId);
+        expect(changeAuthorBookResponse.body.data.BookChangeAuthor.lastAuthor.id).toBe(authorId);
+        expect(changeAuthorBookResponse.body.data.BookChangeAuthor.author.books.edges[0].node.id).toBe(bookId);
     });
 });

@@ -17,8 +17,8 @@ if(process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:category:mutations:createCategory');
 }
 
-const CategoryCreation = mutationWithClientMutationId({
-    name: 'CategoryCreation',
+const CategoryCreate = mutationWithClientMutationId({
+    name: 'CategoryCreate',
     description: 'Category Creation',
     inputFields: {
         name: {
@@ -56,4 +56,4 @@ const CategoryCreation = mutationWithClientMutationId({
     }
 });
 
-export default CategoryCreation;
+export default CategoryCreate;

@@ -16,8 +16,8 @@ if (process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:edition:mutations:editEdition');
 }
 
-const EditEdition = mutationWithClientMutationId({
-    name: 'EditEdition',
+const EditionEdit = mutationWithClientMutationId({
+    name: 'EditionEdit',
     description: 'Edit edition mutation',
     inputFields: {
         editionIdentifier: {
@@ -100,4 +100,4 @@ const editSanitizer = (edition: IEdition, ...args: {key: string, value: any}[]) 
     });
 };
 
-export default EditEdition;
+export default EditionEdit;

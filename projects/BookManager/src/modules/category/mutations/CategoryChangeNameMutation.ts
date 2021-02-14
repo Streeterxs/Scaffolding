@@ -16,8 +16,8 @@ if (process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:category:mutations:changeName');
 }
 
-const ChangeCategoryName = mutationWithClientMutationId({
-    name: "ChangeCategoryName",
+const CategoryChangeName = mutationWithClientMutationId({
+    name: "CategoryChangeName",
     description: "Change a category name mutation",
     inputFields: {
         name: {
@@ -59,4 +59,4 @@ const ChangeCategoryName = mutationWithClientMutationId({
     }
 });
 
-export default ChangeCategoryName;
+export default CategoryChangeName;

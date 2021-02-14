@@ -12,14 +12,14 @@ let log;
 
 if (process.env.JEST_WORKER_ID) {
 
-    log = testsLogger.extend('modules:person:mutations:updatePerson');
+    log = testsLogger.extend('modules:person:mutations:PersonUpdate');
 } else {
 
-    log = appLogger.extend('modules:person:mutations:updatePerson');
+    log = appLogger.extend('modules:person:mutations:PersonUpdate');
 }
 
-const updatePerson = mutationWithClientMutationId({
-    name: 'UpdatePerson',
+const PersonUpdate = mutationWithClientMutationId({
+    name: 'PersonUpdate',
     description: 'Mutation for updating person',
     inputFields: {
         name: { type: GraphQLString },
@@ -74,4 +74,4 @@ const editSanitizer = (person: IPerson, ...args: {key: string, value: any}[]) =>
     });
 };
 
-export default updatePerson;
+export default PersonUpdate;

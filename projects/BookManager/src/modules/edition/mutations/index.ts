@@ -1,9 +1,9 @@
-import EditionCreation from './createEdition';
-import EditEdition from './editEdition';
-import ChangeBookEdition from './changeBookEdition';
+import EditionCreate from './EditionCreateMutation';
+import EditionEdit from './EditionEditMutation';
+import EditionChangeBook from './EditionChangeBookMutation';
 
 export default {
-    EditionCreation,
-    EditEdition,
-    ChangeBookEdition
+    EditionCreate,
+    EditionEdit,
+    EditionChangeBook
 }

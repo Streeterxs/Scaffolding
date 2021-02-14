@@ -27,22 +27,22 @@ describe('category mutations', () => {
 
         log('response body: ', response.body);
         expect(response.status).toBe(200);
-        expect(response.body.data.CategoryCreation).toBeTruthy();
+        expect(response.body.data.CategoryCreate).toBeTruthy();
     });
 
     it('should change a category name', async () => {
 
         const categoryResponse = await createCategory('New Category');
         expect(categoryResponse.status).toBe(200);
-        expect(categoryResponse.body.data.CategoryCreation).toBeTruthy();
+        expect(categoryResponse.body.data.CategoryCreate).toBeTruthy();
 
         const newName = 'New Category Name';
-        const {cursor: categoryId} = categoryResponse.body.data.CategoryCreation.category;
+        const {cursor: categoryId} = categoryResponse.body.data.CategoryCreate.category;
 
         const newCategoryNameResponse = await changeCategoryName({name: newName, category: categoryId});
         expect(newCategoryNameResponse.status).toBe(200);
-        expect(newCategoryNameResponse.body.data.ChangeCategoryName).toBeTruthy();
-        expect(newCategoryNameResponse.body.data.ChangeCategoryName.category.name).toBe(newName);
-        expect(newCategoryNameResponse.body.data.ChangeCategoryName.category.updatedAt).not.toBe(newName);
+        expect(newCategoryNameResponse.body.data.CategoryChangeName).toBeTruthy();
+        expect(newCategoryNameResponse.body.data.CategoryChangeName.category.name).toBe(newName);
+        expect(newCategoryNameResponse.body.data.CategoryChangeName.category.updatedAt).not.toBe(newName);
     });
 });

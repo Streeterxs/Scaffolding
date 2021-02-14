@@ -17,8 +17,8 @@ if(process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:author:mutations:changeName');
 }
 
-const ChangeAuthorName = mutationWithClientMutationId({
-    name: 'ChangeAuthorName',
+const AuthorChangeName = mutationWithClientMutationId({
+    name: 'AuthorChangeName',
     description: 'Change Author Name',
     inputFields: {
         name: {
@@ -59,4 +59,4 @@ const ChangeAuthorName = mutationWithClientMutationId({
     }
 });
 
-export default ChangeAuthorName;
+export default AuthorChangeName;

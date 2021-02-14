@@ -1,9 +1,9 @@
-import AuthorCreation from './createAuthor';
-import AddBook from './addBook';
-import ChangeAuthorName from './AuthorChangeNameMutation';
+import AuthorCreate from './AuthorCreateMutation';
+import AuthorAddBook from './AuthorAddBookMutation';
+import AuthorChangeName from './AuthorChangeNameMutation';
 
 export default {
-    AuthorCreation,
-    AddBook,
-    ChangeAuthorName,
+    AuthorCreate,
+    AuthorAddBook,
+    AuthorChangeName,
 };

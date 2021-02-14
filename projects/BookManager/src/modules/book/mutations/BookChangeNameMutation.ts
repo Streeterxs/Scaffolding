@@ -12,8 +12,8 @@ if (process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:book:mutations:changeName')
 }
 
-const ChangeBookName = mutationWithClientMutationId({
-    name: 'ChangeBookName',
+const BookChangeName = mutationWithClientMutationId({
+    name: 'BookChangeName',
     description: 'A mutation to change a book name',
     inputFields: {
         name: {
@@ -55,4 +55,4 @@ const ChangeBookName = mutationWithClientMutationId({
     }
 });
 
-export default ChangeBookName;
+export default BookChangeName;

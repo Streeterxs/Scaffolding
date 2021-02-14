@@ -8,7 +8,7 @@ export type createPersonInput = {
 };
 export const createPersonQuery = ({name, lastname}: createPersonInput) => `
     mutation {
-        CreatePerson (input: {name: "${name}", lastname: "${lastname}", clientMutationId: "1"}) {
+        PersonCreate (input: {name: "${name}", lastname: "${lastname}", clientMutationId: "1"}) {
             person {
                 id
                 name
@@ -25,7 +25,7 @@ export type updatePersonInput = {
 };
 export const updatePersonQuery = ({name, lastname, person}: updatePersonInput) => `
     mutation {
-        UpdatePerson (input: {name: "${name}", lastname: "${lastname}", person: "${person}", clientMutationId: "2"}) {
+        PersonUpdate (input: {name: "${name}", lastname: "${lastname}", person: "${person}", clientMutationId: "2"}) {
             person {
                 id
                 name
@@ -41,7 +41,7 @@ export type addUserInput = {
 };
 export const addUserQuery = ({person, user}: addUserInput) => `
     mutation {
-        AddUser (input: {person: "${person}", user: "${user}", clientMutationId: "4"}) {
+        PersonAddUser (input: {person: "${person}", user: "${user}", clientMutationId: "4"}) {
             person {
                 id
                 name
@@ -76,7 +76,7 @@ export type removeUserInput = {
 };
 export const removeUserQuery = ({person, user}: removeUserInput) => `
     mutation {
-        RemoveUser (input: {person: "${person}", user: "${user}", clientMutationId: "5"}) {
+        PersonRemoveUser (input: {person: "${person}", user: "${user}", clientMutationId: "5"}) {
             person {
                 id
                 name

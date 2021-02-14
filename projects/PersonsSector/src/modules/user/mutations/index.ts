@@ -1,5 +1,5 @@
-import Register from './register';
+import UserRegister from './UserRegisterMutation';
 
 export default {
-    Register,
+    UserRegister,
 };
