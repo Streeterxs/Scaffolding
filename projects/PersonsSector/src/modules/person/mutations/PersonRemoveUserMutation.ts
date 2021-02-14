@@ -13,14 +13,14 @@ let log;
 
 if (process.env.JEST_WORKER_ID) {
 
-    log = testsLogger.extend('modules:person:mutations:removeUser');
+    log = testsLogger.extend('modules:person:mutations:PersonRemoveUser');
 } else {
 
-    log = appLogger.extend('modules:person:mutations:removeUser');
+    log = appLogger.extend('modules:person:mutations:PersonRemoveUser');
 }
 
-const removeUser = mutationWithClientMutationId({
-    name: 'RemoveUser',
+const PersonRemoveUser = mutationWithClientMutationId({
+    name: 'PersonRemoveUser',
     description:'Remove user mutation',
     inputFields: {
         person: { type: GraphQLString },
@@ -95,4 +95,4 @@ const removeUser = mutationWithClientMutationId({
     }
 });
 
-export default removeUser;
+export default PersonRemoveUser;

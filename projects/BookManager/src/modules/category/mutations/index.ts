@@ -1,7 +1,7 @@
-import CategoryCreation from './createCategory';
-import ChangeCategoryName from './CategoryChangeNameMutation';
+import CategoryCreate from './CategoryCreateMutation';
+import CategoryChangeName from './CategoryChangeNameMutation';
 
 export default {
-    CategoryCreation,
-    ChangeCategoryName
+    CategoryCreate,
+    CategoryChangeName
 }

@@ -14,14 +14,14 @@ let log;
 
 if (process.env.JEST_WORKER_ID) {
 
-    log = testsLogger.extend('modules:person:mutations:addUser');
+    log = testsLogger.extend('modules:person:mutations:PersonAddUser');
 } else {
 
-    log = appLogger.extend('modules:person:mutations:addUser');
+    log = appLogger.extend('modules:person:mutations:PersonAddUser');
 }
 
-const addUser = mutationWithClientMutationId({
-    name: 'AddUser',
+const PersonAddUser = mutationWithClientMutationId({
+    name: 'PersonAddUser',
     description: 'Add a user to a person mutation',
     inputFields: {
         person: { type: new GraphQLNonNull(GraphQLString) },
@@ -86,4 +86,4 @@ const addUser = mutationWithClientMutationId({
     }
 });
 
-export default addUser;
+export default PersonAddUser;

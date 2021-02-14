@@ -1,11 +1,11 @@
 import { testsLogger } from "../testsLogger";
 import ChangeCategoryName from "../../modules/category/mutations/CategoryChangeNameMutation";
-import ChangeBookEdition from "../../modules/edition/mutations/changeBookEdition";
+import ChangeBookEdition from "../../modules/edition/mutations/EditionChangeBookMutation";
 
 const log = testsLogger.extend('mutationsQuery');
 export const createAuthorMutation = (name: string) => `
     mutation {
-        AuthorCreation(input: {name: "${name}", clientMutationId: "1"}) {
+        AuthorCreate(input: {name: "${name}", clientMutationId: "1"}) {
             author {
                 id
                 name
@@ -18,7 +18,7 @@ export const createAuthorMutation = (name: string) => `
 
 export const changeAuthorNameMutation = (name: string, author: string) => `
     mutation {
-        ChangeAuthorName(input: {name: "${name}", author: "${author}", clientMutationId: "2"}) {
+        AuthorChangeName(input: {name: "${name}", author: "${author}", clientMutationId: "2"}) {
             author {
                 id
                 name
@@ -31,7 +31,7 @@ export const changeAuthorNameMutation = (name: string, author: string) => `
 
 export const addBookToAuthorMutation = (authorId: string, bookId: string) => `
     mutation {
-        AddBook(input: {author: "${authorId}", book: "${bookId}", clientMutationId: "3"}) {
+        AuthorAddBook(input: {author: "${authorId}", book: "${bookId}", clientMutationId: "3"}) {
             author {
                 name
                 books {
@@ -60,7 +60,7 @@ export type createBookMutationInput = {
 }
 export const createBookMutation = ({name, author, categories=[]}: createBookMutationInput) => `
     mutation {
-        BookCreation(input: {name: "${name}", author: "${author}", categories: ${JSON.stringify(categories)}, clientMutationId: "4"}) {
+        BookCreate(input: {name: "${name}", author: "${author}", categories: ${JSON.stringify(categories)}, clientMutationId: "4"}) {
             book {
                 cursor
                 node {
@@ -79,7 +79,7 @@ export const createBookMutation = ({name, author, categories=[]}: createBookMuta
 
 export const addCategoryToBookMutation = (bookId, categoryId) => `
     mutation {
-        AddCategory(input: {book: "${bookId}", category: "${categoryId}", clientMutationId: "5"}) {
+        BookAddCategory(input: {book: "${bookId}", category: "${categoryId}", clientMutationId: "5"}) {
             book {
                 id
                 name
@@ -108,7 +108,7 @@ export type ChangeBookNameInput = {
 };
 export const changeBookNameMutation = (changeBookNameObj: ChangeBookNameInput) => `
     mutation {
-        ChangeBookName(input: {name: "${changeBookNameObj.name}", book: "${changeBookNameObj.book}", clientMutationId: "6"}) {
+        BookChangeName(input: {name: "${changeBookNameObj.name}", book: "${changeBookNameObj.book}", clientMutationId: "6"}) {
             book {
                 id
                 name
@@ -125,7 +125,7 @@ export type ChangeAuthorBookInput = {
 };
 export const changeAuthorBookMutations = ({book, author}: ChangeAuthorBookInput) => `
     mutation {
-        ChangeAuthorBook (input: {book: "${book}", author: "${author}", clientMutationId: "12"}) {
+        BookChangeAuthor (input: {book: "${book}", author: "${author}", clientMutationId: "12"}) {
             book {
                 id
                 name
@@ -179,7 +179,7 @@ export const createEditionMutation = (
         }: createEditionMutationInput
     ) => `
     mutation {
-        EditionCreation(input: {
+        EditionCreate(input: {
             edition: ${edition},
             publishing: "${publishing}",
             year: ${year},
@@ -221,7 +221,7 @@ export const editEditionMutation = ({
     language
 }: EditEditionInput) => `
     mutation {
-        EditEdition (
+        EditionEdit (
             input: {
                 editionIdentifier: "${editionIdentifier}",
                 ${edition ? `edition: ${edition},` : ''}
@@ -250,7 +250,7 @@ export type ChangeBookEditionInput = {
 };
 export const changeBookEditionMutation = ({book, edition}: ChangeBookEditionInput) => `
     mutation {
-        ChangeBookEdition(input: {book: "${book}", edition: "${edition}", clientMutationId: "11"}){
+        EditionChangeBook(input: {book: "${book}", edition: "${edition}", clientMutationId: "11"}){
             edition {
                 id
                 edition
@@ -274,7 +274,7 @@ export const changeBookEditionMutation = ({book, edition}: ChangeBookEditionInpu
 
 export const createCategoryMutation = (name: string) => `
     mutation {
-        CategoryCreation(input: {name: "${name}", clientMutationId: "8"}) {
+        CategoryCreate(input: {name: "${name}", clientMutationId: "8"}) {
             category {
                 cursor
                 node {
@@ -295,7 +295,7 @@ export type ChangeCategoryNameInput = {
 
 export const changeCategoryNameMutation = ({name, category}: ChangeCategoryNameInput) => `
     mutation {
-        ChangeCategoryName(input: {name: "${name}", category: "${category}", clientMutationId: "9"}) {
+        CategoryChangeName(input: {name: "${name}", category: "${category}", clientMutationId: "9"}) {
             category {
                 id
                 name

@@ -17,8 +17,8 @@ if(process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:author:mutations:createAuthor');
 }
 
-const AuthorCreation = mutationWithClientMutationId({
-    name: 'AuthorCreation',
+const AuthorCreate = mutationWithClientMutationId({
+    name: 'AuthorCreate',
     description: 'Author Creation',
     inputFields: {
         name: {
@@ -48,4 +48,4 @@ const AuthorCreation = mutationWithClientMutationId({
     }
 });
 
-export default AuthorCreation;
+export default AuthorCreate;

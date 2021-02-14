@@ -10,7 +10,7 @@ export type registerInput = {
 };
 export const registerMutationQuery = ({username, email, password, permission}: registerInput) => `
     mutation {
-        Register (input: {username:"${username}", email: "${email}", password: "${password}", permission: ${permission}, clientMutationId: "3"}) {
+        UserRegister (input: {username:"${username}", email: "${email}", password: "${password}", permission: ${permission}, clientMutationId: "3"}) {
             user {
                 cursor
                 node {

@@ -17,8 +17,8 @@ if(process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:edition:mutations:createEdition');
 }
 
-const EditionCreation = mutationWithClientMutationId({
-    name: 'EditionCreation',
+const EditionCreate = mutationWithClientMutationId({
+    name: 'EditionCreate',
     description: 'Edition Creation',
     inputFields: {
         edition: {
@@ -87,4 +87,4 @@ const EditionCreation = mutationWithClientMutationId({
     }
 });
 
-export default EditionCreation;
+export default EditionCreate;

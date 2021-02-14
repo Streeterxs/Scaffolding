@@ -37,7 +37,7 @@ describe('User Mutations', () => {
         log('registerResponse.body: ', registerResponse.body);
 
         expect(registerResponse.status).toBe(200);
-        expect(registerResponse.body.data.Register).toBeTruthy();
-        expect(registerResponse.body.data.Register.user.node.email).toBe(email);
+        expect(registerResponse.body.data.UserRegister).toBeTruthy();
+        expect(registerResponse.body.data.UserRegister.user.node.email).toBe(email);
     });
 });

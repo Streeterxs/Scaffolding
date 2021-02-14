@@ -1,11 +1,11 @@
-import CreatePerson from './createPerson';
-import UpdatePerson from './PersonUpdateMutation';
-import AddUser from './addUser';
-import RemoveUser from './removeUser';
+import PersonCreate from './PersonCreateMutation';
+import PersonUpdate from './PersonUpdateMutation';
+import PersonAddUser from './PersonAddUserMutation';
+import PersonRemoveUser from './PersonRemoveUserMutation';
 
 export default {
-    CreatePerson,
-    UpdatePerson,
-    AddUser,
-    RemoveUser
+    PersonCreate,
+    PersonUpdate,
+    PersonAddUser,
+    PersonRemoveUser
 };

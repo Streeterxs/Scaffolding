@@ -1,11 +1,11 @@
-import BookCreation from './createBook';
-import AddCategory from './addCategory';
-import ChangeBookName from './BookChangeNameMutation';
-import ChangeAuthorBook from './changeAuthor';
+import BookCreate from './BookCreateMutation';
+import BookAddCategory from './BookAddCategoryMutation';
+import BookChangeName from './BookChangeNameMutation';
+import BookChangeAuthor from './BookChangeAuthorMutation';
 
 export default {
-    BookCreation,
-    AddCategory,
-    ChangeBookName,
-    ChangeAuthorBook,
+    BookCreate,
+    BookAddCategory,
+    BookChangeName,
+    BookChangeAuthor,
 };

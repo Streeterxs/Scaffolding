@@ -11,14 +11,14 @@ let log;
 
 if (process.env.JEST_WORKER_ID) {
 
-    log = testsLogger.extend('modules:person:mutations:createPerson');
+    log = testsLogger.extend('modules:person:mutations:PersonCreate');
 } else {
 
-    log = appLogger.extend('modules:person:mutations:createPerson');
+    log = appLogger.extend('modules:person:mutations:PersonCreate');
 }
 
-const createPerson = mutationWithClientMutationId({
-    name: 'CreatePerson',
+const PersonCreate = mutationWithClientMutationId({
+    name: 'PersonCreate',
     description: 'Create person mutation',
     inputFields: {
         name: {
@@ -56,4 +56,4 @@ const createPerson = mutationWithClientMutationId({
     }
 });
 
-export default createPerson;
+export default PersonCreate;

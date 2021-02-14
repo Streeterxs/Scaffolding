@@ -17,8 +17,8 @@ if(process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:book:mutations:addCategory');
 }
 
-const AddCategory = mutationWithClientMutationId({
-    name: 'AddCategory',
+const BookAddCategory = mutationWithClientMutationId({
+    name: 'BookAddCategory',
     description: 'Add a Category to a Book',
     inputFields: {
         book: {
@@ -67,4 +67,4 @@ const AddCategory = mutationWithClientMutationId({
     }
 });
 
-export default AddCategory;
+export default BookAddCategory;

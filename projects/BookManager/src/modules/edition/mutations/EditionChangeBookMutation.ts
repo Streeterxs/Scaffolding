@@ -20,8 +20,8 @@ if (process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:edition:mutations:changeBookEdition');
 }
 
-const ChangeBookEdition = mutationWithClientMutationId({
-    name: 'ChangeBookEdition',
+const EditionChangeBook = mutationWithClientMutationId({
+    name: 'EditionChangeBook',
     description: 'A mutation to change edition to another book',
     inputFields: {
         book: {
@@ -105,4 +105,4 @@ const ChangeBookEdition = mutationWithClientMutationId({
     }
 });
 
-export default ChangeBookEdition;
+export default EditionChangeBook;

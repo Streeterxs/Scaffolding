@@ -12,14 +12,14 @@ let log;
 
 if (process.env.JEST_WORKER_ID) {
 
-    log = testsLogger.extend('modules:user:mutations:register');
+    log = testsLogger.extend('modules:user:mutations:UserRegister');
 } else {
 
-    log = appLogger.extend('modules:person:mutations:register');
+    log = appLogger.extend('modules:person:mutations:UserRegister');
 }
 
-const register = mutationWithClientMutationId({
-    name: 'Register',
+const UserRegister = mutationWithClientMutationId({
+    name: 'UserRegister',
     description: 'Register mutation',
     inputFields: {
         username: { type: new GraphQLNonNull(GraphQLString) },
@@ -64,4 +64,4 @@ const register = mutationWithClientMutationId({
     }
 });
 
-export default register;
+export default UserRegister;

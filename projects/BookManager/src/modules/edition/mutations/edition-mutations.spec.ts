@@ -25,11 +25,11 @@ describe('edition mutations', () => {
         const authorGraphqlReturn = await (await createAuthor('New Author')).body;
         log(authorGraphqlReturn);
 
-        const bookGraphqlReturn = await createBook({name:'New Book', author: `${authorGraphqlReturn.data.AuthorCreation.author.id}`, categories: []});
+        const bookGraphqlReturn = await createBook({name:'New Book', author: `${authorGraphqlReturn.data.AuthorCreate.author.id}`, categories: []});
 
         log(bookGraphqlReturn.body);
-        bookId = bookGraphqlReturn.body.data.BookCreation.book.cursor;
-        authorId = `${authorGraphqlReturn.data.AuthorCreation.author.id}`;
+        bookId = bookGraphqlReturn.body.data.BookCreate.book.cursor;
+        authorId = `${authorGraphqlReturn.data.AuthorCreate.author.id}`;
     });
 
     afterEach(() => clearDatabase());
@@ -48,7 +48,7 @@ describe('edition mutations', () => {
         });
 
         expect(editionResponse.status).toBe(200);
-        expect(editionResponse.body.data.EditionCreation).toBeTruthy();
+        expect(editionResponse.body.data.EditionCreate).toBeTruthy();
     });
 
     it('should change a edition properties', async () => {
@@ -62,9 +62,9 @@ describe('edition mutations', () => {
             language: 'English'
         });
         expect(editionResponse.status).toBe(200);
-        expect(editionResponse.body.data.EditionCreation).toBeTruthy();
+        expect(editionResponse.body.data.EditionCreate).toBeTruthy();
 
-        const {id: editionId} = editionResponse.body.data.EditionCreation.edition.node;
+        const {id: editionId} = editionResponse.body.data.EditionCreate.edition.node;
 
         const editEditionObj = {
             edition: 2,
@@ -80,13 +80,13 @@ describe('edition mutations', () => {
 
         log('editEditionResponse.body: ', editEditionResponse.body);
         expect(editEditionResponse.status).toBe(200);
-        expect(editEditionResponse.body.data.EditEdition).toBeTruthy();
-        log('editEditionResponse.body: ', editEditionResponse.body.data.EditEdition.edition.edition);
-        expect(editEditionResponse.body.data.EditEdition.edition.edition).toBe(editEditionObj.edition);
-        expect(editEditionResponse.body.data.EditEdition.edition.publishing).toBe(editEditionObj.publishing);
-        expect(editEditionResponse.body.data.EditEdition.edition.year).toBe(editEditionObj.year);
-        expect(editEditionResponse.body.data.EditEdition.edition.language).toBe(editEditionObj.language);
-        expect(editEditionResponse.body.data.EditEdition.edition.pages).toBe(1000);
+        expect(editEditionResponse.body.data.EditionEdit).toBeTruthy();
+        log('editEditionResponse.body: ', editEditionResponse.body.data.EditionEdit.edition.edition);
+        expect(editEditionResponse.body.data.EditionEdit.edition.edition).toBe(editEditionObj.edition);
+        expect(editEditionResponse.body.data.EditionEdit.edition.publishing).toBe(editEditionObj.publishing);
+        expect(editEditionResponse.body.data.EditionEdit.edition.year).toBe(editEditionObj.year);
+        expect(editEditionResponse.body.data.EditionEdit.edition.language).toBe(editEditionObj.language);
+        expect(editEditionResponse.body.data.EditionEdit.edition.pages).toBe(1000);
     });
 
     it('should change a edition from a book to another', async () => {
@@ -101,24 +101,24 @@ describe('edition mutations', () => {
         });
 
         expect(editionResponse.status).toBe(200);
-        expect(editionResponse.body.data.EditionCreation).toBeTruthy();
+        expect(editionResponse.body.data.EditionCreate).toBeTruthy();
 
         const bookResponse = await createBook({name: 'New New Book', author: authorId, categories: []});
 
         expect(bookResponse.status).toBe(200);
-        expect(bookResponse.body.data.BookCreation).toBeTruthy();
+        expect(bookResponse.body.data.BookCreate).toBeTruthy();
 
-        const newBookId = bookResponse.body.data.BookCreation.book.cursor;
-        const editionId = editionResponse.body.data.EditionCreation.edition.cursor;
+        const newBookId = bookResponse.body.data.BookCreate.book.cursor;
+        const editionId = editionResponse.body.data.EditionCreate.edition.cursor;
 
         const changeBookEditionResponse = await changeBookEdition({edition: editionId, book: newBookId});
 
         log('changeBookEditionResponse.body: ', changeBookEditionResponse.body);
 
         expect(changeBookEditionResponse.status).toBe(200);
-        expect(changeBookEditionResponse.body.data.ChangeBookEdition).toBeTruthy();
-        expect(changeBookEditionResponse.body.data.ChangeBookEdition.edition.book.id).toBe(newBookId);
-        expect(changeBookEditionResponse.body.data.ChangeBookEdition.lastBook.id).toBe(bookId);
+        expect(changeBookEditionResponse.body.data.EditionChangeBook).toBeTruthy();
+        expect(changeBookEditionResponse.body.data.EditionChangeBook.edition.book.id).toBe(newBookId);
+        expect(changeBookEditionResponse.body.data.EditionChangeBook.lastBook.id).toBe(bookId);
 
     });
 });

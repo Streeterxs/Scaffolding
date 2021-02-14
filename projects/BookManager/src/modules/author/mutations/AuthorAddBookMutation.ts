@@ -18,8 +18,8 @@ if(process.env.JEST_WORKER_ID) {
     log = appLogger.extend('modules:book:mutations:addBook');
 }
 
-const AddBook = mutationWithClientMutationId({
-    name: 'AddBook',
+const AuthorAddBook = mutationWithClientMutationId({
+    name: 'AuthorAddBook',
     description: 'Add a Book to a Author',
     inputFields: {
         author: {
@@ -68,4 +68,4 @@ const AddBook = mutationWithClientMutationId({
     }
 });
 
-export default AddBook;
+export default AuthorAddBook;
