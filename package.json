@@ -18,7 +18,8 @@
     "personssector:server": "yarn workspace @Scaffolding/personssector start",
     "personssector:build": "yarn workspace @Scaffolding/personssector build",
     "build:all": "yarn personssector:build && yarn stronghold:build && yarn bookmanager:build",
-    "jest": "jest --no-cache --detectOpenHandles"
+    "jest": "jest --no-cache --detectOpenHandles",
+    "prepare": "husky install"
   },
   "author": "Afonso Araújo Neto",
   "license": "MIT",
@@ -36,6 +37,7 @@
     "@babel/preset-typescript": "^7.10.4",
     "@types/dotenv-safe": "^8.1.0",
     "@types/graphql-relay": "^0.6.0",
+    "@types/jest": "^26.0.7",
     "@types/kcors": "^2.2.3",
     "@types/koa": "^2.11.3",
     "@types/koa-graphql": "^0.8.4",
@@ -43,15 +45,27 @@
     "@types/koa-router": "^7.4.1",
     "@types/mongoose": "^5.7.32",
     "@types/node": "^14.0.24",
-    "@types/jest": "^26.0.7",
     "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
     "babel-jest": "^26.1.0",
-    "mongodb-memory-server": "^6.6.3",
-    "nodemon": "^2.0.4",
-    "rimraf": "^3.0.2",
-    "supertest": "^4.0.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-no-only-tests": "^2.6.0",
+    "husky": "^7.0.0",
     "jest": "^26.1.0",
     "jest-junit": "^11.0.1",
+    "lint-staged": "^11.1.2",
+    "mongodb-memory-server": "^6.6.3",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "supertest": "^4.0.2",
     "typescript": "^3.9.7"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix",
+    "*.spec.{js,ts}": "eslint --fix",
+    "*.{js,ts,css,md}": "prettier --write"
   }
 }
