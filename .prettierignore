@@ -1,0 +1,6 @@
+build
+pre-commit
+.husky
+.circleci
+*.json
+*.lock
