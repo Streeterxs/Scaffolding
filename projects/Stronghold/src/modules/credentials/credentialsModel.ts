@@ -1,5 +1,5 @@
 import Mongoose, { Schema, model,  } from "mongoose";
-import { permissions } from '@BookScaffolding/personssector';
+import { permissions } from '@Scaffolding/personssector';
 
 export interface ICredentials extends Mongoose.Document{
     identifier: string;

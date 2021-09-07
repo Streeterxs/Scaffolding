@@ -5,7 +5,7 @@ import { databaseTestModule } from "../../tests/database";
 import { testsLogger } from "../../tests/testsLogger";
 import app from "../../app";
 import { Credentials } from '../../modules/credentials/credentialsModel';
-import { permissions } from '@BookScaffolding/personssector/build';
+import { permissions } from '@Scaffolding/personssector/build';
 
 const log = testsLogger.extend('routes:visitor');
 

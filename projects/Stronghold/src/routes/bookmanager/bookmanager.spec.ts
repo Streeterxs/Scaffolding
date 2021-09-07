@@ -1,7 +1,7 @@
 import request from 'supertest';
 import fetchMock from 'jest-fetch-mock';
 
-import { permissions } from '@BookScaffolding/personssector';
+import { permissions } from '@Scaffolding/personssector';
 
 import { databaseTestModule } from "../../tests/database";
 import { testsLogger } from "../../tests/testsLogger";
