@@ -2,7 +2,7 @@ import { ParameterizedContext, Next } from "koa";
 import Router from "koa-router";
 import fetch from 'node-fetch';
 
-import { permissions } from '@BookScaffolding/personssector';
+import { permissions } from '@Scaffolding/personssector';
 
 import { appLogger } from "../appLogger";
 import { exponencialRateLimit, bucketRateLimit } from "../services/rateLimits";

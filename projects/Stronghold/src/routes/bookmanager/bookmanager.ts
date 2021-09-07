@@ -1,8 +1,8 @@
 import { accessTokenChecker, searchCredentialsByAccessToken, bucketRate, permissionLimiter, authenticate } from "../../middlewares";
 import config from "../../config";
 
-import { graphqlHttpServer } from "@BookScaffolding/bookmanager";
-import { permissions } from '@BookScaffolding/personssector';
+import { graphqlHttpServer } from "@Scaffolding/bookmanager";
+import { permissions } from '@Scaffolding/personssector';
 import Router from "koa-router";
 
 export const bookManagerRouteMount = (path: string, router: Router<any, {}>) => {

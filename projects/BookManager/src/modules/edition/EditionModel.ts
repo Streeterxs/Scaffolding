@@ -38,6 +38,6 @@ const editionSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-const Edition = mongoose.model<IEdition>('BookScaffolding_Edition', editionSchema);
+const Edition = mongoose.model<IEdition>('BookManager_Edition', editionSchema);
 
 export default Edition;

@@ -1,6 +1,6 @@
 import Router from 'koa-router';
 
-import bookManager from '@BookScaffolding/bookmanager';
+import bookManager from '@Scaffolding/bookmanager';
 
 import { appLogger } from '../appLogger';
 import { tokenRouteMount } from './token';

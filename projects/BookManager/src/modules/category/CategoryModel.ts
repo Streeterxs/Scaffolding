@@ -19,6 +19,6 @@ const categorySchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-const Category = mongoose.model<ICategory>('BookScaffolding_Category', categorySchema);
+    const Category = mongoose.model<ICategory>('BookManager_Category', categorySchema);
 
 export default Category;

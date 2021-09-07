@@ -19,6 +19,6 @@ const authorSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-const Author = mongoose.model<IAuthor>('BookScaffolding_Author', authorSchema);
+const Author = mongoose.model<IAuthor>('BookManager_Author', authorSchema);
 
 export default Author;

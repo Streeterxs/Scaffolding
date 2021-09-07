@@ -1,5 +1,5 @@
 {
-  "name": "@BookScaffolding/stronghold",
+  "name": "@Scaffolding/stronghold",
   "version": "0.0.1",
   "description": "A package to manage all security",
   "main": "./build/server",
@@ -17,8 +17,8 @@
   "author": "Afonso Araújo Neto",
   "license": "MIT",
   "dependencies": {
-    "@BookScaffolding/bookmanager": "^0.0.1",
-    "@BookScaffolding/personssector": "^0.0.1",
+    "@Scaffolding/bookmanager": "^0.0.1",
+    "@Scaffolding/personssector": "^0.0.1",
     "@authentication/rate-limit": "^1.0.0",
     "debug": "^4.1.1",
     "http-proxy": "^1.18.1",

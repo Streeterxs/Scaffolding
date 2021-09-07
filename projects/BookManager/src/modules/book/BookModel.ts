@@ -29,6 +29,6 @@ const bookSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-const Book = mongoose.model<IBook>('BookScaffolding_Book', bookSchema);
+const Book = mongoose.model<IBook>('BookManager_Book', bookSchema);
 
 export default Book;

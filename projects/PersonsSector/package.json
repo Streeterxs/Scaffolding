@@ -1,5 +1,5 @@
 {
-  "name": "@BookScaffolding/personssector",
+  "name": "@Scaffolding/personssector",
   "version": "0.0.1",
   "description": "This project manage persons, identifing them, authorizing, forbidding, registering etc",
   "main": "./build",
