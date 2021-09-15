@@ -66,6 +66,7 @@
   "lint-staged": {
     "*.{js,ts}": "eslint --fix",
     "*.spec.{js,ts}": "eslint --fix",
-    "*.{js,ts,css,md}": "prettier --write"
+    "*.{js,ts,css,md}": "prettier --write",
+    "*.sol": "solhint"
   }
 }
