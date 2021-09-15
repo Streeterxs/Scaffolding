@@ -1,0 +1,38 @@
+{
+  "name": "@Scaffolding/contracts",
+  "version": "0.0.1",
+  "description": "A package to manage all security",
+  "main": "./build/server",
+  "scripts": {
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "babel": "babel-node --extensions \".es6,.js,.es,.jsx,.mjs,.ts,.tsx\"",
+    "build": "npm run clear && babel src --extensions \".es6,.js,.es,.jsx,.mjs,.ts\" --ignore *.spec.js --out-dir build --copy-files",
+    "clear": "rimraf ./build",
+    "clear:cache": "rimraf ./cache",
+    "clear:artifacts": "rimraf ./artifacts",
+    "prestart": "npm run build",
+    "jest": "jest --no-cache --detectOpenHandles"
+  },
+  "author": "Afonso Araújo Neto",
+  "license": "MIT",
+  "dependencies": {
+    "hardhat": "^2.6.4",
+    "mocked-env": "^1.3.2",
+    "supertest": "^4.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/plugin-transform-runtime": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@nomiclabs/hardhat-ethers": "^2.0.0",
+    "@nomiclabs/hardhat-waffle": "^2.0.0",
+    "chai": "^4.2.0",
+    "ethereum-waffle": "^3.0.0",
+    "ethers": "^5.0.0",
+    "fs-extra-promise": "^1.0.1",
+    "hardhat": "^2.6.4"
+  }
+}

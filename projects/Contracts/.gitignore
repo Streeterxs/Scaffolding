@@ -1,6 +1,6 @@
+# junit test reports
+junit.xml
 node_modules
-node_modules/*
-
 .env
 
 #Hardhat files

@@ -4,3 +4,9 @@ pre-commit
 .circleci
 *.json
 *.lock
+artifacts
+cache
+coverage*
+gasReporterOutput.json
+.solhint
+.solhintignore
